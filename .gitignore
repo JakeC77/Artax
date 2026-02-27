@@ -1,0 +1,5 @@
+
+# Secrets
+prototypes/snapquote/.env
+*.pyc
+__pycache__/
