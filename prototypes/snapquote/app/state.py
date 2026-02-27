@@ -34,7 +34,7 @@ class QuoteData:
     
     def calculate_total(self) -> float:
         """Sum up line items"""
-        self.total = sum(item.get("amount", 0) for item in self.items)
+        self.total = sum(float(item.get("amount") or 0) for item in self.items)
         return self.total
 
 

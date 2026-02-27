@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnapQuote | Text Your Estimate. Get a Pro Quote Link.</title>
+    <meta name="description" content="Turn a texted estimate into a professional PDF quote in under a minute. No app, no forms. Just text and send.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #f97316;
+            --primary-dark: #ea580c;
+            --secondary: #0ea5e9;
+            --dark: #0f172a;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 72px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--primary);
+        }
+
+        .nav-cta {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.7) 100%);
+            z-index: 2;
+        }
+
+        .hero .container {
+            position: relative;
+            z-index: 3;
+            padding: 140px 24px 100px;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(249, 115, 22, 0.2);
+            color: var(--primary);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.75rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: white;
+        }
+
+        .hero-content h1 span {
+            color: var(--primary);
+        }
+
+        .hero-content p {
+            font-size: 1.35rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 40px;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 18px 36px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(249, 115, 22, 0.3);
+        }
+
+        .hero-note {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 0;
+            background: var(--light);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .step {
+            text-align: center;
+            padding: 40px 24px;
+        }
+
+        .step-number {
+            width: 64px;
+            height: 64px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 auto 24px;
+        }
+
+        .step h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .step p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        /* Features */
+        .features {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+        }
+
+        .feature {
+            display: flex;
+            gap: 20px;
+            padding: 32px;
+            background: var(--light);
+            border-radius: 16px;
+            transition: all 0.3s;
+        }
+
+        .feature:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .feature h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature p {
+            color: var(--gray);
+            font-size: 0.95rem;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 100px 0;
+            background: var(--dark);
+            color: white;
+        }
+
+        .pricing .section-header h2 {
+            color: white;
+        }
+
+        .pricing .section-header p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .pricing-card {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 48px;
+            text-align: center;
+        }
+
+        .pricing-amount {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .pricing-amount span {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .pricing-desc {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 32px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 40px;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pricing-features li::before {
+            content: "✓";
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            text-align: center;
+            color: white;
+        }
+
+        .cta h2 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .cta .btn-primary {
+            background: white;
+            color: var(--primary);
+            font-size: 1.2rem;
+            padding: 20px 48px;
+        }
+
+        .cta .btn-primary:hover {
+            background: var(--light);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-phone {
+            margin-top: 32px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .cta-phone span {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 12px 24px;
+            border-radius: 8px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            background: #0a0f1a;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero-content h1 {
+                font-size: 2.75rem;
+            }
+
+            .steps {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <a href="#" class="logo">Snap<span>Quote</span></a>
+            <a href="#pricing" class="nav-cta">Try It Free</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg">
+            <img src="hero.png" alt="Contractor using SnapQuote">
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">📱 No App Required</div>
+                <h1>Text your estimate. Get a <span>pro quote link.</span></h1>
+                <p>Turn your texted estimate into a professional PDF quote in under a minute. No app to install, no forms to fill out. Just text it like you already do.</p>
+                <div class="hero-cta">
+                    <a href="#pricing" class="btn-primary">
+                        Start Sending Pro Quotes
+                        <span>→</span>
+                    </a>
+                    <span class="hero-note">Free to try. No credit card required.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how">
+        <div class="container">
+            <div class="section-header">
+                <h2>How It Works</h2>
+                <p>Three texts. That's it. Your customer gets a professional quote link they can save and share.</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Text Your Estimate</h3>
+                    <p>Send your estimate to the SnapQuote number. Names, items, amounts — write it however you want.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Add Your Logo (Optional)</h3>
+                    <p>Text a photo of your logo once. It'll appear on all your quotes automatically.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Get Your Quote Link</h3>
+                    <p>Within a minute, you get a link to a polished PDF. Share it with your customer.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Contractors Love SnapQuote</h2>
+                <p>Built for people who'd rather be on the job than doing paperwork.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div>
+                        <h3>Fast as Texting</h3>
+                        <p>Because it IS texting. No new workflow to learn. Type your estimate like you already do in notes or messages.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📱</div>
+                    <div>
+                        <h3>No App to Install</h3>
+                        <p>Works with the phone you already have. iPhone, Android, flip phone — if it can text, it works.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📄</div>
+                    <div>
+                        <h3>Professional PDF Output</h3>
+                        <p>Your customer gets a clean quote with line items, totals, and your branding. Looks like you spent an hour on it.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔗</div>
+                    <div>
+                        <h3>Shareable Link</h3>
+                        <p>Send your customer a link they can save, forward, or reference later. No more "can you resend that quote?"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="section-header">
+                <h2>Simple Pricing</h2>
+                <p>Start free. Pay only when you're ready.</p>
+            </div>
+            <div class="pricing-card">
+                <div class="pricing-amount">$19<span>/month</span></div>
+                <p class="pricing-desc">Unlimited quotes. Cancel anytime.</p>
+                <ul class="pricing-features">
+                    <li>Unlimited professional PDF quotes</li>
+                    <li>Custom logo on every quote</li>
+                    <li>Shareable links for customers</li>
+                    <li>Quote history and tracking</li>
+                    <li>Works from any phone</li>
+                </ul>
+                <a href="#" class="btn-primary">Start Free Trial</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to look more professional?</h2>
+            <p>Text your first estimate now. See how easy it is.</p>
+            <a href="#" class="btn-primary">Get Started Free →</a>
+            <div class="cta-phone">
+                <a href="sms:+18335154305" style="color: white; text-decoration: none;"><span>📱 Text (833) 515-4305</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2026 SnapQuote by <a href="#">Haven Tech Solutions</a>. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

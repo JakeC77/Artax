@@ -96,7 +96,7 @@ async def parse_with_llm(text: str) -> Optional[QuoteData]:
 def parse_with_regex(text: str, existing: Optional[QuoteData] = None) -> QuoteData:
     """
     Fallback regex-based parsing
-    Less flexible but works without API
+    Handles both "item $50" and "50 items" patterns
     """
     result = QuoteData()
     
@@ -105,6 +105,7 @@ def parse_with_regex(text: str, existing: Optional[QuoteData] = None) -> QuoteDa
         r'^([A-Z][a-z]+ [A-Z][a-z]+)',  # "John Smith" at start
         r'for ([A-Z][a-z]+ [A-Z][a-z]+)',  # "for John Smith"
         r'^([A-Z][a-z]+) -',  # "John -"
+        r'^([A-Z][a-z]+ [A-Z][a-z]+)\s*-',  # "John Smith -" or "John Smith-"
     ]
     
     for pattern in name_patterns:
@@ -113,23 +114,48 @@ def parse_with_regex(text: str, existing: Optional[QuoteData] = None) -> QuoteDa
             result.customer_name = match.group(1)
             break
     
-    # Extract price patterns: "item $123" or "item 123"
-    # Match: description followed by $ and numbers, or just numbers at word boundary
-    item_pattern = r'([a-zA-Z][a-zA-Z\s]+?)\s*\$?\s*(\d+(?:\.\d{2})?)'
-    matches = re.findall(item_pattern, text)
+    # Pattern 1: "description $123" or "description 123"
+    pattern1 = r'([a-zA-Z][a-zA-Z\s]+?)\s*\$?\s*(\d+(?:\.\d{2})?)\s*(?:dollars?|each|total)?'
     
-    for desc, amount in matches:
+    # Pattern 2: "123 description" or "$123 description" or "2 widgets"  
+    pattern2 = r'(\d+)\s*(?:x\s*)?([a-zA-Z][a-zA-Z\s]+?)\s*(?:@|at|for|-)?\s*\$?(\d+(?:\.\d{2})?)?'
+    
+    # Pattern 3: Simple "NUMBER description NUMBER" like "20 shirts 50"
+    pattern3 = r'(\d+)\s+([a-zA-Z][a-zA-Z\s]+?)\s+\$?(\d+)'
+    
+    items_found = []
+    
+    # Try pattern 1: description then price
+    matches1 = re.findall(pattern1, text, re.IGNORECASE)
+    for desc, amount in matches1:
         desc = desc.strip()
-        # Skip if description looks like a name we already captured
         if result.customer_name and desc.lower() in result.customer_name.lower():
             continue
-        # Skip very short descriptions
-        if len(desc) < 2:
+        if len(desc) < 2 or desc.lower() in ['for', 'at', 'the', 'and', 'or']:
             continue
-        
-        result.items.append({
+        items_found.append({
             "description": desc.title(),
             "amount": float(amount)
         })
     
+    # Try pattern 3 if pattern 1 didn't find much: "20 shirts 50"
+    if len(items_found) < 1:
+        matches3 = re.findall(pattern3, text, re.IGNORECASE)
+        for qty, desc, price in matches3:
+            desc = desc.strip()
+            if result.customer_name and desc.lower() in result.customer_name.lower():
+                continue
+            if len(desc) < 2:
+                continue
+            # Format as "20 shirts" or just "shirts" depending on qty
+            if int(qty) > 1:
+                full_desc = f"{qty} {desc}"
+            else:
+                full_desc = desc
+            items_found.append({
+                "description": full_desc.title(),
+                "amount": float(price)
+            })
+    
+    result.items = items_found
     return result

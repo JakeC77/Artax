@@ -18,7 +18,7 @@ from .logos import get_logo_path, save_logo
 CLICKSEND_USERNAME = os.getenv("CLICKSEND_USERNAME")
 CLICKSEND_API_KEY = os.getenv("CLICKSEND_API_KEY")
 SNAPQUOTE_NUMBER = os.getenv("SNAPQUOTE_NUMBER", "+18335154305")
-BASE_URL = os.getenv("BASE_URL", "https://snapquote.example.com")
+BASE_URL = os.getenv("BASE_URL", "https://snapquote.haventechsolutions.com")
 
 
 async def send_sms(to: str, message: str) -> bool:
@@ -39,6 +39,7 @@ async def send_sms(to: str, message: str) -> bool:
                 }]
             }
         )
+        print(f"SMS send response: {response.status_code}", flush=True)
         return response.status_code == 200
 
 
@@ -47,45 +48,61 @@ async def handle_inbound_sms(sender: str, body: str) -> Optional[str]:
     Main inbound SMS handler
     Routes through conversation state machine
     """
-    convo = state.get(sender)
-    convo.raw_messages.append(body)
+    print(f"Handling SMS from {sender}: {body}", flush=True)
     
-    # Check for logo upload (MMS with image)
+    # Check for special commands FIRST
+    lower_body = body.lower().strip()
+    
+    # Reset commands
+    reset_keywords = ["reset", "start over", "cancel", "new", "new quote", "start", "begin", "clear"]
+    if lower_body in reset_keywords:
+        state.clear(sender)
+        response = "Starting fresh! Text me your estimate like: John Smith - deck repair $450, railing $275"
+        await send_sms(sender, response)
+        return response
+    
+    # Help command
+    if lower_body in ["help", "?", "how", "what", "huh"]:
+        state.clear(sender)  # Also clear state on confusion
+        response = ("SnapQuote turns texts into pro PDF quotes!\n\n"
+                   "Text like this:\n"
+                   "John Smith - deck repair $450, railing $275\n\n"
+                   "I'll send back a link to a professional quote.")
+        await send_sms(sender, response)
+        return response
+    
+    # Check for logo upload
     if is_logo_upload(body):
         return await handle_logo_upload(sender, body)
     
-    # Check for special commands
-    lower_body = body.lower().strip()
-    if lower_body in ["reset", "start over", "cancel"]:
-        state.clear(sender)
-        response = "Got it, starting fresh. Text me your estimate anytime!"
+    # Parse the message
+    parsed = await parse_estimate(body, None)  # Don't pass existing - parse fresh
+    
+    print(f"Parsed: customer={parsed.customer_name}, items={len(parsed.items)}, complete={parsed.is_complete()}", flush=True)
+    
+    # If message didn't parse to anything useful, ask for clarification
+    if not parsed.customer_name and not parsed.items:
+        state.clear(sender)  # Clear any old state
+        response = ("I didn't catch that. Text your estimate like:\n"
+                   "John Smith - deck repair $450, railing $275\n\n"
+                   "Or text 'help' for more info.")
         await send_sms(sender, response)
         return response
     
-    if lower_body in ["help", "?"]:
-        response = ("SnapQuote turns your texts into pro PDF quotes!\n\n"
-                   "Just text your estimate like:\n"
-                   "\"John Smith - deck repair $450, railing $275\"\n\n"
-                   "I'll send back a link to a professional quote PDF.")
-        await send_sms(sender, response)
-        return response
+    # Get or create conversation
+    convo = state.get(sender)
     
-    # Parse the message for quote info
-    parsed = await parse_estimate(body, convo.quote)
-    
-    # Merge parsed data into conversation
+    # Update conversation with NEW parsed data
     if parsed.customer_name:
         convo.quote.customer_name = parsed.customer_name
     if parsed.items:
-        # Replace or extend items based on context
-        if convo.stage == ConvoStage.NEED_ITEMS:
-            convo.quote.items = parsed.items
-        else:
-            convo.quote.items.extend(parsed.items)
+        convo.quote.items = parsed.items  # Replace, don't extend
     if parsed.notes:
         convo.quote.notes = parsed.notes
     
-    # Determine next action
+    convo.raw_messages.append(body)
+    
+    # Determine response based on what we have
     response = await determine_response(sender, convo)
     state.update(sender, convo)
     
@@ -100,29 +117,30 @@ async def determine_response(sender: str, convo) -> str:
     missing_customer = not quote.customer_name
     missing_items = not quote.items or len(quote.items) == 0
     
+    print(f"Determining response: customer={quote.customer_name}, items={len(quote.items) if quote.items else 0}", flush=True)
+    
     # If we have everything, generate the quote
     if quote.is_complete():
         return await generate_and_send_quote(sender, convo)
     
-    # Ask for missing info (prioritize items over customer name)
+    # Ask for missing info
     if missing_items:
         convo.stage = ConvoStage.NEED_ITEMS
         if quote.customer_name:
-            response = f"Got it for {quote.customer_name}. What are the line items and prices?"
+            response = f"Got it for {quote.customer_name}. What are the items and prices?"
         else:
-            response = "What would you like to quote? Include items and prices, like: deck repair $450, railing $275"
+            response = "What items and prices for the quote? Like: deck repair $450, railing $275"
         await send_sms(sender, response)
         return response
     
     if missing_customer:
         convo.stage = ConvoStage.NEED_CUSTOMER
-        # Summarize what we have
-        items_summary = ", ".join(f"{i['description']} ${i['amount']}" for i in quote.items[:3])
+        items_summary = ", ".join(f"{i['description']} ${i['amount']:.0f}" for i in quote.items[:3])
         response = f"Got: {items_summary}. Customer name for the quote?"
         await send_sms(sender, response)
         return response
     
-    # Shouldn't get here, but fallback
+    # Fallback
     response = "Something went wrong. Text 'reset' to start over."
     await send_sms(sender, response)
     return response
@@ -154,20 +172,18 @@ async def generate_and_send_quote(sender: str, convo) -> str:
     convo.stage = ConvoStage.COMPLETE
     state.clear(sender)
     
+    print(f"Quote generated: {quote_id}", flush=True)
     return response
 
 
 def is_logo_upload(body: str) -> bool:
     """Check if message contains a logo/image upload"""
-    # ClickSend MMS includes media URLs
-    # For now, check for common patterns
     lower = body.lower()
     return any(x in lower for x in ["logo", "my logo", "here's my logo", "heres my logo"])
 
 
 async def handle_logo_upload(sender: str, body: str) -> str:
     """Handle logo image upload"""
-    # TODO: Extract media URL from MMS and save
     response = ("Logo feature coming soon! For now, we'll generate quotes without a logo. "
                "Text your estimate anytime.")
     await send_sms(sender, response)

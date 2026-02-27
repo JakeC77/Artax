@@ -1,0 +1,17 @@
+[Unit]
+Description=SnapQuote SMS Poller
+After=network.target snapquote-server.service
+
+[Service]
+Type=simple
+User=openclaw
+WorkingDirectory=/home/openclaw/.openclaw/workspace/artax/prototypes/snapquote
+Environment=PATH=/home/openclaw/.openclaw/workspace/artax/prototypes/snapquote/.venv/bin:/usr/bin
+Environment=BASE_URL=https://snapquote.haventechsolutions.com
+EnvironmentFile=/home/openclaw/.openclaw/workspace/artax/prototypes/snapquote/.env
+ExecStart=/home/openclaw/.openclaw/workspace/artax/prototypes/snapquote/.venv/bin/python -u run_poller.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
