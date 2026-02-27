@@ -9,6 +9,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional
 import os
+import json
 
 from .sms import handle_inbound_sms, send_sms
 from .state import ConversationState
@@ -18,19 +19,6 @@ app = FastAPI(title="SnapQuote", version="1.0.0")
 
 # Serve generated quotes
 app.mount("/quotes", StaticFiles(directory="quotes"), name="quotes")
-
-
-class ClickSendInbound(BaseModel):
-    """ClickSend inbound SMS webhook payload"""
-    from_: str  # sender phone
-    to: str     # our TFN
-    body: str   # message content
-    message_id: Optional[str] = None
-    timestamp: Optional[str] = None
-    
-    class Config:
-        # ClickSend uses 'from' which is a Python keyword
-        fields = {'from_': 'from'}
 
 
 @app.get("/")
@@ -47,24 +35,41 @@ async def health():
 async def sms_webhook(request: Request):
     """
     ClickSend inbound SMS webhook
-    
-    They POST form data or JSON depending on config.
-    We handle both.
     """
     content_type = request.headers.get("content-type", "")
     
+    # Log everything for debugging
+    print(f"=== WEBHOOK HIT ===")
+    print(f"Content-Type: {content_type}")
+    print(f"Headers: {dict(request.headers)}")
+    
+    body_bytes = await request.body()
+    print(f"Raw body: {body_bytes}")
+    
     if "application/json" in content_type:
-        data = await request.json()
-    else:
+        data = json.loads(body_bytes)
+    elif "form" in content_type or "urlencoded" in content_type:
         form = await request.form()
         data = dict(form)
+    else:
+        # Try JSON first, then form
+        try:
+            data = json.loads(body_bytes)
+        except:
+            data = dict(await request.form())
     
-    # Normalize field names (ClickSend uses 'from')
-    sender = data.get("from") or data.get("from_")
-    body = data.get("body") or data.get("message")
+    print(f"Parsed data: {data}")
+    
+    # ClickSend field names (they use various formats)
+    sender = data.get("from") or data.get("from_") or data.get("from_number") or data.get("sender_id")
+    body = data.get("body") or data.get("message") or data.get("message_body") or data.get("sms_message_body")
+    
+    print(f"Extracted - sender: {sender}, body: {body}")
     
     if not sender or not body:
-        raise HTTPException(status_code=400, detail="Missing from or body")
+        print(f"Missing fields! Keys available: {list(data.keys())}")
+        # Return 200 anyway to not break ClickSend
+        return {"status": "missing_fields", "keys": list(data.keys())}
     
     # Process the message
     response = await handle_inbound_sms(sender, body.strip())
