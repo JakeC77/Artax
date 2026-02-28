@@ -23,6 +23,20 @@ import secrets
 from dotenv import load_dotenv
 load_dotenv()
 
+def _clean_props(props: dict) -> dict:
+    """Clean Neo4j properties for JSON serialization."""
+    clean = {}
+    for k, v in props.items():
+        if k.startswith('_'):
+            continue
+        try:
+            import json
+            json.dumps(v)
+            clean[k] = v
+        except (TypeError, ValueError):
+            clean[k] = str(v)
+    return clean
+
 app = FastAPI(
     title="DejaView API",
     description="Personal knowledge graph as a service. Your knowledge, connected.",
@@ -345,9 +359,7 @@ def get_entity(name: str, user: dict = Depends(verify_api_key)):
         if not record:
             raise HTTPException(status_code=404, detail=f"Entity '{name}' not found")
         
-        node = dict(record["n"])
-        # Clean internal properties
-        entity = {k: v for k, v in node.items() if not k.startswith("_")}
+        entity = _clean_props(dict(record["n"]))
         
         return {
             "entity": entity,
@@ -401,7 +413,7 @@ def get_subgraph(name: str, depth: int = 2, user: dict = Depends(verify_api_key)
                         "name": name_val,
                     })
             
-            return {"nodes": nodes, "edges": [], "center": name}
+            return {"nodes": nodes, "edges": [], "links": [], "center": name}
     
     # Format APOC result
     nodes = []
@@ -441,10 +453,13 @@ def search(query: SearchQuery, user: dict = Depends(verify_api_key)):
         
         results = []
         for record in result:
+            conns = [c for c in record["connections"] if c["target"]]
             results.append({
                 "name": record["name"],
                 "label": record["label"],
-                "connections": [c for c in record["connections"] if c["target"]],
+                "type": record["label"] or "Entity",
+                "connections": len(conns),
+                "connection_list": conns,
             })
         
         return {"query": query.q, "results": results, "count": len(results)}
