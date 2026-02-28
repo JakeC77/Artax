@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Counter-UAS Engagement Effectiveness Review | Geodesic</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"><\/script>
+<style>
+@media print {
+    body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .page-break { page-break-before: always; }
+    .no-print { display: none; }
+    .chart-wrap { break-inside: avoid; }
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: Georgia, "Times New Roman", serif;
+    line-height: 1.75; color: #1a1a1a;
+    max-width: 900px; margin: 0 auto; padding: 50px 40px; background: #fff;
+}
+.cover { text-align: center; padding: 80px 0 60px; border-bottom: 3px solid #1a3a5c; margin-bottom: 50px; }
+.cover .logo { font-size: 2.5rem; margin-bottom: 15px; }
+.cover h1 { font-size: 2.2rem; color: #1a3a5c; font-weight: normal; margin-bottom: 8px; }
+.cover .subtitle { font-size: 1.2rem; color: #666; margin-bottom: 30px; font-style: italic; }
+.cover .meta { font-size: 0.9rem; color: #888; line-height: 1.8; }
+.cover .classification { display: inline-block; margin-top: 25px; padding: 6px 20px; border: 2px solid #1a3a5c; color: #1a3a5c; font-family: -apple-system, sans-serif; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; }
+h2 { font-size: 1.4rem; color: #1a3a5c; border-bottom: 2px solid #e8ecf0; padding-bottom: 8px; margin: 45px 0 20px; font-weight: normal; }
+h3 { font-size: 1.1rem; color: #333; margin: 28px 0 12px; }
+p { margin-bottom: 14px; }
+.executive-summary { background: #f4f7fa; padding: 28px; border-left: 4px solid #1a3a5c; margin: 35px 0; }
+.executive-summary h3 { margin-top: 0; color: #1a3a5c; }
+.kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin: 25px 0; }
+.kpi-box { text-align: center; padding: 18px 10px; background: #f4f7fa; border-radius: 8px; border-top: 3px solid #1a3a5c; }
+.kpi-value { font-size: 1.7rem; font-weight: bold; color: #1a3a5c; }
+.kpi-label { font-size: 0.78rem; color: #666; margin-top: 4px; font-family: -apple-system, sans-serif; }
+.kpi-delta { font-size: 0.75rem; margin-top: 2px; font-family: -apple-system, sans-serif; }
+.kpi-delta.up { color: #28a745; } .kpi-delta.down { color: #dc3545; }
+.chart-wrap { background: #fafbfc; border: 1px solid #e8ecf0; border-radius: 8px; padding: 24px; margin: 25px 0; }
+.chart-wrap .chart-title { font-size: 0.85rem; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; font-family: -apple-system, sans-serif; }
+.chart-container { position: relative; height: 300px; }
+.chart-container.short { height: 220px; }
+.chart-container.tall { height: 380px; }
+.chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.9rem; font-family: -apple-system, sans-serif; }
+th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #e8ecf0; }
+th { background: #f4f7fa; font-weight: 600; color: #333; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+tr:hover { background: #fafbfc; }
+.text-right { text-align: right; }
+.callout { padding: 16px 20px; border-radius: 6px; margin: 20px 0; font-family: -apple-system, sans-serif; font-size: 0.92rem; }
+.callout.warning { background: #fff8e1; border-left: 4px solid #ffc107; }
+.callout.danger { background: #fef0f0; border-left: 4px solid #dc3545; }
+.callout.success { background: #f0faf0; border-left: 4px solid #28a745; }
+.callout.info { background: #f0f4ff; border-left: 4px solid #1a3a5c; }
+.recommendation { padding: 16px 20px; margin: 12px 0; border-left: 4px solid #1a3a5c; background: #f8f9fa; }
+.recommendation strong { color: #1a3a5c; }
+.badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-family: -apple-system, sans-serif; font-weight: 600; }
+.badge.green { background: #d4edda; color: #155724; }
+.badge.yellow { background: #fff3cd; color: #856404; }
+.badge.red { background: #f8d7da; color: #721c24; }
+.badge.blue { background: #d6eaf8; color: #1a3a5c; }
+.badge.gray { background: #e9ecef; color: #495057; }
+.okr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0; }
+.okr-card { padding: 14px 16px; background: #fafbfc; border: 1px solid #e8ecf0; border-radius: 6px; font-family: -apple-system, sans-serif; }
+.okr-objective { font-size: 0.85rem; font-weight: 600; color: #333; margin-bottom: 4px; }
+.okr-kr { font-size: 0.78rem; color: #666; margin-bottom: 8px; }
+.progress-bar { height: 6px; background: #e9ecef; border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; border-radius: 3px; }
+.progress-label { font-size: 0.72rem; color: #888; margin-top: 4px; display: flex; justify-content: space-between; }
+.footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #e8ecf0; font-size: 0.82rem; color: #888; text-align: center; font-family: -apple-system, sans-serif; }
+ul, ol { margin: 12px 0 12px 25px; }
+li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<div class="cover">
+<div class="logo">&#x1f6e1;&#xfe0f;</div>
+<h1>Counter-UAS Engagement Effectiveness Review</h1>
+<div class="subtitle">Quantifying Detect-to-Defeat Performance &amp; Organizational Readiness</div>
+<div class="meta">Prepared: February 28, 2026<br>Data Source: Geodesic Knowledge Graph<br>Entity: Anduril Industries</div>
+<div class="classification">COMPANY CONFIDENTIAL</div>
+</div>
+
+<div class="executive-summary">
+<h3>Executive Summary</h3>
+<p>This report provides a comprehensive operational and financial analysis of Anduril Industries across <strong>6 program segments</strong>, <strong>40 active contracts</strong>, and <strong>45 customers</strong> spanning FY2025 Q1-Q3. The analysis draws on workforce data for <strong>300 employees</strong> across <strong>10 departments</strong> and <strong>7 global locations</strong>.</p>
+<p><strong>Key Finding:</strong> Revenue reached <strong>$1.06B</strong> through Q3 FY2025 with <strong>+45% YoY growth</strong>, driven primarily by Counter-UAS Systems and Autonomous ISR. However, three critical risk areas demand executive attention: the Arsenal-1 scale-up (72% complete, at risk), two at-risk Lattice contracts totaling $131M, and a Raytheon single-source dependency ($168M) expiring Q4 2025.</p>
+</div>
+
+<div class="kpi-grid">
+<div class="kpi-box"><div class="kpi-value">$1.06B</div><div class="kpi-label">YTD Revenue</div><div class="kpi-delta up">&#9650; 45% YoY</div></div>
+<div class="kpi-box"><div class="kpi-value">$3.4B</div><div class="kpi-label">Contract Backlog</div><div class="kpi-delta up">40 contracts</div></div>
+<div class="kpi-box"><div class="kpi-value">300</div><div class="kpi-label">Headcount</div><div class="kpi-delta up">51 contractors</div></div>
+<div class="kpi-box"><div class="kpi-value">37</div><div class="kpi-label">Initiatives</div><div class="kpi-delta down">3 at risk</div></div>
+<div class="kpi-box"><div class="kpi-value">$106M</div><div class="kpi-label">Initiative Budget</div><div class="kpi-delta up">29 in progress</div></div>
+</div>
+
+<h2>1. Revenue Performance by Program Segment</h2>
+<p>Counter-UAS Systems represents the largest share at $314M (29.6%), followed by Autonomous ISR at $267M (25.2%). The most notable growth trajectory is in International Programs, which grew from $18M in Q1 to $40M in Q3 &#8212; a 122% increase within the fiscal year, reflecting the UK MoD partnership ramp and AUKUS expansion.</p>
+
+<div class="chart-wrap">
+<div class="chart-title">Revenue by Segment &#8212; FY2025 Q1 through Q3 ($M)</div>
+<div class="chart-container"><canvas id="revenueChart"></canvas></div>
+</div>
+
+<table>
+<thead><tr><th>Segment</th><th class="text-right">Q1</th><th class="text-right">Q2</th><th class="text-right">Q3</th><th class="text-right">Total</th><th class="text-right">Growth</th></tr></thead>
+<tbody>
+<tr><td>Counter-UAS Systems</td><td class="text-right">$100M</td><td class="text-right">$104M</td><td class="text-right">$110M</td><td class="text-right">$314M</td><td class="text-right">+10%</td></tr>
+<tr><td>Autonomous ISR</td><td class="text-right">$74M</td><td class="text-right">$88M</td><td class="text-right">$105M</td><td class="text-right">$267M</td><td class="text-right">+42%</td></tr>
+<tr><td>Command &amp; Control (Lattice)</td><td class="text-right">$60M</td><td class="text-right">$70M</td><td class="text-right">$84M</td><td class="text-right">$214M</td><td class="text-right">+40%</td></tr>
+<tr><td>Undersea &amp; Maritime</td><td class="text-right">$39M</td><td class="text-right">$41M</td><td class="text-right">$45M</td><td class="text-right">$125M</td><td class="text-right">+15%</td></tr>
+<tr><td>International Programs</td><td class="text-right">$18M</td><td class="text-right">$28M</td><td class="text-right">$40M</td><td class="text-right">$86M</td><td class="text-right">+122%</td></tr>
+<tr><td>Other / R&amp;D</td><td class="text-right">$17M</td><td class="text-right">$18M</td><td class="text-right">$19M</td><td class="text-right">$54M</td><td class="text-right">+12%</td></tr>
+<tr style="font-weight:bold;border-top:2px solid #1a3a5c"><td>Total</td><td class="text-right">$308M</td><td class="text-right">$349M</td><td class="text-right">$403M</td><td class="text-right">$1,060M</td><td class="text-right">+31%</td></tr>
+</tbody>
+</table>
+
+<div class="callout success"><strong>&#10003; Revenue Target Achieved:</strong> Q3 quarterly run rate reached $403M, exceeding the $400M OKR target. Annualized run rate of ~$1.6B suggests the $1.4B full-year target is well within reach.</div>
+
+<div class="chart-wrap">
+<div class="chart-title">Revenue Mix &#8212; Q3 FY2025</div>
+<div class="chart-container short"><canvas id="revenuePieChart"></canvas></div>
+</div>
+
+<div class="page-break"></div>
+<h2>2. Customer Portfolio Analysis</h2>
+<p>Anduril maintains relationships with 45 customers across four segments: DoD Direct (25), Prime Subcontractors (9), Allied Nations (7), and Other Government (4). Revenue concentration is significant &#8212; the top 5 customers represent approximately 73% of annual revenue.</p>
+
+<div class="chart-wrap">
+<div class="chart-title">Top 10 Customers by Annual Revenue ($M)</div>
+<div class="chart-container tall"><canvas id="customerChart"></canvas></div>
+</div>
+
+<div class="callout warning"><strong>&#9888; Customer Concentration Risk:</strong> US SOCOM alone represents ~38% of annual revenue ($488M). US Army PEO M&amp;S, the #2 customer, carries the lowest health score (5.9) among top accounts &#8212; warranting a dedicated relationship recovery plan.</div>
+
+<table>
+<thead><tr><th>Customer</th><th>Type</th><th class="text-right">Annual Revenue</th><th class="text-right">Health</th><th class="text-right">Contracts</th></tr></thead>
+<tbody><tr><td>US SOCOM</td><td><span class="badge blue">DoD Direct</span></td><td class="text-right">$487.5M</td><td class="text-right">7.7</td><td class="text-right">2</td></tr>
+<tr><td>US Army PEO Missiles & Space</td><td><span class="badge blue">DoD Direct</span></td><td class="text-right">$198.0M</td><td class="text-right" style="color:#dc3545;font-weight:bold">5.9</td><td class="text-right">2</td></tr>
+<tr><td>UK Ministry of Defence</td><td><span class="badge green">Allied</span></td><td class="text-right">$116.9M</td><td class="text-right">8.3</td><td class="text-right">3</td></tr>
+<tr><td>US Navy NAVWAR</td><td><span class="badge blue">DoD Direct</span></td><td class="text-right">$80.4M</td><td class="text-right">9.2</td><td class="text-right">1</td></tr>
+<tr><td>US Air Force AFLCMC</td><td><span class="badge blue">DoD Direct</span></td><td class="text-right">$60.2M</td><td class="text-right">9.1</td><td class="text-right">3</td></tr>
+<tr><td>US Marine Corps Systems Command</td><td><span class="badge blue">DoD Direct</span></td><td class="text-right">$47.5M</td><td class="text-right">6.8</td><td class="text-right">0</td></tr>
+<tr><td>DARPA</td><td><span class="badge blue">DoD Direct</span></td><td class="text-right">$38.8M</td><td class="text-right">8.3</td><td class="text-right">0</td></tr>
+<tr><td>US Space Force</td><td><span class="badge blue">DoD Direct</span></td><td class="text-right">$32.7M</td><td class="text-right" style="color:#dc3545;font-weight:bold">5.1</td><td class="text-right">0</td></tr>
+</tbody>
+</table>
+
+<div class="chart-wrap">
+<div class="chart-title">Customer Type Distribution</div>
+<div class="chart-container short"><canvas id="customerTypeChart"></canvas></div>
+</div>
+
+<div class="page-break"></div>
+<h2>3. OKR Scorecard &#8212; Q3 FY2025</h2>
+<p>Of 18 tracked OKRs, <strong>10 are on track</strong>, <strong>5 achieved</strong>, and <strong>3 at risk</strong>. At-risk items center on Arsenal-1 scale-up, Lattice NATO certification, and international hiring.</p>
+
+<div class="okr-grid">
+<div class="okr-card"><div class="okr-objective">Achieve $1.4B Revenue Target</div><div class="okr-kr">Quarterly run rate exceeds $400M by Q3</div><div class="progress-bar"><div class="progress-fill" style="width:100%;background:#28a745"></div></div><div class="progress-label"><span><span class="badge green">Achieved</span></span><span>$403M / $400M</span></div></div>
+<div class="okr-card"><div class="okr-objective">Scale Arsenal-1 to Production</div><div class="okr-kr">Complete Phase 1 buildout by Q4</div><div class="progress-bar"><div class="progress-fill" style="width:72%;background:#ffc107"></div></div><div class="progress-label"><span><span class="badge yellow">At Risk</span></span><span>72 / 100</span></div></div>
+<div class="okr-card"><div class="okr-objective">Win SOCOM Phase 3 Award</div><div class="okr-kr">Submit compliant proposal by Dec 2025</div><div class="progress-bar"><div class="progress-fill" style="width:85%;background:#1a3a5c"></div></div><div class="progress-label"><span><span class="badge blue">On Track</span></span><span>85 / 100</span></div></div>
+<div class="okr-card"><div class="okr-objective">Expand International Revenue 8%+</div><div class="okr-kr">International revenue reaches $86M YTD</div><div class="progress-bar"><div class="progress-fill" style="width:93%;background:#1a3a5c"></div></div><div class="progress-label"><span><span class="badge blue">On Track</span></span><span>$80M / $86M</span></div></div>
+<div class="okr-card"><div class="okr-objective">Deliver Lattice OS v4.2</div><div class="okr-kr">All milestone deliverables accepted</div><div class="progress-bar"><div class="progress-fill" style="width:80%;background:#1a3a5c"></div></div><div class="progress-label"><span><span class="badge blue">On Track</span></span><span>4 / 5</span></div></div>
+<div class="okr-card"><div class="okr-objective">CMMC Level 3 Compliance</div><div class="okr-kr">All facilities certified by Q4</div><div class="progress-bar"><div class="progress-fill" style="width:65%;background:#ffc107"></div></div><div class="progress-label"><span><span class="badge yellow">At Risk</span></span><span>65%</span></div></div>
+</div>
+
+<h2>4. Contract Pipeline &amp; Risk</h2>
+<p>The $3.4B backlog contains 40 contracts. The SOCOM Phase 3 ($500M, pending) is the single largest pipeline item.</p>
+
+<div class="chart-wrap">
+<div class="chart-title">Top 10 Contracts by Total Value ($M)</div>
+<div class="chart-container tall"><canvas id="contractChart"></canvas></div>
+</div>
+
+<div class="callout danger"><strong>&#x1f534; At-Risk Contracts:</strong><ul style="margin-top:8px"><li><strong>Lattice OS Integration Services ($111.1M)</strong> &#8212; PoP ending May 2025, renewal probability only 49%.</li><li><strong>Tactical ISR Data Services ($19.7M)</strong> &#8212; PoP expired, renewal probability 39%.</li></ul></div>
+
+<table>
+<thead><tr><th>Contract</th><th>Segment</th><th class="text-right">Value</th><th>Status</th><th class="text-right">PoP End</th><th class="text-right">Renewal</th></tr></thead>
+<tbody><tr><td>SOCOM Phase 3 Autonomous ISR (</td><td>Autonomous ISR</td><td class="text-right">$500M</td><td><span class="badge gray">Pending Award</span></td><td class="text-right">2030-12</td><td class="text-right">64%</td></tr>
+<tr><td>SOCOM Phase 2 Autonomous ISR P</td><td>Autonomous ISR</td><td class="text-right">$480M</td><td><span class="badge green">Active</span></td><td class="text-right">2027-03</td><td class="text-right">78%</td></tr>
+<tr><td>Counter-UAS Next Gen Developme</td><td>Counter-UAS Systems</td><td class="text-right">$290M</td><td><span class="badge green">Active</span></td><td class="text-right">2026-06</td><td class="text-right">66%</td></tr>
+<tr><td>Dive-LD Undersea Production Bl</td><td>Undersea & Maritime</td><td class="text-right">$210M</td><td><span class="badge green">Active</span></td><td class="text-right">2025-12</td><td class="text-right">64%</td></tr>
+<tr><td>UK MoD Autonomous Systems Part</td><td>International Programs</td><td class="text-right">$185M</td><td><span class="badge green">Active</span></td><td class="text-right">2029-12</td><td class="text-right">70%</td></tr>
+<tr><td>Five Eyes ISR Sharing Platform</td><td>International Programs</td><td class="text-right">$120M</td><td><span class="badge green">Active</span></td><td class="text-right">2027-10</td><td class="text-right">65%</td></tr>
+</tbody>
+</table>
+
+<div class="page-break"></div>
+<h2>5. Department Financial Performance</h2>
+<p>Total spend reached $111.5M against $107.3M planned (<strong>3.9% overrun</strong>). Software Engineering (+$1.56M, +6.0%) and Manufacturing Operations (+$1.27M, +11.7%) are the largest variance drivers.</p>
+
+<div class="chart-wrap">
+<div class="chart-title">Budget Planned vs. Actual by Department &#8212; FY2025 YTD ($M)</div>
+<div class="chart-container tall"><canvas id="budgetChart"></canvas></div>
+</div>
+
+<div class="chart-wrap">
+<div class="chart-title">Headcount by Department &#8212; FTE vs. Contractor (Q3)</div>
+<div class="chart-container"><canvas id="headcountChart"></canvas></div>
+</div>
+
+<div class="callout warning"><strong>&#9888; Manufacturing Operations:</strong> 11.7% budget overrun combined with the highest contractor ratio (18/55 = 33%). Aligns with Arsenal-1 pressures but warrants monitoring.</div>
+
+<div class="page-break"></div>
+<h2>6. Workforce Analysis</h2>
+
+<div class="chart-row">
+<div class="chart-wrap"><div class="chart-title">Security Clearance Distribution</div><div class="chart-container short"><canvas id="clearanceChart"></canvas></div></div>
+<div class="chart-wrap"><div class="chart-title">Weekly Time Allocation (Avg Hours)</div><div class="chart-container short"><canvas id="timeChart"></canvas></div></div>
+</div>
+
+<div class="callout danger"><strong>&#x1f534; Meeting Overload:</strong> Average weekly meeting time is <strong>24.4 hours</strong> (53% of a 46.2-hour week), with only <strong>13.4 hours of focus time</strong> (29%). Even a 20% meeting reduction would reclaim ~5 hours/week of engineering capacity.</div>
+
+<div class="chart-wrap">
+<div class="chart-title">Top Skills by Assessment Count</div>
+<div class="chart-container"><canvas id="skillsChart"></canvas></div>
+</div>
+
+<div class="page-break"></div>
+<h2>7. Initiative Portfolio</h2>
+<p>37 initiatives totaling $106M. Portfolio: 29 in progress, 3 at risk, 2 on hold, 2 completed, 1 planned.</p>
+
+<table>
+<thead><tr><th>Initiative</th><th>Priority</th><th>Status</th><th class="text-right">Budget</th><th class="text-right">End Date</th></tr></thead>
+<tbody><tr><td>Arsenal-1 Production Scale-Up</td><td><span class="badge red">Critical</span></td><td><span class="badge green">In Progress</span></td><td class="text-right">$12.0M</td><td class="text-right">2025-12-31</td></tr>
+<tr><td>SOCOM Phase 2 Autonomous ISR Production</td><td><span class="badge red">High</span></td><td><span class="badge green">In Progress</span></td><td class="text-right">$11.7M</td><td class="text-right">2026-09-30</td></tr>
+<tr><td>AFLCMC Lattice OS Enterprise Integration</td><td><span class="badge red">Critical</span></td><td><span class="badge red">At Risk</span></td><td class="text-right">$7.5M</td><td class="text-right">2025-05-22</td></tr>
+<tr><td>UK MoD Autonomous Systems Partnership</td><td><span class="badge red">High</span></td><td><span class="badge green">In Progress</span></td><td class="text-right">$6.8M</td><td class="text-right">2026-09-30</td></tr>
+<tr><td>Dive-LD Undersea Production Block 2</td><td><span class="badge red">High</span></td><td><span class="badge green">Completed</span></td><td class="text-right">$6.7M</td><td class="text-right">2025-12-31</td></tr>
+<tr><td>Counter-UAS Next Gen Development</td><td><span class="badge red">High</span></td><td><span class="badge green">In Progress</span></td><td class="text-right">$5.4M</td><td class="text-right">2026-06-30</td></tr>
+<tr><td>AUKUS Program Expansion</td><td><span class="badge red">High</span></td><td><span class="badge green">In Progress</span></td><td class="text-right">$5.0M</td><td class="text-right">2026-06-30</td></tr>
+<tr><td>Undersea Distributed Sensor Network — Ph</td><td><span class="badge yellow">Medium</span></td><td><span class="badge green">In Progress</span></td><td class="text-right">$4.6M</td><td class="text-right">2026-09-30</td></tr>
+<tr><td>Columbus SCIF Buildout</td><td><span class="badge red">High</span></td><td><span class="badge green">In Progress</span></td><td class="text-right">$4.5M</td><td class="text-right">2025-11-30</td></tr>
+<tr><td>Applied AI Research — Sensor Fusion Algo</td><td><span class="badge yellow">Medium</span></td><td><span class="badge green">In Progress</span></td><td class="text-right">$4.3M</td><td class="text-right">2025-06-28</td></tr>
+</tbody>
+</table>
+
+<div class="chart-wrap">
+<div class="chart-title">Initiative Status Distribution</div>
+<div class="chart-container short"><canvas id="initiativeChart"></canvas></div>
+</div>
+
+<div class="page-break"></div>
+<h2>8. Vendor &amp; Supply Chain Risk</h2>
+<p>65 vendor contracts across 62 vendors. <strong>12 single-source dependencies</strong> identified, several in critical categories.</p>
+
+<h3>Critical Single-Source Dependencies</h3>
+<table>
+<thead><tr><th>Vendor</th><th>Category</th><th class="text-right">Annual Value</th><th>Criticality</th><th class="text-right">Contract End</th></tr></thead>
+<tbody><tr style="background:#fef0f0"><td><strong>Raytheon Sensors Division</strong></td><td>Manufacturing Supply</td><td class="text-right">$42.0M</td><td><span class="badge red">Critical</span></td><td class="text-right">2025-12-31 ⚠️</td></tr>
+<tr style="background:#fef0f0"><td><strong>Amazon Web Services</strong></td><td>Cloud Infrastructure</td><td class="text-right">$28.0M</td><td><span class="badge red">Critical</span></td><td class="text-right">2026-06-30</td></tr>
+<tr style="background:#fef0f0"><td><strong>Cushman & Wakefield</strong></td><td>Facilities</td><td class="text-right">$8.5M</td><td><span class="badge red">Critical</span></td><td class="text-right">2033-05-31</td></tr>
+<tr style="background:#fef0f0"><td><strong>McKinsey</strong></td><td>Professional Services</td><td class="text-right">$4.2M</td><td><span class="badge red">Critical</span></td><td class="text-right">2022-11-10 ⚠️</td></tr>
+<tr><td><strong>Aerotek</strong></td><td>Staffing</td><td class="text-right">$3.6M</td><td><span class="badge yellow">High</span></td><td class="text-right">2026-12-09</td></tr>
+</tbody>
+</table>
+
+<div class="callout danger"><strong>&#x1f534; Raytheon Sensors Division:</strong> $42M/year single-source manufacturing supply contract expiring Dec 2025. Given Arsenal-1 production ramp, renewal or alternative sourcing must be prioritized immediately.</div>
+<div class="callout info"><strong>&#x2139;&#xfe0f; Palantir:</strong> Appears as both a $2.4M/year software vendor and a direct competitor in defense AI. Dual relationship warrants periodic review.</div>
+
+<div class="page-break"></div>
+<h2>9. Recommendations</h2>
+
+<div class="recommendation"><strong>1. Accelerate Arsenal-1 Completion (Critical):</strong> OKR at 72% with Q4 deadline. Recommend dedicated weekly exec review with Manufacturing Ops and a recovery plan. Consider contractor surge.</div>
+<div class="recommendation"><strong>2. Raytheon Sourcing Strategy (Urgent):</strong> Initiate dual-source qualification for sensor components. Begin second-source evaluation with L3Harris Components or Collins Aerospace.</div>
+<div class="recommendation"><strong>3. Army PEO Relationship Recovery:</strong> Health score 5.9 on $198M customer demands senior executive engagement. Root cause analysis within 30 days.</div>
+<div class="recommendation"><strong>4. Meeting Culture Intervention:</strong> 24.4h/week meetings vs 13.4h focus time. Pilot "No Meeting Wednesdays" and 25-minute meeting caps. Target 40% focus time within 90 days.</div>
+<div class="recommendation"><strong>5. Lattice Contract Recovery:</strong> Two at-risk contracts ($131M combined). Deploy capture team approach before PoP expiration.</div>
+<div class="recommendation"><strong>6. IPO Readiness Acceleration:</strong> Planned program hasn't started (June 2025 start). Pull forward given financial trajectory. SOX compliance takes 12-18 months for defense companies.</div>
+
+<div class="footer">
+<p>Generated by Geodesic Knowledge Graph Analytics &#8226; February 28, 2026</p>
+<p>Data reflects FY2025 Q1-Q3 &#8226; 25,451 graph entities analyzed</p>
+</div>
+
+<script>
+const NAVY='#1a3a5c',BLUE='#2d7dd2',TEAL='#00b894',AMBER='#fdcb6e',RED='#e17055',PURPLE='#6c5ce7',GRAY='#636e72';
+Chart.defaults.font.family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif";
+Chart.defaults.font.size=11;Chart.defaults.color='#666';
+
+new Chart(document.getElementById('revenueChart'),{type:'bar',data:{labels:['Q1 FY2025','Q2 FY2025','Q3 FY2025'],datasets:[{label:'Counter-UAS',data:[100,104,110],backgroundColor:NAVY},{label:'Autonomous ISR',data:[74,88,105],backgroundColor:BLUE},{label:'C2 (Lattice)',data:[60,70,84],backgroundColor:TEAL},{label:'Undersea',data:[39,41,45],backgroundColor:AMBER},{label:'International',data:[18,28,40],backgroundColor:PURPLE},{label:'R&D',data:[17,18,19],backgroundColor:GRAY}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:15}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,title:{display:true,text:'$ Millions'},grid:{color:'#f0f0f0'}}}}});
+
+new Chart(document.getElementById('revenuePieChart'),{type:'doughnut',data:{labels:['Counter-UAS ($314M)','ISR ($267M)','Lattice ($214M)','Undersea ($125M)','Intl ($86M)','R&D ($54M)'],datasets:[{data:[314,267,214,125,86,54],backgroundColor:[NAVY,BLUE,TEAL,AMBER,PURPLE,GRAY],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:12}}}}});
+
+new Chart(document.getElementById('customerChart'),{type:'bar',data:{labels:['US SOCOM','Army PEO M&S','UK MoD','Navy NAVWAR','AF AFLCMC','Marine Corps','DARPA','Space Force','Cyber Command','DHS CBP'],datasets:[{label:'Annual Revenue ($M)',data:[487.5,198.0,116.9,80.4,60.2,47.5,38.8,32.7,28.0,24.4],backgroundColor:[NAVY,'#c0392b',TEAL,BLUE,BLUE,BLUE,TEAL,'#c0392b',BLUE,TEAL],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'$ Millions'},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('customerTypeChart'),{type:'doughnut',data:{labels:['DoD Direct (25)','Prime Sub (9)','Allied (7)','Other Gov (4)'],datasets:[{data:[25,9,7,4],backgroundColor:[NAVY,BLUE,TEAL,AMBER],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:12}}}}});
+
+new Chart(document.getElementById('budgetChart'),{type:'bar',data:{labels:["Executive", "Finance & Legal", "Software Eng", "Hardware Eng", "Manufacturing Ops", "Gov Affairs", "Program Mgmt", "People & Ops", "International Programs", "IT & Security"],datasets:[{label:'Planned',data:[3.6, 7.2, 26.2, 17.8, 10.9, 11.4, 10.8, 5.4, 5.2, 8.8],backgroundColor:'rgba(26,58,92,0.3)',borderColor:NAVY,borderWidth:1},{label:'Actual',data:[3.64, 7.38, 27.76, 18.35, 12.17, 11.47, 10.2, 5.5, 5.6, 9.4],backgroundColor:NAVY,borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12}}},scales:{x:{grid:{display:false}},y:{title:{display:true,text:'$ Millions'},grid:{color:'#f0f0f0'}}}}});
+
+new Chart(document.getElementById('headcountChart'),{type:'bar',data:{labels:["Executive", "Finance & Legal", "Software Eng", "Hardware Eng", "Manufacturing Ops", "Gov Affairs", "Program Mgmt", "People & Ops", "International Programs", "IT & Security"],datasets:[{label:'FTE',data:[9, 17, 65, 43, 55, 29, 29, 16, 17, 19],backgroundColor:NAVY},{label:'Contractor',data:[2, 3, 7, 5, 18, 3, 4, 1, 3, 5],backgroundColor:AMBER}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:12}}},scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,title:{display:true,text:'Headcount'},grid:{color:'#f0f0f0'}}}}});
+
+new Chart(document.getElementById('clearanceChart'),{type:'doughnut',data:{labels:['TS/SCI (6)','TS (19)','Secret (13)','Confidential (3)','Uncleared (8)','Pending (1)'],datasets:[{data:[6,19,13,3,8,1],backgroundColor:[NAVY,BLUE,TEAL,AMBER,GRAY,'#dfe6e9'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:8,font:{size:10}}}}}});
+
+new Chart(document.getElementById('timeChart'),{type:'doughnut',data:{labels:['Meetings (24.4h)','Focus (13.4h)','Admin (7.7h)','Travel (0.7h)'],datasets:[{data:[24.4,13.4,7.7,0.7],backgroundColor:[RED,TEAL,AMBER,GRAY],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{boxWidth:10,padding:8,font:{size:10}}}}}});
+
+new Chart(document.getElementById('skillsChart'),{type:'bar',data:{labels:['CI/CD','Sensor Fusion','ML','Python','C++','Contract Mgmt','AWS','Inspection','ERP','gRPC','Real-Time','CNC','Sys Arch'],datasets:[{label:'Assessments',data:[4,4,4,4,4,4,3,3,3,3,3,3,3],backgroundColor:[BLUE,NAVY,TEAL,BLUE,NAVY,AMBER,BLUE,AMBER,GRAY,TEAL,NAVY,AMBER,PURPLE],borderRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{title:{display:true,text:'Count'},grid:{color:'#f0f0f0'},ticks:{stepSize:1}}}}});
+
+new Chart(document.getElementById('contractChart'),{type:'bar',data:{labels:['SOCOM Phase 3','SOCOM Phase 2','CUAS Next Gen','Dive-LD Block 2','UK MoD','Five Eyes ISR','NATO CUAS','Lattice Integ','Mobile C-Drone','Tactical ISR'],datasets:[{label:'Total Value ($M)',data:[500,480,290,210,185,119.8,114.7,111.1,103.1,102.8],backgroundColor:[GRAY,NAVY,NAVY,TEAL,PURPLE,PURPLE,NAVY,RED,NAVY,BLUE],borderRadius:4}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'$ Millions'},grid:{color:'#f0f0f0'}},y:{grid:{display:false}}}}});
+
+new Chart(document.getElementById('initiativeChart'),{type:'doughnut',data:{labels:['In Progress (29)','At Risk (3)','On Hold (2)','Completed (2)','Planned (1)'],datasets:[{data:[29,3,2,2,1],backgroundColor:[TEAL,RED,AMBER,NAVY,GRAY],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{boxWidth:12}}}}});
+<\/script>
+</body>
+</html>
