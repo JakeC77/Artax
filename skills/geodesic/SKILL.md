@@ -119,3 +119,83 @@ Content-Type: application/json
 - Read-only access (no mutations)
 - Results capped at 1000 rows by default
 - Token expires (refresh as needed)
+
+---
+
+## Dashboard Generation
+
+Generate interactive HTML dashboards from query results using Chart.js.
+
+### Basic Template
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: system-ui; background: #1a1a2e; color: #eee; padding: 20px; }
+        .card { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 20px; margin: 10px; }
+        .chart-container { height: 300px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h3>Chart Title</h3>
+        <div class="chart-container"><canvas id="chart1"></canvas></div>
+    </div>
+    <script>
+        new Chart(document.getElementById('chart1'), {
+            type: 'bar',  // or 'line', 'doughnut', 'pie'
+            data: {
+                labels: ['Label1', 'Label2', 'Label3'],
+                datasets: [{
+                    data: [10, 20, 30],
+                    backgroundColor: '#00d9ff',
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+            }
+        });
+    </script>
+</body>
+</html>
+```
+
+### Workflow
+
+1. **Query the data:**
+```python
+result = run_query("""
+    MATCH (rx:Prescription)-[:PRESCRIPTION_TO_MEDICATION]->(m:Medication)-[:MEDICATION_TO_DRUGCLASS]->(dc:DrugClass)
+    RETURN dc.name as drug_class, count(rx) as rx_count
+    ORDER BY rx_count DESC LIMIT 10
+""")
+labels = [row[0] for row in result]
+values = [row[1] for row in result]
+```
+
+2. **Generate HTML** with data embedded in the Chart.js config
+
+3. **Deploy to GitHub Pages:**
+```bash
+cp dashboard.html artax/sites/<name>/index.html
+cd artax && git add sites/<name>/ && git commit -m "Add dashboard" && git push
+```
+
+Dashboard will be live at: `https://jakec77.github.io/Artax/sites/<name>/`
+
+### Chart Types
+
+| Type | Use For |
+|------|---------|
+| `bar` | Comparisons, rankings |
+| `line` | Trends over time |
+| `doughnut` | Proportions, percentages |
+| `horizontalBar` | Long labels, rankings |
+
+### Example: KPI Cards + Charts
+
+See live example: https://jakec77.github.io/Artax/sites/geodesic-dashboard/
