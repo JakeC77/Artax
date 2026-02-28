@@ -1,0 +1,51 @@
+# Theo Workflow Configuration
+# Controls model selection and settings for Theo conversational agents
+
+# =============================================================================
+# MODELS
+# =============================================================================
+# Each model can be specified as:
+#   - String: "openai:gpt-4o-mini" or just "gpt-4o-mini"
+#   - Object: { provider: "azure", model: "gpt-4o" }
+#   - With thinking (Google Gemini):
+#       provider: google
+#       model: gemini-2.5-pro
+#       thinking: true
+#       thinking_budget: 10000  # optional: token budget for thinking (-1 unlimited, 0 disabled)
+
+# Main Theo agent - conversational intent discovery
+# Streaming UX - latency matters, no thinking
+theo_model:
+  provider: google
+  model: gemini-2.5-flash
+
+# Intent builder - orchestrates intent discovery conversation
+# Conversational flow - latency matters, no thinking
+intent_builder_model:
+  provider: google
+  model: gemini-2.5-flash
+
+# Team builder - creates team definitions from intent packages
+# Complex agent architecture design - needs deep reasoning
+team_builder_model:
+  provider: google
+  model: gemini-2.5-pro
+  thinking: true
+
+# =============================================================================
+# TEMPERATURE SETTINGS
+# =============================================================================
+# Lower = more deterministic, Higher = more creative
+
+theo_temperature: 0.4
+intent_builder_temperature: 0.4
+team_builder_temperature: 0.4
+
+# =============================================================================
+# RETRY SETTINGS
+# =============================================================================
+# Number of retries on model errors (not counting initial attempt)
+
+theo_retries: 2
+intent_builder_retries: 2
+team_builder_retries: 2

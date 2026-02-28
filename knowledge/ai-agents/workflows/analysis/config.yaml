@@ -1,0 +1,96 @@
+# Analysis Workflow Configuration
+
+# =============================================================================
+# AI Models
+# =============================================================================
+# Each model can be specified as:
+#   - String: "openai:gpt-4o-mini" or just "gpt-4o-mini"
+#   - Object: { provider: "azure", model: "gpt-4o" }
+#   - With thinking (Google Gemini):
+#       provider: google
+#       model: gemini-2.5-pro
+#       thinking: true
+#       thinking_budget: 10000  # optional: token budget for thinking (-1 unlimited, 0 disabled)
+
+# Strategic planning needs deep reasoning
+planner_model:
+  provider: google
+  model: gemini-2.5-pro
+  thinking_budget: 1024
+
+# Analytical rigor, complex structured output
+executor_model:
+  provider: google
+  model: gemini-2.5-pro
+  thinking_budget: 1024
+
+# Creative scenario design
+scenario_planner_model:
+  provider: google
+  model: gemini-2.5-pro
+  thinking_budget: 1024
+
+# Calculations (less creative than planning)
+scenario_executor_model:
+  provider: google
+  model: gemini-2.5-pro
+  thinking_budget: 1024
+
+# Tools per stage
+planning_tools:
+  - calculator
+  - cypher_query
+
+analysis_tools:
+  - calculator
+  - web_search
+  - date_time_utilities
+  - cypher_query
+
+scenario_planning_tools:
+  - calculator
+  - web_search
+  - cypher_query
+
+scenario_execution_tools:
+  - calculator
+  - web_search
+  - cypher_query
+  - date_time_utilities
+
+# Limits
+max_analyses: 2
+max_scenarios_per_analysis: 2
+max_scenarios_total: 4
+
+# Timeouts (seconds)
+planning_timeout_seconds: 180
+analysis_timeout_seconds: 300
+scenario_planning_timeout_seconds: 120
+scenario_timeout_seconds: 180
+graphql_timeout_seconds: 60  # Timeout for GraphQL/Cypher queries
+
+planner_max_web_search_calls: 2
+executor_max_web_search_calls: 2
+scenario_planner_max_web_search_calls: 2
+scenario_executor_max_web_search_calls: 2
+
+# Concurrency
+max_parallel_workstreams: 3
+max_parallel_scenarios_per_analysis: 3
+
+# Features
+enable_web_search: true  # Required for tools to use web_search - ensure FIRECRAWL_API_KEY is set
+enable_validation: true
+
+# Cypher result compression at query time (DISABLED - using history compaction instead)
+# When true, cypher_query returns: summary + sample rows + aggregates instead of full results
+# We disable this so agent sees full data during reasoning, then history compaction kicks in
+compress_cypher_results: false
+compress_sample_rows: 15  # Number of sample rows to include (used by history compactor now)
+
+# History compaction (post-reasoning context reduction)
+# Agent sees full data during reasoning, then history is compacted before next model call
+enable_history_compaction: true
+compaction_sample_rows: 10  # Number of sample rows to keep after compaction
+compaction_min_rows: 20  # Only compact results with >= this many rows

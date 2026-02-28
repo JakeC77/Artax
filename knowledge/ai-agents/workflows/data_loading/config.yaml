@@ -1,0 +1,34 @@
+# Data Loading Workflow Configuration
+# Controls model selection and settings for data loading workflow
+
+# =============================================================================
+# MODELS
+# =============================================================================
+# Each model can be specified as:
+#   - String: "openai:gpt-4o-mini" or just "gpt-4o-mini"
+#   - Object: { provider: "azure", model: "gpt-4o" }
+#   - With thinking (Google Gemini):
+#       provider: google
+#       model: gemini-2.5-pro
+#       thinking: true
+#       thinking_budget: 10000  # optional: token budget for thinking (-1 unlimited, 0 disabled)
+
+# Data loader agent - conversational CSV mapping and data insertion
+# Conversational flow - latency matters, no thinking needed
+data_loader_model:
+  provider: google
+  model: gemini-2.5-flash
+
+data_loader_temperature: 0.5
+data_loader_retries: 2
+
+# Performance settings
+max_batch_size: 100
+
+# Feature flags
+enable_preview: true
+auto_confirm_mapping: false
+
+# CSV parsing
+csv_sample_rows: 10
+csv_max_rows_preview: 5

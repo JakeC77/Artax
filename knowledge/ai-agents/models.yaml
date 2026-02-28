@@ -1,0 +1,199 @@
+# ============================================================================
+# MODEL CONFIGURATION HUB
+# ============================================================================
+# Central configuration for all AI model settings.
+# Supports multiple providers: OpenAI, Azure, Anthropic, Google, Groq, etc.
+#
+# ENVIRONMENT VARIABLE OVERRIDES:
+#   MODEL_DEFAULT_PROVIDER        - Override default provider
+#   MODEL_<COMPONENT>_MODEL       - Override model for component
+#   MODEL_<COMPONENT>_TEMPERATURE - Override temperature
+#   MODEL_<COMPONENT>_PROVIDER    - Override provider for component
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# SUPPORTED PROVIDERS REFERENCE
+# ----------------------------------------------------------------------------
+# Pydantic AI supports these providers natively:
+#
+# PROVIDER        | ENV VARS NEEDED              | EXAMPLE MODELS
+# ----------------|------------------------------|---------------------------
+# openai          | OPENAI_API_KEY               | gpt-4o, gpt-4o-mini, o1, o3-mini
+# azure           | AZURE_OPENAI_ENDPOINT,       | (uses deployment names)
+#                 | AZURE_OPENAI_DEPLOYMENT_NAME |
+#                 | AZURE_OPENAI_API_KEY (or MI) |
+# anthropic       | ANTHROPIC_API_KEY            | claude-sonnet-4-5, claude-opus-4, claude-3-5-haiku
+# google          | GOOGLE_API_KEY (or gcloud)   | gemini-2.5-pro, gemini-2.5-flash
+# groq            | GROQ_API_KEY                 | llama-3.3-70b, mixtral-8x7b
+# mistral         | MISTRAL_API_KEY              | mistral-large, mistral-small
+# bedrock         | AWS credentials              | anthropic.claude-v2, amazon.titan
+# cohere          | COHERE_API_KEY               | command-r-plus, command-r
+# cerebras        | CEREBRAS_API_KEY             | llama3.1-70b, llama3.1-8b
+# ollama          | OLLAMA_HOST (optional)       | llama3.2, mistral, codellama
+# together        | TOGETHER_API_KEY             | meta-llama/Llama-3-70b
+# fireworks       | FIREWORKS_API_KEY            | accounts/fireworks/models/llama-v3
+# deepseek        | DEEPSEEK_API_KEY             | deepseek-chat, deepseek-coder
+# openrouter      | OPENROUTER_API_KEY           | openai/gpt-4o, anthropic/claude-3
+# ----------------------------------------------------------------------------
+
+# Default provider (used when component doesn't specify)
+# Set to "azure" if using Azure OpenAI, "anthropic" for Claude, etc.
+default_provider: "openai"
+
+# Provider-specific settings (credentials come from environment variables)
+providers:
+  openai:
+    # Uses OPENAI_API_KEY from environment
+    enabled: true
+
+  azure:
+    # Uses AZURE_OPENAI_* from environment (see config.py)
+    # When enabled, auto-detects via Config.is_azure_configured()
+    enabled: true
+    # Deployment mapping: map model names to Azure deployment names
+    deployments:
+      gpt-4o: "gpt-4o"
+      gpt-4o-mini: "gpt-4o-mini"
+
+  anthropic:
+    # Uses ANTHROPIC_API_KEY from environment
+    enabled: false
+
+  google:
+    # Uses GOOGLE_API_KEY or gcloud authentication
+    enabled: false
+
+  groq:
+    # Uses GROQ_API_KEY from environment
+    enabled: false
+
+  mistral:
+    # Uses MISTRAL_API_KEY from environment
+    enabled: false
+
+  bedrock:
+    # Uses AWS credentials (boto3 default credential chain)
+    enabled: false
+
+  ollama:
+    # Local models - no API key needed
+    enabled: false
+    host: "http://localhost:11434"
+
+  together:
+    # Uses TOGETHER_API_KEY from environment
+    enabled: false
+
+  fireworks:
+    # Uses FIREWORKS_API_KEY from environment
+    enabled: false
+
+  deepseek:
+    # Uses DEEPSEEK_API_KEY from environment
+    enabled: false
+
+  openrouter:
+    # Uses OPENROUTER_API_KEY from environment
+    # Supports multiple model providers through single API
+    enabled: false
+
+# ----------------------------------------------------------------------------
+# DEFAULT SETTINGS
+# ----------------------------------------------------------------------------
+# Applied when a component doesn't specify a value
+defaults:
+  model: "gpt-4o"
+  temperature: 0.7
+  retries: 2
+  timeout: 60
+
+# ----------------------------------------------------------------------------
+# COMPONENT CONFIGURATIONS
+# ----------------------------------------------------------------------------
+# Each component can override defaults. Settings cascade:
+# 1. Environment variable (MODEL_<COMPONENT>_<SETTING>)
+# 2. Component-specific config below
+# 3. Defaults section above
+# 4. Hardcoded fallbacks
+#
+# MULTI-PROVIDER EXAMPLE:
+# You can mix providers per component. Just add `provider:` to override:
+#
+#   conductor:
+#     provider: "anthropic"
+#     model: "claude-sonnet-4-5"
+#
+#   theo:
+#     provider: "google"
+#     model: "gemini-2.5-flash"
+#
+#   scope_builder:
+#     provider: "openai"
+#     model: "gpt-4o-mini"
+
+components:
+  # Theo agent - conversational intent discovery and team building
+  theo:
+    # provider: "openai"  # Uncomment to override default_provider
+    model: "gpt-4o-mini"
+    temperature: 0.4
+    retries: 2
+
+  # Intent builder - orchestrates intent discovery conversation
+  intent_builder:
+    # provider: "anthropic"  # Example: use Claude for intent discovery
+    # model: "claude-sonnet-4-5"
+    model: "gpt-4o"
+    temperature: 0.4
+
+  # Team builder - creates team definitions from intent packages
+  team_builder:
+    # provider: "anthropic"  # Example: use Claude for complex team design
+    # model: "claude-opus-4"
+    model: "gpt-4o"
+    temperature: 0.4
+
+  # Conductor - task decomposition and orchestration
+  conductor:
+    # provider: "anthropic"  # Example: use Claude for reasoning-heavy tasks
+    # model: "claude-sonnet-4-5"
+    model: "gpt-4o"
+    retries: 3
+
+  # Chat conductor - routes chat messages and makes quick decisions
+  chat_conductor:
+    # provider: "google"  # Example: use Gemini for fast routing
+    # model: "gemini-2.5-flash"
+    model: "gpt-4o"
+    retries: 2
+
+  # Scope builder - data recommendation agent
+  scope_builder:
+    model: "gpt-4o-mini"
+    temperature: 0.3
+
+  # Agent factory - default model for YAML-defined agents
+  agent_factory:
+    model: "gpt-4o"
+
+  # Feedback classifier - classifies user feedback intent
+  feedback_classifier:
+    # provider: "groq"  # Example: use Groq for fast classification
+    # model: "llama-3.3-70b"
+    model: "gpt-4o"
+    temperature: 0.3
+
+  # Answer agent - quick question answering
+  answer_agent:
+    model: "gpt-4o-mini"
+
+# ----------------------------------------------------------------------------
+# MODEL ALIASES
+# ----------------------------------------------------------------------------
+# Semantic aliases for easier configuration. Use these in component configs
+# instead of specific model names for flexibility.
+aliases:
+  fast: "gpt-4o-mini"
+  capable: "gpt-4o"
+  reasoning: "o1"
+  cheap: "gpt-4o-mini"

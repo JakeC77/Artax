@@ -1,0 +1,769 @@
+# Reference SDL illustrating the object shapes exposed by the API.
+# The server is code-first; this file is for docs only.
+
+type Query {
+  workspaces: [Workspace!]!
+  users: [User!]!
+  tenants: [Tenant!]!
+  roles: [Role!]!
+  userRoles: [UserRole!]!
+  workspaceMembers: [WorkspaceMember!]!
+  workspaceItems: [WorkspaceItem!]!
+  overlayChangesets: [OverlayChangeset!]!
+  overlayNodePatches: [OverlayNodePatch!]!
+  overlayEdgePatches: [OverlayEdgePatch!]!
+  scenarios: [Scenario!]!
+  scenarioRuns: [ScenarioRun!]!
+  workspaceAnalyses: [WorkspaceAnalysis!]!
+  workspaceAnalysisMetrics: [WorkspaceAnalysisMetric!]!
+  scenarioMetrics: [ScenarioMetric!]!
+  insights: [Insight!]!
+  scratchpadAttachments: [ScratchpadAttachment!]!
+  scratchpadNotes: [ScratchpadNote!]!
+  ontologies: [Ontology!]!
+  companies: [Company!]!
+  dataLoadingAttachments: [DataLoadingAttachment!]!
+  intents: [Intent!]!
+  agentRoles: [AgentRole!]!
+  """When workspaceId is set, results are limited to entities whose ontologyId matches the workspace's ontologyId."""
+  semanticEntities(workspaceId: UUID): [SemanticEntity!]!
+  semanticFields: [SemanticField!]!
+
+  # convenience getters
+  workspaceById(workspaceId: UUID!): Workspace
+  userById(userId: UUID!): User
+  tenantById(tenantId: UUID!): Tenant
+  scenarioById(scenarioId: UUID!): Scenario
+  scenarioRunById(runId: UUID!): ScenarioRun
+  overlayChangesetById(changesetId: UUID!): OverlayChangeset
+  insightById(insightId: UUID!): Insight
+  workspaceAnalysisById(workspaceAnalysisId: UUID!): WorkspaceAnalysis
+  workspaceAnalysisMetricById(workspaceAnalysisMetricId: UUID!): WorkspaceAnalysisMetric
+  scenarioMetricById(scenarioMetricId: UUID!): ScenarioMetric
+  scratchpadAttachmentById(scratchpadAttachmentId: UUID!): ScratchpadAttachment
+  # Contents of the processed pipeline's assertions.json for the attachment, or null if the attachment or file is missing.
+  scratchpadAttachmentAssertions(scratchpadAttachmentId: UUID!): String
+  scratchpadNoteById(scratchpadNoteId: UUID!): ScratchpadNote
+  ontologyById(ontologyId: UUID!): Ontology
+  # Contents of the ontology JSON file from blob storage (jsonUri or default path). Null if ontology or file is missing.
+  ontologyJson(ontologyId: UUID!): String
+  companyById(companyId: UUID!): Company
+  dataLoadingAttachmentById(attachmentId: UUID!): DataLoadingAttachment
+  intentById(intentId: UUID!): Intent
+  agentRoleById(agentRoleId: UUID!): AgentRole
+  """Access keys for an agent role (metadata only; secret is never returned)."""
+  agentRoleAccessKeys(agentRoleId: UUID!): [AgentRoleAccessKey!]!
+  semanticEntityByNodeLabel(nodeLabel: String!): SemanticEntity
+  semanticFieldsBySemanticEntityId(semanticEntityId: UUID!): [SemanticField!]!
+}
+
+type Workspace {
+  workspaceId: UUID!
+  tenantId: UUID!
+  companyId: UUID
+  ontologyId: UUID
+  ownerUserId: UUID!
+  name: String!
+  description: String
+  intent: String
+  visibility: String!
+  baseSnapshotTs: DateTime
+  state: String! # draft|setup|working|action|archived
+  createdAt: DateTime!
+  updatedAt: DateTime!
+
+  company: Company
+  ontology: Ontology
+  # Resolved with DataLoader to avoid N+1
+  members: [WorkspaceMember!]!
+  owner: User!
+}
+
+type WorkspaceMember {
+  user: User!
+  workspaceId: UUID!
+  userId: UUID!
+  role: String!
+  addedAt: DateTime!
+}
+
+type User {
+  userId: UUID!
+  tenantId: UUID!
+  subject: String!
+  email: String!
+  displayName: String!
+  isAdmin: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+
+extend type Query {
+  workspaceNodes(workspaceId: UUID!): WorkspaceItemConnection! @paginate
+}
+
+extend type Mutation {
+  addWorkspaceNode(workspaceId: UUID!, graphNodeId: String!, graphEdgeId: String, labels: [String!], pinnedBy: UUID!): WorkspaceItem!
+  updateWorkspaceNodeLabels(workspaceId: UUID!, graphNodeId: String!, graphEdgeId: String, labels: [String!]!): WorkspaceItem
+  removeWorkspaceNode(workspaceId: UUID!, graphNodeId: String!, graphEdgeId: String): Boolean!
+}
+
+type WorkspaceItem {
+  workspaceId: UUID!
+  graphNodeId: String!
+  graphEdgeId: String
+  labels: [String!]!
+  pinnedBy: UUID!
+  pinnedAt: DateTime!
+  user: User @deprecated(reason: "Use pinnedBy to look up user") # placeholder
+}
+
+# ---------------- Entities ----------------
+
+type Tenant {
+  tenantId: UUID!
+  name: String!
+  region: String!
+  createdAt: DateTime!
+}
+
+type Role {
+  tenantId: UUID!
+  roleName: String!
+  description: String
+}
+
+type UserRole {
+  userId: UUID!
+  roleName: String!
+}
+
+type OverlayChangeset {
+  changesetId: UUID!
+  workspaceId: UUID!
+  createdBy: UUID!
+  status: String!
+  comment: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type OverlayNodePatch {
+  changesetId: UUID!
+  graphNodeId: String!
+  op: String!
+  patch: String!
+}
+
+type OverlayEdgePatch {
+  changesetId: UUID!
+  graphEdgeId: String!
+  op: String!
+  patch: String!
+}
+
+type Scenario {
+  scenarioId: UUID!
+  workspaceId: UUID!
+  name: String!
+  headerText: String
+  mainText: String
+  relatedChangesetId: UUID
+  createdBy: UUID!
+  createdAt: DateTime!
+}
+
+type ScenarioRun {
+  runId: UUID!
+  workspaceId: UUID!
+  scenarioId: UUID
+  title: String
+  engine: String!
+  prompt: String
+  inputs: String!
+  outputs: String
+  status: String!
+  errorMessage: String
+  artifactsUri: String
+  startedAt: DateTime
+  finishedAt: DateTime
+}
+
+type Insight {
+  insightId: UUID!
+  tenantId: UUID!
+  workspaceId: UUID
+  severity: String!
+  title: String!
+  body: String!
+  relatedGraphIds: [String!]!
+  evidenceRefs: String!
+  generatedAt: DateTime!
+}
+
+# ---------------- Analyses & Metrics ----------------
+
+type WorkspaceAnalysis {
+  workspaceAnalysisId: UUID!
+  workspaceId: UUID!
+  titleText: String!
+  bodyText: String
+  createdOn: DateTime!
+  version: Int!
+}
+
+type WorkspaceAnalysisMetric {
+  workspaceAnalysisMetricId: UUID!
+  workspaceAnalysisId: UUID!
+  mainText: String
+  secondaryText: String
+  createdOn: DateTime!
+}
+
+type ScenarioMetric {
+  scenarioMetricId: UUID!
+  scenarioId: UUID!
+  mainText: String
+  secondaryText: String
+  createdOn: DateTime!
+  version: Int!
+}
+
+# ---------------- Scratchpad ----------------
+
+type ScratchpadAttachment {
+  scratchpadAttachmentId: UUID!
+  workspaceId: UUID!
+  title: String!
+  description: String
+  createdOn: DateTime!
+  uri: String
+  fileType: String
+  size: Long
+  processingStatus: String!
+  processingError: String
+}
+
+type ScratchpadNote {
+  scratchpadNoteId: UUID!
+  workspaceId: UUID!
+  title: String!
+  text: String!
+  createdOn: DateTime!
+}
+
+"""Company; name and markdown for agentic workflows. Tenant-scoped."""
+type Company {
+  companyId: UUID!
+  tenantId: UUID!
+  name: String!
+  markdownContent: String
+}
+
+"""Ontology metadata; content lives in external JSON (jsonUri). Tenant-scoped, shared across workspaces."""
+type Ontology {
+  ontologyId: UUID!
+  tenantId: UUID!
+  companyId: UUID
+  name: String!
+  description: String
+  semVer: String
+  createdOn: DateTime!
+  createdBy: UUID
+  lastEdit: DateTime
+  lastEditedBy: UUID
+  status: String!
+  runId: UUID
+  jsonUri: String
+  """Markdown text examples injected into prompts for this ontology's domain."""
+  domainExamples: String
+  company: Company
+  """When set, this ontology uses its own Neo4j instance (e.g. Aura). Password is never exposed."""
+  neo4jConnection: OntologyNeo4jConnection
+}
+
+"""Per-ontology Neo4j connection info. Password is never exposed."""
+type OntologyNeo4jConnection {
+  uri: String!
+  username: String!
+}
+
+"""Input to set per-ontology Neo4j connection. Password is encrypted at rest and never returned."""
+input SetOntologyNeo4jConnectionInput {
+  uri: String!
+  username: String!
+  password: String!
+}
+
+"""CSV upload for the data-loading workflow; scoped by tenant and ontology. runId set when workflow is started."""
+type DataLoadingAttachment {
+  attachmentId: UUID!
+  tenantId: UUID!
+  ontologyId: UUID!
+  fileName: String!
+  blobPath: String!
+  uri: String
+  createdOn: DateTime!
+  createdBy: UUID
+  runId: UUID
+  status: String!
+}
+
+"""Agent intent operation: what information to collect, when to execute, and what the response looks like. Tenant-scoped. Optionally linked to one ontology (one ontology has many intents)."""
+type Intent {
+  intentId: UUID!
+  tenantId: UUID!
+  """When set, this intent belongs to this ontology. One ontology has many intents."""
+  ontologyId: UUID
+  opId: String!
+  intentName: String!
+  route: String
+  description: String
+  dataSource: String
+  """JSON Schema for input (JSON string)."""
+  inputSchema: String
+  """JSON Schema for output (JSON string)."""
+  outputSchema: String
+  """Cypher query template for grounding (plain text)."""
+  grounding: String
+  createdOn: DateTime!
+  lastEdit: DateTime
+  """Ontology this intent belongs to, when ontologyId is set; otherwise null."""
+  ontology: Ontology
+}
+
+"""Profile for what incoming agents are allowed to do: read/write ontology scope and allowed intents. Tenant-scoped."""
+type AgentRole {
+  agentRoleId: UUID!
+  tenantId: UUID!
+  name: String!
+  description: String
+  readOntologyId: UUID
+  writeOntologyId: UUID
+  createdOn: DateTime!
+  lastEdit: DateTime
+  readOntology: Ontology
+  writeOntology: Ontology
+  intents: [Intent!]!
+  accessKeys: [AgentRoleAccessKey!]!
+}
+
+"""Access key for an agent role. Secret is never exposed; only prefix and metadata."""
+type AgentRoleAccessKey {
+  accessKeyId: UUID!
+  agentRoleId: UUID!
+  keyPrefix: String!
+  name: String
+  createdOn: DateTime!
+  expiresAt: DateTime
+}
+
+"""Result of generating an agent role access key. secretKey is returned only once; client must store it."""
+type GenerateAgentRoleAccessKeyResult {
+  accessKeyId: UUID!
+  """Full secret; returned only on generation. Never stored or returned again."""
+  secretKey: String!
+  keyPrefix: String!
+  expiresAt: DateTime
+}
+
+type SemanticEntity {
+  semanticEntityId: UUID!
+  tenantId: UUID!
+  nodeLabel: String!
+  version: Int!
+  description: String
+  name: String!
+  createdOn: DateTime!
+  fields: [SemanticField!]!
+}
+
+type SemanticField {
+  semanticFieldId: UUID!
+  semanticEntityId: UUID!
+  version: Int!
+  description: String
+  name: String!
+  dataType: String
+  rangeInfo: String
+  semanticEntity: SemanticEntity
+}
+
+extend type Mutation {
+  createWorkspaceAnalysis(workspaceId: UUID!, titleText: String!, bodyText: String, version: Int): UUID!
+  updateWorkspaceAnalysis(workspaceAnalysisId: UUID!, titleText: String, bodyText: String, version: Int): Boolean!
+  deleteWorkspaceAnalysis(workspaceAnalysisId: UUID!): Boolean!
+
+  createWorkspaceAnalysisMetric(workspaceAnalysisId: UUID!, mainText: String, secondaryText: String): UUID!
+  updateWorkspaceAnalysisMetric(workspaceAnalysisMetricId: UUID!, mainText: String, secondaryText: String): Boolean!
+  deleteWorkspaceAnalysisMetric(workspaceAnalysisMetricId: UUID!): Boolean!
+
+  createScenarioMetric(scenarioId: UUID!, mainText: String, secondaryText: String, version: Int): UUID!
+  updateScenarioMetric(scenarioMetricId: UUID!, mainText: String, secondaryText: String, version: Int): Boolean!
+  deleteScenarioMetric(scenarioMetricId: UUID!): Boolean!
+}
+
+extend type Query {
+  """When workspaceId is set and the workspace has an ontology with Neo4j connection, uses that graph; otherwise default Neo4j."""
+  graphNodeById(id: String!, workspaceId: UUID): GraphNode
+  """When workspaceId is set and the workspace has an ontology with Neo4j connection, uses that graph; otherwise default Neo4j."""
+  graphEdgeById(id: String!, workspaceId: UUID): GraphEdge
+  """When workspaceId is set and the workspace has an ontology with Neo4j connection, uses that graph; otherwise default Neo4j."""
+  graphNodeTypes(workspaceId: UUID): [String!]!
+  """When workspaceId is set and the workspace has an ontology with Neo4j connection, uses that graph; otherwise default Neo4j."""
+  graphEdgeTypes(workspaceId: UUID): [String!]!
+  """When workspaceId is set and the workspace has an ontology with Neo4j connection, uses that graph; otherwise default Neo4j."""
+  graphNodesByType(type: String!, workspaceId: UUID): [GraphNode!]!
+  """When workspaceId is set and the workspace has an ontology with Neo4j connection, uses that graph; otherwise default Neo4j."""
+  graphNeighbors(id: String!, workspaceId: UUID): GraphNeighborhood!
+  # When ontologyId or workspaceId is set, search uses that ontology's Neo4j connection if configured; otherwise default Neo4j.
+  graphNodesSearch(criteria: [GraphPropertyMatchInput!]!, type: String, ontologyId: UUID, workspaceId: UUID): [GraphNode!]!
+  graphNodesSearchWithFilters(filterGroup: GraphFilterGroupInput!, type: String, ontologyId: UUID, workspaceId: UUID): [GraphNode!]!
+  """When workspaceId is set and the workspace has an ontology with Neo4j connection, uses that graph; otherwise default Neo4j."""
+  graphNodePropertyMetadata(type: String!, workspaceId: UUID): [GraphPropertyMetadata!]!
+  """When workspaceId is set and the workspace has an ontology with Neo4j connection, uses that graph; otherwise default Neo4j."""
+  graphNodeRelationshipTypes(type: String!, workspaceId: UUID): [String!]!
+  """When workspaceId is set and the workspace has an ontology with Neo4j connection, uses that graph; otherwise default Neo4j."""
+  graphNodesByCypher(cypherQuery: String!, workspaceId: UUID): [GraphNode!]!
+  """Execute Cypher and return row-structured results with metadata. workspaceIds optional (no-op if graph has no workspace key)."""
+  graphRowsByCypher(cypherQuery: String!, workspaceIds: [String!], limit: Int = 10000): GraphQueryResult!
+  """Return the graph schema (node types, relationship types) for system prompt / agent context. When workspaceId is set and the workspace has an ontology with Neo4j connection, uses that graph; otherwise default Neo4j. workspaceIds reserved for future filtering."""
+  graphSchema(workspaceId: UUID, workspaceIds: [String!]): GraphSchema!
+}
+
+extend type Mutation {
+  upsertGraphNode(id: String!, type: String!, properties: MapOfStringToString): GraphNode!
+  upsertGraphEdge(id: String!, type: String!, fromId: String!, toId: String!, properties: MapOfStringToString): GraphEdge!
+}
+
+"""A graph node stored in Neo4j."""
+type GraphNode {
+  id: String!
+  labels: [String!]!
+  properties: MapOfStringToString!
+}
+
+"""A graph edge (relationship) stored in Neo4j."""
+type GraphEdge {
+  id: String!
+  type: String!
+  fromId: String!
+  toId: String!
+  properties: MapOfStringToString!
+}
+
+"""A graph neighborhood around a central node (excluding the center)."""
+type GraphNeighborhood {
+  nodes: [GraphNode!]!
+  edges: [GraphEdge!]!
+}
+
+"""Row-structured Cypher result with metadata."""
+type GraphQueryResult {
+  columns: [String!]!
+  rows: [[String!]!]!
+  rowCount: Int!
+  truncated: Boolean!
+  metadata: QueryMetadata!
+}
+
+type QueryMetadata {
+  pattern: PatternInfo!
+  nodes: [NodeInfo!]!
+  relationships: [RelationshipInfo!]!
+  columnDetails: [ColumnInfo!]!
+  rowGrain: String!
+}
+
+type PatternInfo {
+  description: String!
+  cypherPattern: String!
+}
+
+type NodeInfo {
+  alias: String!
+  labels: [String!]!
+  patternPosition: Int!
+}
+
+type RelationshipInfo {
+  type: String!
+  fromAlias: String!
+  toAlias: String!
+  direction: RelationshipDirection!
+}
+
+enum RelationshipDirection {
+  OUTGOING
+  INCOMING
+  UNDIRECTED
+}
+
+type ColumnInfo {
+  name: String!
+  nodeAlias: String
+  property: String
+  dataType: GraphDataType!
+  isIdentifier: Boolean!
+  role: ColumnRole!
+  """From SemanticField when matched by node label + property."""
+  description: String
+}
+
+enum GraphDataType {
+  STRING
+  INTEGER
+  FLOAT
+  BOOLEAN
+  DATE
+  DATETIME
+  LIST
+  MAP
+  NULL
+}
+
+enum ColumnRole {
+  IDENTIFIER
+  ATTRIBUTE
+  METRIC
+  CATEGORY
+  TIMESTAMP
+  COMPUTED
+}
+
+"""Full graph schema for system prompt / agent context."""
+type GraphSchema {
+  nodeTypes: [NodeTypeInfo!]!
+  relationshipTypes: [RelationshipTypeInfo!]!
+  suggestedPatterns: [SuggestedPattern!]
+}
+
+type NodeTypeInfo {
+  label: String!
+  description: String
+  count: Int
+  properties: [SchemaPropertyInfo!]!
+}
+
+type SchemaPropertyInfo {
+  name: String!
+  dataType: GraphDataType!
+  description: String
+  isIdentifier: Boolean!
+  exampleValues: [String!]
+  required: Boolean!
+}
+
+type RelationshipTypeInfo {
+  type: String!
+  description: String
+  fromLabels: [String!]!
+  toLabels: [String!]!
+  cardinality: Cardinality!
+  properties: [SchemaPropertyInfo!]
+}
+
+enum Cardinality {
+  ONE_TO_ONE
+  ONE_TO_MANY
+  MANY_TO_ONE
+  MANY_TO_MANY
+}
+
+type SuggestedPattern {
+  name: String!
+  description: String!
+  cypherPattern: String!
+  exampleQuery: String!
+}
+
+"""Describes a property available on a given node label."""
+type GraphPropertyMetadata {
+  name: String!
+  dataType: String!
+}
+
+"""Documentation-only map type representing { key: string, value: string }"""
+scalar MapOfStringToString
+
+"""Input for searching nodes by a property/value, optionally fuzzy."""
+input GraphPropertyMatchInput {
+  property: String!
+  value: String!
+  fuzzySearch: Boolean
+  maxDistance: Int
+  operator: String
+}
+
+"""
+Input for nested filter groups with AND/OR logic.
+
+A filter group combines conditions using AND/OR logic. It can contain:
+- filters: Direct property conditions (leaf nodes)
+- groups: Nested groups for hierarchical logic
+
+All items (both filters and groups) are combined using the operator.
+For AI agents: Always create a group. Put direct conditions in 'filters', 
+nest logic using 'groups'. A group can have both filters and groups.
+"""
+input GraphFilterGroupInput {
+  """The logical operator to combine all items: "AND" or "OR" (default: "AND")"""
+  operator: String!
+  """Direct property filter conditions (leaf nodes in the filter tree)"""
+  filters: [GraphPropertyMatchInput!]
+  """Nested filter groups for hierarchical logic (wrapped in parentheses)"""
+  groups: [GraphFilterGroupInput!]
+}
+
+extend type Mutation {
+  # Workspace creation (code-first implemented)
+  createWorkspace(name: String!, description: String, intent: String, companyId: UUID, ontologyId: UUID): UUID!
+
+  # Tenants
+  createTenant(name: String!, region: String): UUID!
+  updateTenant(tenantId: UUID!, name: String, region: String): Boolean!
+  deleteTenant(tenantId: UUID!): Boolean!
+
+  # Roles
+  upsertRole(tenantId: UUID!, roleName: String!, description: String): Boolean!
+  deleteRole(tenantId: UUID!, roleName: String!): Boolean!
+
+  # Users
+  createUser(tenantId: UUID!, subject: String!, email: String!, displayName: String!, isAdmin: Boolean, preferences: String): UUID!
+  updateUser(userId: UUID!, subject: String, email: String, displayName: String, isAdmin: Boolean, preferences: String): Boolean!
+  deleteUser(userId: UUID!): Boolean!
+
+  # UserRoles
+  addUserRole(userId: UUID!, roleName: String!): Boolean!
+  removeUserRole(userId: UUID!, roleName: String!): Boolean!
+
+  # Workspaces
+  updateWorkspace(workspaceId: UUID!, name: String, description: String, visibility: String, baseSnapshotTs: DateTime, intent: String, state: String, companyId: UUID, ontologyId: UUID): Boolean!
+  deleteWorkspace(workspaceId: UUID!): Boolean!
+
+  # Workspace Members
+  upsertWorkspaceMember(workspaceId: UUID!, userId: UUID!, role: String): Boolean!
+  removeWorkspaceMember(workspaceId: UUID!, userId: UUID!): Boolean!
+
+  # Workspace Items (generic)
+  upsertWorkspaceItem(workspaceId: UUID!, graphNodeId: String!, graphEdgeId: String, labels: [String!], pinnedBy: UUID): Boolean!
+  deleteWorkspaceItem(workspaceId: UUID!, graphNodeId: String!, graphEdgeId: String): Boolean!
+
+  # Overlay Changesets
+  createOverlayChangeset(workspaceId: UUID!, createdBy: UUID!, status: String, comment: String): UUID!
+  updateOverlayChangeset(changesetId: UUID!, status: String, comment: String): Boolean!
+  deleteOverlayChangeset(changesetId: UUID!): Boolean!
+
+  # Overlay Node Patch
+  upsertOverlayNodePatch(changesetId: UUID!, graphNodeId: String!, op: String, patch: String): Boolean!
+  deleteOverlayNodePatch(changesetId: UUID!, graphNodeId: String!): Boolean!
+
+  # Overlay Edge Patch
+  upsertOverlayEdgePatch(changesetId: UUID!, graphEdgeId: String!, op: String, patch: String): Boolean!
+  deleteOverlayEdgePatch(changesetId: UUID!, graphEdgeId: String!): Boolean!
+
+  # Scenarios
+  createScenario(workspaceId: UUID!, name: String!, relatedChangesetId: UUID, createdBy: UUID!): UUID!
+  updateScenario(scenarioId: UUID!, name: String, relatedChangesetId: UUID): Boolean!
+  deleteScenario(scenarioId: UUID!): Boolean!
+
+  # Scenario Runs
+  createScenarioRun(scenarioId: UUID!, engine: String!, inputs: String, status: String, prompt: String, title: String): UUID!
+  createWorkspaceRun(workspaceId: UUID!, scenarioId: UUID, engine: String!, inputs: String, status: String, prompt: String, title: String): UUID!
+  updateScenarioRun(runId: UUID!, status: String, outputs: String, errorMessage: String, artifactsUri: String, prompt: String, title: String, startedAt: DateTime, finishedAt: DateTime): Boolean!
+  deleteScenarioRun(runId: UUID!): Boolean!
+
+  # Insights
+  createInsight(tenantId: UUID!, workspaceId: UUID, severity: String!, title: String!, body: String!, relatedGraphIds: [String!], evidenceRefs: String): UUID!
+  updateInsight(insightId: UUID!, severity: String, title: String, body: String, relatedGraphIds: [String!], evidenceRefs: String): Boolean!
+  deleteInsight(insightId: UUID!): Boolean!
+
+  # Semantic Entities
+  createSemanticEntity(tenantId: UUID!, nodeLabel: String!, name: String!, description: String, version: Int): UUID!
+  updateSemanticEntity(semanticEntityId: UUID!, nodeLabel: String, name: String, description: String, version: Int): Boolean!
+  deleteSemanticEntity(semanticEntityId: UUID!): Boolean!
+
+  # Semantic Fields
+  createSemanticField(semanticEntityId: UUID!, name: String!, description: String, dataType: String, version: Int): UUID!
+  updateSemanticField(semanticFieldId: UUID!, name: String, description: String, dataType: String, version: Int): Boolean!
+  deleteSemanticField(semanticFieldId: UUID!): Boolean!
+  calculateSemanticFieldRanges: Boolean!
+  """Syncs ontology draft.json to semantic_entities/semantic_fields for the given ontology and computes range info from Neo4j."""
+  syncOntologyToSemanticEntities(ontologyId: UUID!): SyncOntologyToSemanticEntitiesResult!
+}
+
+"""Result of syncing an ontology draft to semantic entities and computing field ranges."""
+type SyncOntologyToSemanticEntitiesResult {
+  entitiesCreated: Int!
+  entitiesUpdated: Int!
+  fieldsWithRangeUpdated: Int!
+}
+
+scalar Upload
+
+extend type Mutation {
+  # Scratchpad Notes
+  createScratchpadNote(workspaceId: UUID!, title: String!, text: String!): UUID!
+  updateScratchpadNote(scratchpadNoteId: UUID!, title: String, text: String): Boolean!
+  deleteScratchpadNote(scratchpadNoteId: UUID!): Boolean!
+
+  # Scratchpad Attachments
+  createScratchpadAttachment(workspaceId: UUID!, title: String!, description: String, file: Upload!): UUID!
+  """Starts the document-indexing workflow for an existing scratchpad attachment (enqueues the pipeline)."""
+  startDocumentIndexingPipeline(scratchpadAttachmentId: UUID!): Boolean!
+  updateScratchpadAttachment(scratchpadAttachmentId: UUID!, title: String, description: String, processingStatus: String, processingError: String): Boolean!
+  deleteScratchpadAttachment(scratchpadAttachmentId: UUID!): Boolean!
+
+  # Ontologies (tenant-scoped; shared across workspaces)
+  createCompany(tenantId: UUID!, name: String!, markdownContent: String): UUID!
+  updateCompany(companyId: UUID!, name: String, markdownContent: String): Boolean!
+  deleteCompany(companyId: UUID!): Boolean!
+  createOntology(tenantId: UUID!, name: String!, description: String, semVer: String, createdBy: UUID, status: String, companyId: UUID, domainExamples: String): UUID!
+  updateOntology(ontologyId: UUID!, name: String, description: String, semVer: String, lastEditedBy: UUID, status: String, runId: UUID, jsonUri: String, companyId: UUID, domainExamples: String): Boolean!
+  deleteOntology(ontologyId: UUID!): Boolean!
+  createIntent(tenantId: UUID!, opId: String!, intentName: String!, route: String, description: String, dataSource: String, inputSchema: String, outputSchema: String, grounding: String, ontologyId: UUID): UUID!
+  updateIntent(intentId: UUID!, opId: String, intentName: String, route: String, description: String, dataSource: String, inputSchema: String, outputSchema: String, grounding: String, ontologyId: UUID): Boolean!
+  deleteIntent(intentId: UUID!): Boolean!
+  createAgentRole(tenantId: UUID!, name: String!, description: String, readOntologyId: UUID, writeOntologyId: UUID): UUID!
+  updateAgentRole(agentRoleId: UUID!, name: String, description: String, readOntologyId: UUID, writeOntologyId: UUID): Boolean!
+  deleteAgentRole(agentRoleId: UUID!): Boolean!
+  """Replace the role's allowed intents with the given list."""
+  setAgentRoleIntents(agentRoleId: UUID!, intentIds: [UUID!]!): Boolean!
+  """Generate an access key for the role. secretKey is returned only once; client must store it."""
+  generateAgentRoleAccessKey(agentRoleId: UUID!, name: String, expiresAt: DateTime): GenerateAgentRoleAccessKeyResult!
+  revokeAgentRoleAccessKey(accessKeyId: UUID!): Boolean!
+  """Clones an ontology: new DB row plus copy of draft.json to the new ontology's default blob path. Returns new ontology ID. Neo4j credentials are not copied."""
+  cloneOntology(sourceOntologyId: UUID!, name: String, tenantId: UUID!): UUID!
+  """Sets per-ontology Neo4j connection (e.g. Aura). Password encrypted at rest; never returned. Requires Neo4j:EncryptionKeyBase64."""
+  setOntologyNeo4jConnection(tenantId: UUID!, ontologyId: UUID!, input: SetOntologyNeo4jConnectionInput!): Boolean!
+  """Clears per-ontology Neo4j connection; ontology will use app default Neo4j."""
+  clearOntologyNeo4jConnection(tenantId: UUID!, ontologyId: UUID!): Boolean!
+
+  # Data loading workflow (CSV uploads + pipeline)
+  """Upload a CSV for the data-loading workflow; file is stored in cloud storage. Returns attachmentId."""
+  createDataLoadingAttachment(tenantId: UUID!, ontologyId: UUID!, file: Upload!, fileName: String): UUID!
+  """Starts the data-loading workflow for an attachment. Sends WorkflowEvent to Service Bus, sets runId on the attachment. Returns runId for the frontend to subscribe to the stream."""
+  startDataLoadingPipeline(dataLoadingAttachmentId: UUID!, workspaceId: UUID, initialInstructions: String): StartDataLoadingResult!
+  deleteDataLoadingAttachment(attachmentId: UUID!): Boolean!
+
+  # Ontology creation workflow (enqueues to Service Bus)
+  """Starts the ontology-creation workflow (new or resume). Sends WorkflowEvent to Service Bus. Returns runId for the frontend to subscribe to the run stream."""
+  startOntologyCreationPipeline(workspaceId: UUID!, initialContext: String, ontologyId: UUID): StartOntologyCreationResult!
+}
+
+"""Result of starting the data-loading pipeline. runId is set when the workflow was queued so the client can subscribe to the run stream."""
+type StartDataLoadingResult {
+  """Run ID for this workflow run; use to connect to the run's event stream. Null if the run was not queued."""
+  runId: UUID
+  """True if the workflow was accepted (queued or no Service Bus); false if attachment/workspace not found or send failed."""
+  success: Boolean!
+}
+
+"""Result of starting the ontology-creation pipeline. runId is set when the workflow was queued so the client can subscribe to the run stream."""
+type StartOntologyCreationResult {
+  """Run ID for this workflow run; use to connect to the run's event stream. Null if the run was not queued (e.g. workspace not found)."""
+  runId: UUID
+  """True if the workflow was accepted (queued or no Service Bus); false if workspace not found or send failed."""
+  success: Boolean!
+}

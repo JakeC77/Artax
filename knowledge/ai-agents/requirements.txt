@@ -1,0 +1,73 @@
+# Complete requirements for Multi-Workflow Azure Container App
+# Install with: pip install -r requirements.txt
+
+# Core dependencies (from main project)
+pydantic>=2.0.0
+pyyaml>=6.0.0
+python-dotenv>=1.0.0
+
+# Pydantic AI (for agents)
+# v1.21+ required for Gemini nested schema fix (issue #3483)
+pydantic-ai>=1.21.0
+
+# OpenAI API (for document indexing LLM extraction and pydantic-ai)
+openai>=1.0.0
+
+# Logfire for observability (used by Theo workflow)
+logfire>=0.0.1
+aiofiles>=23.0.0
+
+# HTTP client for SSE (Server-Sent Events)
+httpx>=0.24.0
+
+# Web search tool (Firecrawl)
+firecrawl-py>=1.0.0
+
+# PDF reading support
+PyPDF2>=3.0.0
+
+# Data analysis and CSV handling
+pandas>=2.0.0
+chardet>=5.0.0  # For CSV encoding detection
+
+# Date parsing for data scope executor
+python-dateutil>=2.8.0
+
+# SQL schema introspection (ontology conversation workflow)
+sqlalchemy>=2.0.0
+pyodbc>=4.0.0  # For SQL Server (mssql+pyodbc) when using key=value connection strings
+
+# Azure Service Bus SDK (required)
+azure-servicebus>=7.11.0
+
+# Optional: For managed identity authentication
+azure-identity>=1.15.0
+
+# Document indexing (Azure Blob + parsing)
+azure-storage-blob>=12.19.0
+
+# Graphiti knowledge graph (document-graphiti workflow; requires Neo4j)
+graphiti-core>=0.26.0
+# Neo4j driver for entity-resolution (document subgraph queries)
+neo4j>=5.14.0
+# Cryptography for Neo4j password decryption (per-ontology connections)
+cryptography>=41.0.0
+# PostgreSQL driver for querying ontology Neo4j credentials
+asyncpg>=0.29.0
+# Optional: graphiti-core[google-genai] for Gemini LLM (set GOOGLE_API_KEY or GEMINI_API_KEY)
+graphiti-core[google-genai]>=0.26.0
+python-docx>=1.0.0
+python-pptx>=0.6.21
+openpyxl>=3.1.0
+pyahocorasick>=2.0.0
+
+# Optional: For health check endpoint (recommended for Container Apps)
+fastapi>=0.104.0
+uvicorn>=0.24.0
+
+# Testing dependencies (optional)
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+pytest-mock>=3.10.0
+
+

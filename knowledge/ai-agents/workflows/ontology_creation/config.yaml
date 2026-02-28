@@ -1,0 +1,34 @@
+# Ontology Creation Workflow Configuration
+# Controls model selection and settings for ontology creation agents
+
+# =============================================================================
+# MODELS
+# =============================================================================
+# Each model can be specified as:
+#   - String: "openai:gpt-4o-mini" or just "gpt-4o-mini"
+#   - Object: { provider: "azure", model: "gpt-4o" }
+#   - With thinking (Google Gemini):
+#       provider: google
+#       model: gemini-2.5-pro
+#       thinking: true
+#       thinking_budget: 10000  # optional: token budget for thinking (-1 unlimited, 0 disabled)
+
+# Ontology creation agent - conversational ontology design
+# Conversational flow - latency matters, no thinking needed
+ontology_agent_model:
+  provider: google
+  model: gemini-2.5-flash
+
+# =============================================================================
+# TEMPERATURE SETTINGS
+# =============================================================================
+# Lower = more deterministic, Higher = more creative
+
+ontology_agent_temperature: 0.4
+
+# =============================================================================
+# RETRY SETTINGS
+# =============================================================================
+# Number of retries on model errors (not counting initial attempt)
+
+ontology_agent_retries: 2

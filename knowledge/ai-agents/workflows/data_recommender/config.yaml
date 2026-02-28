@@ -1,0 +1,39 @@
+# Data Recommender Workflow Configuration
+# Controls model selection and settings for the scope builder agent
+
+# =============================================================================
+# MODEL
+# =============================================================================
+# Model can be specified as:
+#   - String: "openai:gpt-4o-mini" or just "gpt-4o-mini"
+#   - Object: { provider: "azure", model: "gpt-4o" }
+#   - With thinking (Google Gemini):
+#       provider: google
+#       model: gemini-2.5-pro
+#       thinking: true
+#       thinking_budget: 10000  # optional: token budget for thinking (-1 unlimited, 0 disabled)
+
+# Schema matching needs reasoning for scope recommendation
+scope_builder_model:
+  provider: google
+  model: gemini-2.5-flash
+  thinking: true
+
+# =============================================================================
+# SCHEMA FILTERING
+# =============================================================================
+# Entity types to exclude from schema discovery (hidden from agent prompt).
+# These won't appear in scope recommendations or entity counts.
+excluded_entities:
+  - Entity
+  - Episodic
+
+# =============================================================================
+# SETTINGS
+# =============================================================================
+
+# Temperature - lower for more deterministic data scope recommendations
+scope_builder_temperature: 0.3
+
+# Retries on model errors
+scope_builder_retries: 2

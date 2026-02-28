@@ -1,0 +1,119 @@
+# Prescryptive Health - Company Profile
+## Company Overview
+
+**Prescryptive Health, Inc.** is a healthcare technology company headquartered in Redmond, WA, founded in 2017 by Microsoft cloud veterans Chris Blackley (CEO) and Kevin Young (Chief Product Officer). The company operates in the pharmacy benefit management (PBM) space with a mission to transform the U.S. prescription drug market through transparency and consumer empowerment.
+- **Founded:** 2017
+- **Headquarters:** Redmond, Washington
+- **Employees:** ~212
+- **Funding:** $35M (Series B)
+- **Industry:** Healthcare Technology / Pharmacy Benefit Management
+
+## What Prescryptive Does
+Prescryptive provides a transparent pharmacy benefit management platform that connects healthcare participants in a consumer-first ecosystem. Unlike traditional PBMs known for opaque pricing and hidden fees, Prescryptive emphasizes price transparency and digital prescription control.
+
+### Core Products & Services
+- **myPrescryptive** - Mobile-first consumer platform giving members digital control over prescriptions, real-time pricing, and pharmacy choice
+- **PrescryptivePRO** - Provider/pharmacy portal for claims and benefit management
+- **PBM Services** - Full benefit management including formulary management, prior authorization, claims adjudication
+- **rxlogic** - Pricing engine for pharmacy benefit analysis and plan design
+
+### Who They Serve
+
+- Employers and plan sponsors
+- Health plans and payers
+- Pharmacies and pharmacy networks
+- Pharma manufacturers
+- Health systems
+
+## Leadership Team
+| Name | Title |
+|------|-------|
+| Chris Blackley | CEO & Co-Founder |
+| Kevin Young | Chief Product Officer & Co-Founder |
+| Kelcey Blair, PharmD | EVP, Benefit Management Services |
+| Marc Gillette | EVP, Engineering |
+| Rob Wright, CPA | Chief Financial Officer |
+| Gaylord Wahl | Chief Strategy Delivery Officer |
+| Cameron Olig | Chief Commercial Officer |
+| Jim Markwith | Chief Legal Officer & General Counsel |
+| Tammy Young | Chief People Officer |
+| Rae McMahan | SVP, Payer Solutions |
+| Miranda Rochol | SVP, Provider Solutions |
+| Bret Parker | SVP, Pharma Solutions |
+| Paige Clark, RPh | VP, Pharmacy Programs & Policy |
+| Tony Little, ND | SVP, Solutions Architecture |
+
+## Key Operational Roles
+| Role | Profile |
+|------|---------|
+| Formulary & Drug Information Expert | Pharmacist background, non-technical. Consumes Medispan drug data changes weekly. Determines formulary tier assignments and coverage decisions. |
+| Business Analysts | Technical capacity for data analysis. Work with claims data, enrollment files, and operational reporting. |
+| Data & Analytics Lead | High technical proficiency. Manages cross-domain data relationships, reporting infrastructure, and analytics strategy. |
+| Pharmacist with Data Skills | Clinical expertise combined with data mapping capabilities. Bridge between clinical requirements and technical implementation. |
+
+## Business Domains & Data
+Prescryptive operates across interconnected domains:
+
+### 1. Plan Management
+- Benefit plan design and configuration
+- Plan sponsors (employers, unions, government entities)
+- Member groups and enrollment
+- Cost sharing structures (tiers, copays, deductibles)
+
+### 2. Formulary & Drug Information
+- Medispan drug data (weekly updates, ~120,000 rows)
+- Drug classification (GPI, NDC, therapeutic class)
+- Tier assignments and coverage rules
+- Price changes (AWP, WAC, MAC)
+
+### 3. Pricing & Claims
+- rxlogic pricing runs (PMPM analysis)
+- Claims adjudication
+- Network pricing and reimbursement
+- Budget variance tracking
+
+### 4. Policy & Compliance
+- Prior authorization rules
+- Step therapy requirements
+- Quantity limits
+- State-specific regulations (CA, OR, WA, etc.)
+- Federal requirements (Medicare, Medicaid)
+
+### 5. Member Operations
+- Enrollment and eligibility management
+- Data quality (address validation, name matching)
+- Member communications and support
+- Prescription history
+
+### 6. Customer Support
+- Call center operations
+- Member inquiries and issue resolution
+- Proactive outreach
+
+## Operational Context
+
+### Recurring Workflows
+- Weekly Medispan change analysis (tier changes, price changes, discontinuations)
+- Quarterly Business Review (QBR) assembly for plan sponsors
+- Policy drafting and compliance updates
+- New member/sponsor onboarding and data ingestion
+- Test case execution for plan configuration changes
+
+### Key Metrics
+- PMPM (per member per month) costs
+- Formulary compliance rates
+- Data quality scores
+- Claims processing accuracy
+- Member satisfaction
+
+### Domain Vocabulary
+- **NDC:** National Drug Code (11-digit drug identifier)
+- **GPI:** Generic Product Identifier (14-digit therapeutic classification)
+- **AWP:** Average Wholesale Price
+- **WAC:** Wholesale Acquisition Cost
+- **MAC:** Maximum Allowable Cost
+- **PA:** Prior Authorization
+- **QL:** Quantity Limit
+- **PMPM:** Per Member Per Month
+- **Formulary:** List of covered drugs with tier assignments
+- **Step Therapy:** Requirement to try lower-cost drugs before expensive alternatives
