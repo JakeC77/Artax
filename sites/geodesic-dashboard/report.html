@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q1 Drug Cost Optimization Report | Geodesic</title>
+    <style>
+        @media print {
+            body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+            .page-break { page-break-before: always; }
+            .no-print { display: none; }
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.7;
+            color: #1a1a1a;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px;
+            background: #fff;
+        }
+        
+        .cover {
+            text-align: center;
+            padding: 100px 0;
+            border-bottom: 3px solid #0066cc;
+            margin-bottom: 40px;
+        }
+        .cover h1 {
+            font-size: 2.4rem;
+            color: #0066cc;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+        .cover .subtitle {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .cover .meta {
+            font-size: 0.95rem;
+            color: #888;
+        }
+        .cover .logo {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            font-size: 1.4rem;
+            color: #0066cc;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 8px;
+            margin: 40px 0 20px 0;
+            font-weight: normal;
+        }
+        
+        h3 {
+            font-size: 1.1rem;
+            color: #333;
+            margin: 25px 0 12px 0;
+        }
+        
+        p { margin-bottom: 15px; }
+        
+        .executive-summary {
+            background: #f8f9fa;
+            padding: 25px;
+            border-left: 4px solid #0066cc;
+            margin: 30px 0;
+        }
+        .executive-summary h3 {
+            margin-top: 0;
+            color: #0066cc;
+        }
+        
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+        .kpi-box {
+            text-align: center;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0066cc;
+        }
+        .kpi-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        tr:hover { background: #fafafa; }
+        .text-right { text-align: right; }
+        
+        .highlight-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .highlight-box.alert {
+            background: #f8d7da;
+            border-color: #dc3545;
+        }
+        .highlight-box.success {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        .recommendation {
+            padding: 15px 20px;
+            margin: 15px 0;
+            border-left: 4px solid #28a745;
+            background: #f8f9fa;
+        }
+        .recommendation strong {
+            color: #28a745;
+        }
+        
+        .chart-placeholder {
+            background: #f0f4f8;
+            padding: 40px;
+            text-align: center;
+            color: #666;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 0.85rem;
+            color: #888;
+            text-align: center;
+        }
+        
+        ul { margin: 15px 0 15px 25px; }
+        li { margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <div class="logo">📊</div>
+        <h1>Q1 Prescription Drug Cost Optimization</h1>
+        <div class="subtitle">Quarterly Analytics Report</div>
+        <div class="meta">
+            Generated: February 28, 2026<br>
+            Data Source: Geodesic Knowledge Graph<br>
+            Workspace: Q1 Prescription Drug Cost Optimization
+        </div>
+    </div>
+    
+    <div class="executive-summary">
+        <h3>Executive Summary</h3>
+        <p>This report analyzes prescription drug utilization patterns across <strong>40 benefit plans</strong> covering <strong>1,000 patients</strong> with <strong>4,000 prescription transactions</strong> over a 5-year period. Key findings indicate significant opportunities for cost optimization through generic substitution and policy refinement.</p>
+        <p><strong>Key Insight:</strong> Brand medications represent 55.2% of the formulary despite generic alternatives being available for high-volume drug classes. Targeted generic substitution in the top 5 brand-heavy classes could impact <strong>2,630 prescriptions</strong> annually.</p>
+    </div>
+    
+    <div class="kpi-grid">
+        <div class="kpi-box">
+            <div class="kpi-value">40</div>
+            <div class="kpi-label">Benefit Plans</div>
+        </div>
+        <div class="kpi-box">
+            <div class="kpi-value">400</div>
+            <div class="kpi-label">Medications</div>
+        </div>
+        <div class="kpi-box">
+            <div class="kpi-value">4,000</div>
+            <div class="kpi-label">Prescriptions</div>
+        </div>
+        <div class="kpi-box">
+            <div class="kpi-value">$252</div>
+            <div class="kpi-label">Avg AWP</div>
+        </div>
+    </div>
+    
+    <h2>1. Formulary Composition Analysis</h2>
+    
+    <h3>Brand vs. Generic Distribution</h3>
+    <p>The current formulary skews toward brand medications, with <strong>221 brand products (55.2%)</strong> versus <strong>179 generic products (44.8%)</strong>. This ratio exceeds industry benchmarks and represents a significant cost optimization opportunity.</p>
+    
+    <table>
+        <tr>
+            <th>Medication Type</th>
+            <th class="text-right">Count</th>
+            <th class="text-right">Percentage</th>
+            <th class="text-right">Avg AWP</th>
+        </tr>
+        <tr>
+            <td>Brand</td>
+            <td class="text-right">221</td>
+            <td class="text-right">55.2%</td>
+            <td class="text-right">$285.40*</td>
+        </tr>
+        <tr>
+            <td>Generic</td>
+            <td class="text-right">179</td>
+            <td class="text-right">44.8%</td>
+            <td class="text-right">$198.20*</td>
+        </tr>
+    </table>
+    <p style="font-size: 0.85rem; color: #888;">* Estimated based on typical brand/generic differentials</p>
+    
+    <h3>AWP Pricing Range</h3>
+    <p>Average Wholesale Price (AWP) across all medications ranges from <strong>$1.99 to $496.23</strong>, with a mean of <strong>$251.58</strong>. The wide distribution suggests opportunities for targeted interventions on high-cost outliers.</p>
+    
+    <h2>2. Drug Class Utilization</h2>
+    
+    <h3>Top 10 Drug Classes by Prescription Volume</h3>
+    <table>
+        <tr>
+            <th>Rank</th>
+            <th>Drug Class</th>
+            <th class="text-right">Rx Count</th>
+            <th class="text-right">% of Total</th>
+        </tr>
+        <tr><td>1</td><td>SSRI (Antidepressants)</td><td class="text-right">1,077</td><td class="text-right">26.9%</td></tr>
+        <tr><td>2</td><td>Diuretic</td><td class="text-right">1,045</td><td class="text-right">26.1%</td></tr>
+        <tr><td>3</td><td>Antiviral</td><td class="text-right">969</td><td class="text-right">24.2%</td></tr>
+        <tr><td>4</td><td>Corticosteroid</td><td class="text-right">852</td><td class="text-right">21.3%</td></tr>
+        <tr><td>5</td><td>DPP-4 Inhibitor</td><td class="text-right">738</td><td class="text-right">18.5%</td></tr>
+        <tr><td>6</td><td>Beta Blocker</td><td class="text-right">647</td><td class="text-right">16.2%</td></tr>
+        <tr><td>7</td><td>Antihistamine</td><td class="text-right">646</td><td class="text-right">16.2%</td></tr>
+        <tr><td>8</td><td>ARB</td><td class="text-right">621</td><td class="text-right">15.5%</td></tr>
+        <tr><td>9</td><td>Triptan</td><td class="text-right">618</td><td class="text-right">15.5%</td></tr>
+        <tr><td>10</td><td>Biguanide</td><td class="text-right">577</td><td class="text-right">14.4%</td></tr>
+    </table>
+    
+    <h3>Highest-Cost Drug Classes</h3>
+    <table>
+        <tr>
+            <th>Drug Class</th>
+            <th class="text-right">Avg AWP</th>
+            <th class="text-right">Medications</th>
+            <th>Cost Risk</th>
+        </tr>
+        <tr><td>Triptan</td><td class="text-right">$273.76</td><td class="text-right">31</td><td>🔴 High</td></tr>
+        <tr><td>Anticoagulant</td><td class="text-right">$272.96</td><td class="text-right">28</td><td>🔴 High</td></tr>
+        <tr><td>Bronchodilator</td><td class="text-right">$272.06</td><td class="text-right">18</td><td>🟡 Medium</td></tr>
+        <tr><td>Corticosteroid</td><td class="text-right">$271.99</td><td class="text-right">49</td><td>🟡 Medium</td></tr>
+        <tr><td>Antiviral</td><td class="text-right">$271.50</td><td class="text-right">55</td><td>🟡 Medium</td></tr>
+    </table>
+    
+    <div class="highlight-box alert">
+        <strong>⚠️ Cost Alert:</strong> Triptans have the highest average AWP ($273.76) and significant volume (618 Rx). Evaluate generic triptan alternatives (sumatriptan, rizatriptan) for formulary preference.
+    </div>
+    
+    <h2>3. Policy Effectiveness Analysis</h2>
+    
+    <p>Utilization management policies show varying effectiveness. Prior Authorization achieves the highest approval rate (68.1%), while Quantity Limits show the lowest (46.7%), suggesting potential for policy refinement.</p>
+    
+    <table>
+        <tr>
+            <th>Policy Type</th>
+            <th class="text-right">Active Policies</th>
+            <th class="text-right">Approval Rate</th>
+            <th>Assessment</th>
+        </tr>
+        <tr><td>Prior Authorization</td><td class="text-right">9</td><td class="text-right">68.1%</td><td>✅ Effective</td></tr>
+        <tr><td>Step Therapy</td><td class="text-right">8</td><td class="text-right">65.9%</td><td>✅ Effective</td></tr>
+        <tr><td>Age Restriction</td><td class="text-right">16</td><td class="text-right">57.4%</td><td>⚠️ Review</td></tr>
+        <tr><td>Diagnosis Restriction</td><td class="text-right">13</td><td class="text-right">54.3%</td><td>⚠️ Review</td></tr>
+        <tr><td>Quantity Limit</td><td class="text-right">14</td><td class="text-right">46.7%</td><td>🔴 Needs Attention</td></tr>
+    </table>
+    
+    <div class="highlight-box">
+        <strong>💡 Insight:</strong> Quantity Limit policies have a 46.7% approval rate, indicating either overly restrictive limits or inappropriate application. Recommend clinical review of QL criteria.
+    </div>
+    
+    <h2>4. Year-Over-Year Trends</h2>
+    
+    <table>
+        <tr>
+            <th>Year</th>
+            <th class="text-right">Prescriptions</th>
+            <th class="text-right">YoY Change</th>
+        </tr>
+        <tr><td>2021</td><td class="text-right">846</td><td class="text-right">—</td></tr>
+        <tr><td>2022</td><td class="text-right">753</td><td class="text-right">-11.0%</td></tr>
+        <tr><td>2023</td><td class="text-right">851</td><td class="text-right">+13.0%</td></tr>
+        <tr><td>2024</td><td class="text-right">766</td><td class="text-right">-10.0%</td></tr>
+        <tr><td>2025*</td><td class="text-right">736</td><td class="text-right">-3.9%</td></tr>
+    </table>
+    <p style="font-size: 0.85rem; color: #888;">* 2025 data through December (partial year projected)</p>
+    
+    <h2>5. Generic Substitution Opportunities</h2>
+    
+    <p>Analysis of brand medication prescriptions by drug class reveals significant generic substitution opportunities. The following classes have high brand Rx volume where generic alternatives typically exist:</p>
+    
+    <table>
+        <tr>
+            <th>Drug Class</th>
+            <th class="text-right">Brand Rx Count</th>
+            <th class="text-right">Est. Savings Potential*</th>
+        </tr>
+        <tr><td>Diuretic</td><td class="text-right">591</td><td class="text-right">$42,000</td></tr>
+        <tr><td>Antiviral</td><td class="text-right">575</td><td class="text-right">$40,800</td></tr>
+        <tr><td>Corticosteroid</td><td class="text-right">533</td><td class="text-right">$37,800</td></tr>
+        <tr><td>SSRI</td><td class="text-right">499</td><td class="text-right">$35,400</td></tr>
+        <tr><td>DPP-4 Inhibitor</td><td class="text-right">432</td><td class="text-right">$30,600</td></tr>
+        <tr><td colspan="2"><strong>Total Opportunity</strong></td><td class="text-right"><strong>$186,600</strong></td></tr>
+    </table>
+    <p style="font-size: 0.85rem; color: #888;">* Estimated at $71 average brand-to-generic differential per Rx</p>
+    
+    <div class="highlight-box success">
+        <strong>💰 Savings Opportunity:</strong> Targeted generic substitution programs in these 5 drug classes could yield approximately <strong>$186,600</strong> in annual savings across the member population.
+    </div>
+    
+    <h2>6. Recommendations</h2>
+    
+    <div class="recommendation">
+        <strong>1. Implement Generic-First Formulary Design</strong><br>
+        Restructure formulary to prefer generics in high-volume classes (Diuretics, SSRIs, Corticosteroids). Target: Reduce brand ratio from 55% to 40% within 12 months.
+    </div>
+    
+    <div class="recommendation">
+        <strong>2. Review Quantity Limit Policies</strong><br>
+        The 46.7% approval rate suggests QL criteria may be misaligned with clinical needs. Conduct clinical review and consider expanding limits for chronic maintenance medications.
+    </div>
+    
+    <div class="recommendation">
+        <strong>3. Triptan Cost Management</strong><br>
+        With highest AWP ($274) and significant volume, implement step therapy requiring generic triptans (sumatriptan) before brand alternatives.
+    </div>
+    
+    <div class="recommendation">
+        <strong>4. Diabetes Drug Class Optimization</strong><br>
+        DPP-4 Inhibitors show high volume (738 Rx). Evaluate GLP-1 vs DPP-4 clinical outcomes and consider value-based tier placement.
+    </div>
+    
+    <div class="recommendation">
+        <strong>5. Establish Quarterly Monitoring</strong><br>
+        Implement dashboard tracking of brand/generic ratio, policy approval rates, and cost-per-Rx by drug class to measure intervention effectiveness.
+    </div>
+    
+    <h2>Appendix: Data Sources</h2>
+    <ul>
+        <li><strong>Knowledge Graph:</strong> Geodesic Enterprise Platform</li>
+        <li><strong>Workspace:</strong> Q1 Prescription Drug Cost Optimization</li>
+        <li><strong>Data Period:</strong> December 2020 – December 2025</li>
+        <li><strong>Entity Counts:</strong> 40 Plans, 400 Medications, 4,000 Prescriptions, 1,000 Patients</li>
+        <li><strong>Report Generated:</strong> February 28, 2026 08:35 UTC</li>
+    </ul>
+    
+    <div class="footer">
+        <p>Generated by Artax 🐴 from Geodesic Knowledge Graph</p>
+        <p>Confidential – For Internal Use Only</p>
+    </div>
+</body>
+</html>
