@@ -240,7 +240,7 @@ input,select,textarea{font-family:inherit;outline:none}
     </div>
     <div class="form-group">
       <label>Object</label>
-      <input type="text" id="fact-object" placeholder="e.g. Geodesic Works" />
+      <input type="text" id="fact-object" placeholder="e.g. Orbit Labs" />
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" id="fact-cancel">Cancel</button>
@@ -250,7 +250,7 @@ input,select,textarea{font-family:inherit;outline:none}
 </div>
 <div class="toast" id="toast"></div>
 <script>
-var state={endpoint:localStorage.getItem('dv_endpoint')||'https://api.dejaview.io',apiKey:localStorage.getItem('dv_apikey')||'',connected:false,demoMode:false,graphData:{nodes:[],links:[]},simulation:null,demoFacts:[{subject:'Jake',predicate:'works_at',object:'Geodesic Works',subject_type:'Person',object_type:'Organization'},{subject:'Jake',predicate:'founded',object:'Haven Tech',subject_type:'Person',object_type:'Organization'},{subject:'Artax',predicate:'is_agent_of',object:'Jake',subject_type:'Agent',object_type:'Person'},{subject:'Geodesic Works',predicate:'builds',object:'Knowledge Graphs',subject_type:'Organization',object_type:'Concept'},{subject:'SnapQuote',predicate:'built_with',object:'FastAPI',subject_type:'Project',object_type:'Technology'},{subject:'Haven Tech',predicate:'owns',object:'SnapQuote',subject_type:'Organization',object_type:'Project'}]};
+var state={endpoint:localStorage.getItem('dv_endpoint')||'https://api.dejaview.io',apiKey:localStorage.getItem('dv_apikey')||'',connected:false,demoMode:false,graphData:{nodes:[],links:[]},simulation:null,demoFacts:[{subject:'Alice',predicate:'works_at',object:'Orbit Labs',subject_type:'Person',object_type:'Organization'},{subject:'Alice',predicate:'founded',object:'Cascade AI',subject_type:'Person',object_type:'Organization'},{subject:'Nova',predicate:'is_agent_of',object:'Alice',subject_type:'Agent',object_type:'Person'},{subject:'Orbit Labs',predicate:'builds',object:'Knowledge Graphs',subject_type:'Organization',object_type:'Concept'},{subject:'PulseTrack',predicate:'built_with',object:'FastAPI',subject_type:'Project',object_type:'Technology'},{subject:'Cascade AI',predicate:'owns',object:'PulseTrack',subject_type:'Organization',object_type:'Project'}]};
 var typeColors={Person:'#3b82f6',Organization:'#22c55e',Project:'#a855f7',Technology:'#f59e0b',Concept:'#ec4899',Agent:'#f97316',Default:'#6366f1'};
 function getColor(t){return typeColors[t]||typeColors.Default}
 function api(method,path,body){if(state.demoMode)return demoApi(method,path,body);var opts={method:method,headers:{'Content-Type':'application/json'}};if(state.apiKey)opts.headers['Authorization']='Bearer '+state.apiKey;if(body)opts.body=JSON.stringify(body);return fetch(state.endpoint+path,opts).then(function(r){if(!r.ok)throw new Error(r.status+' '+r.statusText);return r.json()})}
