@@ -1,0 +1,26 @@
+name: Deploy DejaView API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - prototypes/dejaview/api.py
+      - prototypes/dejaview/requirements.txt
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to droplet
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 64.23.173.57
+          username: root
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          script: |
+            cd /home/openclaw/dejaview
+            git pull origin main
+            source prototypes/dejaview/venv/bin/activate
+            pip install -r prototypes/dejaview/requirements.txt --quiet
+            systemctl restart dejaview
+            echo "Deployed at $(date)"
