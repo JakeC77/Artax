@@ -1,6 +1,6 @@
 """
 Estimate parser using LLM
-Extracts customer name, line items, and prices from freeform text
+Extracts customer info, line items, and prices from freeform text
 """
 
 import os
@@ -19,35 +19,32 @@ PARSE_PROMPT = """Extract quote information from this text message. Return JSON 
 Text: {text}
 
 Extract:
-- customer_name: The customer/client name (null if not found)  
+- customer_name: The customer/client name (null if not found)
+- customer_address: Full address if provided (null if not found)
 - items: Array of {{description: string, amount: number}} for each line item
+- project_description: Brief description of the work/project (null if not found)
 - notes: Any additional notes or terms (null if none)
 
 Rules:
-- Parse prices flexibly: "$450", "450", "four fifty", "~700" all work
-- If price is a range or approximate, use the middle/stated value
-- Split combined items if possible ("deck and railing $700" → keep as one if price isn't split)
-- Customer name might be at start, "for John", "John Smith -", etc.
+- Parse prices flexibly: "$450", "450", "four fifty" all work
+- Customer name might be "for John", "John Smith -", etc.
+- Address might include street, city, state, zip
+- Project description is what work is being done
 - Return valid JSON only, no markdown
 
-Example input: "John Smith deck repair 450 new railing 275 materials 180"
-Example output: {{"customer_name": "John Smith", "items": [{{"description": "Deck repair", "amount": 450}}, {{"description": "New railing", "amount": 275}}, {{"description": "Materials", "amount": 180}}], "notes": null}}
+Example input: "John Smith, 123 Main St, Seattle WA 98101 - deck repair $450, railing $275. Refinishing the back deck."
+Example output: {{"customer_name": "John Smith", "customer_address": "123 Main St, Seattle WA 98101", "items": [{{"description": "Deck repair", "amount": 450}}, {{"description": "Railing", "amount": 275}}], "project_description": "Refinishing the back deck", "notes": null}}
 
 Return JSON:"""
 
 
 async def parse_estimate(text: str, existing: Optional[QuoteData] = None) -> QuoteData:
-    """
-    Parse freeform estimate text into structured QuoteData
-    Uses LLM for flexible parsing, falls back to regex
-    """
-    # Try LLM parsing first
+    """Parse freeform estimate text into structured QuoteData"""
     if ANTHROPIC_API_KEY:
         result = await parse_with_llm(text)
         if result:
             return result
     
-    # Fallback to regex parsing
     return parse_with_regex(text, existing)
 
 
@@ -74,38 +71,35 @@ async def parse_with_llm(text: str) -> Optional[QuoteData]:
             )
             
             if response.status_code != 200:
-                print(f"LLM parse error: {response.status_code}")
+                print(f"LLM parse error: {response.status_code}", flush=True)
                 return None
             
             data = response.json()
             content = data["content"][0]["text"]
             
-            # Parse JSON from response
             parsed = json.loads(content)
             
             return QuoteData(
                 customer_name=parsed.get("customer_name"),
+                customer_address=parsed.get("customer_address"),
                 items=parsed.get("items", []),
+                project_description=parsed.get("project_description"),
                 notes=parsed.get("notes")
             )
     except Exception as e:
-        print(f"LLM parse exception: {e}")
+        print(f"LLM parse exception: {e}", flush=True)
         return None
 
 
 def parse_with_regex(text: str, existing: Optional[QuoteData] = None) -> QuoteData:
-    """
-    Fallback regex-based parsing
-    Handles both "item $50" and "50 items" patterns
-    """
+    """Fallback regex-based parsing"""
     result = QuoteData()
     
-    # Try to extract customer name (common patterns)
+    # Customer name patterns
     name_patterns = [
-        r'^([A-Z][a-z]+ [A-Z][a-z]+)',  # "John Smith" at start
-        r'for ([A-Z][a-z]+ [A-Z][a-z]+)',  # "for John Smith"
-        r'^([A-Z][a-z]+) -',  # "John -"
-        r'^([A-Z][a-z]+ [A-Z][a-z]+)\s*-',  # "John Smith -" or "John Smith-"
+        r'^([A-Z][a-z]+ [A-Z][a-z]+)',
+        r'for ([A-Z][a-z]+ [A-Z][a-z]+)',
+        r'^([A-Z][a-z]+ [A-Z][a-z]+)\s*[-,]',
     ]
     
     for pattern in name_patterns:
@@ -114,48 +108,38 @@ def parse_with_regex(text: str, existing: Optional[QuoteData] = None) -> QuoteDa
             result.customer_name = match.group(1)
             break
     
-    # Pattern 1: "description $123" or "description 123"
-    pattern1 = r'([a-zA-Z][a-zA-Z\s]+?)\s*\$?\s*(\d+(?:\.\d{2})?)\s*(?:dollars?|each|total)?'
+    # Address pattern (simplified - look for state abbreviation)
+    addr_pattern = r'(\d+[^,]+,\s*[^,]+,?\s*[A-Z]{2}\s*\d{5}(?:-\d{4})?)'
+    addr_match = re.search(addr_pattern, text)
+    if addr_match:
+        result.customer_address = addr_match.group(1)
     
-    # Pattern 2: "123 description" or "$123 description" or "2 widgets"  
-    pattern2 = r'(\d+)\s*(?:x\s*)?([a-zA-Z][a-zA-Z\s]+?)\s*(?:@|at|for|-)?\s*\$?(\d+(?:\.\d{2})?)?'
+    # Item patterns
+    pattern1 = r'([a-zA-Z][a-zA-Z\s]+?)\s*\$\s*(\d+(?:\.\d{2})?)'
+    pattern2 = r'(\d+)\s+([a-zA-Z][a-zA-Z\s]+?)\s+\$?(\d+(?:\.\d{2})?)'
     
-    # Pattern 3: Simple "NUMBER description NUMBER" like "20 shirts 50"
-    pattern3 = r'(\d+)\s+([a-zA-Z][a-zA-Z\s]+?)\s+\$?(\d+)'
-    
-    items_found = []
-    
-    # Try pattern 1: description then price
     matches1 = re.findall(pattern1, text, re.IGNORECASE)
     for desc, amount in matches1:
         desc = desc.strip()
         if result.customer_name and desc.lower() in result.customer_name.lower():
             continue
-        if len(desc) < 2 or desc.lower() in ['for', 'at', 'the', 'and', 'or']:
+        if len(desc) < 2 or desc.lower() in ['for', 'at', 'the', 'and']:
             continue
-        items_found.append({
+        result.items.append({
             "description": desc.title(),
             "amount": float(amount)
         })
     
-    # Try pattern 3 if pattern 1 didn't find much: "20 shirts 50"
-    if len(items_found) < 1:
-        matches3 = re.findall(pattern3, text, re.IGNORECASE)
-        for qty, desc, price in matches3:
+    if not result.items:
+        matches2 = re.findall(pattern2, text, re.IGNORECASE)
+        for qty, desc, price in matches2:
             desc = desc.strip()
-            if result.customer_name and desc.lower() in result.customer_name.lower():
-                continue
             if len(desc) < 2:
                 continue
-            # Format as "20 shirts" or just "shirts" depending on qty
-            if int(qty) > 1:
-                full_desc = f"{qty} {desc}"
-            else:
-                full_desc = desc
-            items_found.append({
+            full_desc = f"{qty} {desc}" if int(qty) > 1 else desc
+            result.items.append({
                 "description": full_desc.title(),
                 "amount": float(price)
             })
     
-    result.items = items_found
     return result
