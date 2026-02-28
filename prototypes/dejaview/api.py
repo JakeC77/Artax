@@ -10,7 +10,7 @@ Core improvements over artax-kg prototype:
 - Temporal metadata on everything
 """
 
-from fastapi import FastAPI, HTTPException, Depends, Header
+from fastapi import FastAPI, HTTPException, Depends, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from neo4j import GraphDatabase
@@ -53,15 +53,83 @@ driver = GraphDatabase.driver(
 API_KEYS: Dict[str, dict] = {}
 
 def _load_keys():
-    """Load API keys from env or create default."""
-    default_key = os.getenv("DEJAVIEW_API_KEY", "dv_dev_" + secrets.token_hex(16))
-    API_KEYS[default_key] = {
-        "user_id": "default",
-        "graph_id": "default",
-        "tier": "pro",
-        "created": datetime.utcnow().isoformat(),
-    }
-    print(f"🔑 Dev API key: {default_key}")
+    """Load API keys — from Neo4j first, fallback to env dev key."""
+    try:
+        with driver.session() as session:
+            result = session.run("""
+                MATCH (u:DejaViewUser {status: 'active'})
+                RETURN u.api_key as key, u.user_id as user_id,
+                       u.graph_id as graph_id, u.email as email, u.tier as tier
+            """)
+            loaded = 0
+            for record in result:
+                API_KEYS[record["key"]] = {
+                    "user_id": record["user_id"],
+                    "graph_id": record["graph_id"],
+                    "email": record["email"],
+                    "tier": record["tier"],
+                }
+                loaded += 1
+            if loaded:
+                print(f"✅ Loaded {loaded} API keys from Neo4j")
+    except Exception as e:
+        print(f"⚠️  Could not load keys from Neo4j: {e}")
+
+    # Always ensure dev key works
+    dev_key = os.getenv("DEJAVIEW_API_KEY", "dv_dev_" + secrets.token_hex(16))
+    if dev_key not in API_KEYS:
+        API_KEYS[dev_key] = {"user_id": "default", "graph_id": "default", "email": "dev", "tier": "pro"}
+        print(f"🔑 Dev key: {dev_key}")
+
+
+def _create_user(email: str, tier: str = "pro", source: str = "lemonsqueezy") -> dict:
+    """Create a new user, generate API key, store in Neo4j."""
+    import hashlib as _hl
+    api_key = "dv_" + secrets.token_hex(24)
+    user_id = "usr_" + _hl.md5(email.encode()).hexdigest()[:12]
+    graph_id = "graph_" + secrets.token_hex(8)
+    with driver.session() as session:
+        session.run("""
+            MERGE (u:DejaViewUser {email: $email})
+            SET u.api_key = $api_key, u.user_id = $user_id,
+                u.graph_id = $graph_id, u.tier = $tier,
+                u.source = $source, u.status = 'active',
+                u.created_at = datetime()
+        """, {"email": email, "api_key": api_key, "user_id": user_id,
+              "graph_id": graph_id, "tier": tier, "source": source})
+    user = {"user_id": user_id, "graph_id": graph_id, "email": email, "tier": tier}
+    API_KEYS[api_key] = user
+    print(f"✅ Created user: {email} -> {api_key[:12]}...")
+    return {"api_key": api_key, **user}
+
+
+def _send_welcome_email(email: str, api_key: str):
+    """Send welcome email with API key via Resend."""
+    resend_key = os.getenv("RESEND_API_KEY")
+    if not resend_key:
+        print(f"⚠️  No RESEND_API_KEY — skipping welcome email to {email}")
+        return
+    import urllib.request as _ur, json as _js
+    html = f"""<div style="font-family:system-ui,sans-serif;max-width:600px;margin:0 auto;padding:40px 20px">
+<h1 style="color:#7c5cfc">Welcome to DejaView 🔮</h1>
+<p>Your personal knowledge graph is ready. Here's your API key:</p>
+<div style="background:#0a0e17;border-radius:12px;padding:20px;margin:24px 0">
+  <code style="color:#00d4ff;font-size:16px">{api_key}</code>
+</div>
+<p><strong>Get started:</strong><br>
+• <a href="https://app.dejaview.io">Open the web app</a> — paste your key to connect<br>
+• API: <code>https://api.dejaview.io</code><br>
+• Docs: <a href="https://api.dejaview.io/docs">api.dejaview.io/docs</a></p>
+<p style="color:#aaa;font-size:13px">— The DejaView team</p></div>"""
+    payload = _js.dumps({"from": "DejaView <hello@dejaview.io>", "to": [email],
+                          "subject": "Your DejaView API Key 🔮", "html": html}).encode()
+    req = _ur.Request("https://api.resend.com/emails", data=payload,
+                      headers={"Authorization": f"Bearer {resend_key}", "Content-Type": "application/json"})
+    try:
+        with _ur.urlopen(req, timeout=10) as r:
+            print(f"📧 Welcome email sent to {email}")
+    except Exception as e:
+        print(f"❌ Email failed for {email}: {e}")
 
 async def verify_api_key(authorization: str = Header(None)) -> dict:
     """Verify API key and return user context."""
@@ -458,6 +526,33 @@ def legacy_context(entity: str):
     except HTTPException:
         return {"entity": None, "outgoing": [], "incoming": []}
 
+
+
+# ============ LemonSqueezy Webhook ============
+
+@app.post("/webhooks/lemonsqueezy")
+async def lemonsqueezy_webhook(request: Request):
+    """Handle LemonSqueezy webhooks — auto-provision users on payment."""
+    import hmac as _hmac, hashlib as _hl, json as _js
+    secret = os.getenv("LEMONSQUEEZY_WEBHOOK_SECRET", "")
+    payload = await request.body()
+    sig = request.headers.get("x-signature", "")
+    if secret and sig:
+        expected = _hmac.new(secret.encode(), payload, _hl.sha256).hexdigest()
+        if not _hmac.compare_digest(expected, sig):
+            raise HTTPException(status_code=401, detail="Invalid signature")
+    event = _js.loads(payload)
+    event_name = event.get("meta", {}).get("event_name", "")
+    attrs = event.get("data", {}).get("attributes", {})
+    print(f"📦 LemonSqueezy: {event_name}")
+    if event_name in ("order_created", "subscription_created"):
+        email = attrs.get("user_email") or attrs.get("customer_email", "")
+        if not email:
+            return {"status": "skipped", "reason": "no email"}
+        user = _create_user(email=email, tier="pro", source="lemonsqueezy")
+        _send_welcome_email(email, user["api_key"])
+        return {"status": "ok", "provisioned": email}
+    return {"status": "ok", "event": event_name}
 
 # ============ Startup ============
 
