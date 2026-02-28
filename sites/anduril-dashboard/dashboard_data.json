@@ -1,0 +1,2476 @@
+{
+  "revenue": {
+    "chart": {
+      "quarters": [
+        "FY2025_Q1",
+        "FY2025_Q2",
+        "FY2025_Q3"
+      ],
+      "segments": [
+        {
+          "id": "SEG_01",
+          "name": "Counter-UAS Systems",
+          "data": [
+            100000000,
+            104000000,
+            110000000
+          ]
+        },
+        {
+          "id": "SEG_02",
+          "name": "Autonomous ISR",
+          "data": [
+            74000000,
+            88000000,
+            105000000
+          ]
+        },
+        {
+          "id": "SEG_03",
+          "name": "Command & Control (Lattice)",
+          "data": [
+            60000000,
+            70000000,
+            84000000
+          ]
+        },
+        {
+          "id": "SEG_04",
+          "name": "Undersea & Maritime",
+          "data": [
+            39000000,
+            41000000,
+            45000000
+          ]
+        },
+        {
+          "id": "SEG_05",
+          "name": "International Programs",
+          "data": [
+            18000000,
+            28000000,
+            40000000
+          ]
+        },
+        {
+          "id": "SEG_06",
+          "name": "Other / R&D Contracts",
+          "data": [
+            17000000,
+            18000000,
+            19000000
+          ]
+        }
+      ]
+    },
+    "total": 1060000000,
+    "yoy_avg": 45.0
+  },
+  "customers": {
+    "list": [
+      {
+        "name": "US SOCOM",
+        "annual_revenue": 487542623,
+        "health_score": 7.7,
+        "customer_type": "dod_direct",
+        "active_contracts": 2,
+        "total_value": 1178700000,
+        "status": "active"
+      },
+      {
+        "name": "US Army PEO Missiles & Space",
+        "annual_revenue": 198003829,
+        "health_score": 5.9,
+        "customer_type": "dod_direct",
+        "active_contracts": 2,
+        "total_value": 302400000,
+        "status": "active"
+      },
+      {
+        "name": "UK Ministry of Defence",
+        "annual_revenue": 116883970,
+        "health_score": 8.3,
+        "customer_type": "allied_nation",
+        "active_contracts": 3,
+        "total_value": 315000000,
+        "status": "active"
+      },
+      {
+        "name": "US Navy NAVWAR",
+        "annual_revenue": 80414542,
+        "health_score": 9.2,
+        "customer_type": "dod_direct",
+        "active_contracts": 1,
+        "total_value": 210000000,
+        "status": "active"
+      },
+      {
+        "name": "US Air Force AFLCMC",
+        "annual_revenue": 60166061,
+        "health_score": 9.1,
+        "customer_type": "dod_direct",
+        "active_contracts": 3,
+        "total_value": 325900000,
+        "status": "active"
+      },
+      {
+        "name": "US Marine Corps Systems Command",
+        "annual_revenue": 47469642,
+        "health_score": 6.8,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "DARPA",
+        "annual_revenue": 38849473,
+        "health_score": 8.3,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "US Space Force",
+        "annual_revenue": 32658452,
+        "health_score": 5.1,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "US Cyber Command",
+        "annual_revenue": 28021883,
+        "health_score": 7.4,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "DHS Customs and Border Protection",
+        "annual_revenue": 24435014,
+        "health_score": 9.5,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "US Coast Guard",
+        "annual_revenue": 21587487,
+        "health_score": 8.5,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "Defense Innovation Unit",
+        "annual_revenue": 19278665,
+        "health_score": 9.2,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "US Army Futures Command",
+        "annual_revenue": 17373456,
+        "health_score": 8.6,
+        "customer_type": "dod_direct",
+        "active_contracts": 1,
+        "total_value": 17000000,
+        "status": "active"
+      },
+      {
+        "name": "National Geospatial-Intelligence Agency",
+        "annual_revenue": 15777789,
+        "health_score": 8.8,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "US Indo-Pacific Command",
+        "annual_revenue": 14424273,
+        "health_score": 8.7,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "US Central Command",
+        "annual_revenue": 13263453,
+        "health_score": 8.5,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "National Reconnaissance Office",
+        "annual_revenue": 12258264,
+        "health_score": 8.6,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "Missile Defense Agency",
+        "annual_revenue": 11380421,
+        "health_score": 8.8,
+        "customer_type": "dod_direct",
+        "active_contracts": 1,
+        "total_value": 94400000,
+        "status": "active"
+      },
+      {
+        "name": "US DoD Agency 19",
+        "annual_revenue": 10607985,
+        "health_score": 9.1,
+        "customer_type": "dod_direct",
+        "active_contracts": 1,
+        "total_value": 48800000,
+        "status": "active"
+      },
+      {
+        "name": "US DoD Agency 20",
+        "annual_revenue": 9923699,
+        "health_score": 6.8,
+        "customer_type": "dod_direct",
+        "active_contracts": 1,
+        "total_value": 18200000,
+        "status": "active"
+      },
+      {
+        "name": "US DoD Agency 21",
+        "annual_revenue": 9313813,
+        "health_score": 6.6,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "US DoD Agency 22",
+        "annual_revenue": 8767244,
+        "health_score": 6.9,
+        "customer_type": "dod_direct",
+        "active_contracts": 1,
+        "total_value": 89800000,
+        "status": "active"
+      },
+      {
+        "name": "US DoD Agency 23",
+        "annual_revenue": 8274969,
+        "health_score": 8.1,
+        "customer_type": "dod_direct",
+        "active_contracts": 1,
+        "total_value": 10000000,
+        "status": "active"
+      },
+      {
+        "name": "US DoD Agency 24",
+        "annual_revenue": 7829571,
+        "health_score": 9.1,
+        "customer_type": "dod_direct",
+        "active_contracts": 2,
+        "total_value": 104400000,
+        "status": "active"
+      },
+      {
+        "name": "US DoD Agency 25",
+        "annual_revenue": 7424899,
+        "health_score": 6.8,
+        "customer_type": "dod_direct",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "US DoD Agency 26",
+        "annual_revenue": 7055816,
+        "health_score": 8.6,
+        "customer_type": "dod_direct",
+        "active_contracts": 1,
+        "total_value": 93700000,
+        "status": "active"
+      },
+      {
+        "name": "L3Harris Technologies",
+        "annual_revenue": 6717995,
+        "health_score": 8.3,
+        "customer_type": "prime_subcontract",
+        "active_contracts": 1,
+        "total_value": 20700000,
+        "status": "active"
+      },
+      {
+        "name": "General Dynamics Mission Systems",
+        "annual_revenue": 6407773,
+        "health_score": 6.7,
+        "customer_type": "prime_subcontract",
+        "active_contracts": 1,
+        "total_value": 8400000,
+        "status": "active"
+      },
+      {
+        "name": "BAE Systems",
+        "annual_revenue": 6122026,
+        "health_score": 8.6,
+        "customer_type": "prime_subcontract",
+        "active_contracts": 1,
+        "total_value": 70400000,
+        "status": "active"
+      },
+      {
+        "name": "Leidos",
+        "annual_revenue": 5858075,
+        "health_score": 7.2,
+        "customer_type": "prime_subcontract",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "SAIC",
+        "annual_revenue": 5613612,
+        "health_score": 7.2,
+        "customer_type": "prime_subcontract",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "Booz Allen Hamilton",
+        "annual_revenue": 5386636,
+        "health_score": 6.6,
+        "customer_type": "prime_subcontract",
+        "active_contracts": 1,
+        "total_value": 8000000,
+        "status": "active"
+      },
+      {
+        "name": "Northrop Grumman Mission Systems",
+        "annual_revenue": 5175406,
+        "health_score": 9.2,
+        "customer_type": "prime_subcontract",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "RTX (Raytheon)",
+        "annual_revenue": 4978402,
+        "health_score": 7.5,
+        "customer_type": "prime_subcontract",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "Prime Contractor 35",
+        "annual_revenue": 4794288,
+        "health_score": 7,
+        "customer_type": "prime_subcontract",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "Royal Australian Navy",
+        "annual_revenue": 4621887,
+        "health_score": 6.9,
+        "customer_type": "allied_nation",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "Australian Defence Force",
+        "annual_revenue": 4460159,
+        "health_score": 7.8,
+        "customer_type": "allied_nation",
+        "active_contracts": 1,
+        "total_value": 8400000,
+        "status": "active"
+      },
+      {
+        "name": "UK Defence Science and Technology Laboratory",
+        "annual_revenue": 4308181,
+        "health_score": 7.5,
+        "customer_type": "allied_nation",
+        "active_contracts": 2,
+        "total_value": 110300000,
+        "status": "active"
+      },
+      {
+        "name": "Canadian Department of National Defence",
+        "annual_revenue": 4165130,
+        "health_score": 8.2,
+        "customer_type": "allied_nation",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "NATO Communications and Information Agency",
+        "annual_revenue": 4030274,
+        "health_score": 6.6,
+        "customer_type": "allied_nation",
+        "active_contracts": 1,
+        "total_value": 156100000,
+        "status": "active"
+      },
+      {
+        "name": "Republic of Korea Defense Acquisition Program Administration",
+        "annual_revenue": 3902955,
+        "health_score": 9,
+        "customer_type": "allied_nation",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "US Department of Energy",
+        "annual_revenue": 3782583,
+        "health_score": 7.5,
+        "customer_type": "other_government",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "FBI Critical Incident Response Group",
+        "annual_revenue": 3668627,
+        "health_score": 7.9,
+        "customer_type": "other_government",
+        "active_contracts": 2,
+        "total_value": 111900000,
+        "status": "active"
+      },
+      {
+        "name": "US Secret Service",
+        "annual_revenue": 3560608,
+        "health_score": 8.5,
+        "customer_type": "other_government",
+        "active_contracts": 0,
+        "total_value": 0,
+        "status": "active"
+      },
+      {
+        "name": "US Forest Service",
+        "annual_revenue": 3458090,
+        "health_score": 7.4,
+        "customer_type": "other_government",
+        "active_contracts": 2,
+        "total_value": 134900000,
+        "status": "active"
+      }
+    ],
+    "types": {
+      "dod_direct": 25,
+      "allied_nation": 7,
+      "prime_subcontract": 9,
+      "other_government": 4
+    },
+    "total_count": 45
+  },
+  "okrs": [
+    {
+      "objective": "Achieve $1.4B revenue target",
+      "key_result": "Quarterly revenue run rate exceeds $400M by Q3",
+      "current_value": 403,
+      "target_value": 400,
+      "status": "achieved",
+      "period": "Q3 2025",
+      "level": "company"
+    },
+    {
+      "objective": "Scale Arsenal-1 to initial production",
+      "key_result": "Complete Phase 1 buildout by Q4",
+      "current_value": 72,
+      "target_value": 100,
+      "status": "at_risk",
+      "period": "Q3 2025",
+      "level": "company"
+    },
+    {
+      "objective": "Win SOCOM Phase 3 award",
+      "key_result": "Submit compliant proposal by December 2025",
+      "current_value": 85,
+      "target_value": 100,
+      "status": "on_track",
+      "period": "Q3 2025",
+      "level": "company"
+    },
+    {
+      "objective": "Expand international revenue to 8%+ of total",
+      "key_result": "International revenue reaches $86M YTD",
+      "current_value": 86,
+      "target_value": 86,
+      "status": "on_track",
+      "period": "Q3 2025",
+      "level": "company"
+    },
+    {
+      "objective": "Deliver Lattice OS v4.2 on schedule",
+      "key_result": "All milestone deliverables accepted by program office",
+      "current_value": 4,
+      "target_value": 5,
+      "status": "on_track",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "Reduce platform deployment time by 40%",
+      "key_result": "Average deployment time under 48 hours",
+      "current_value": 62,
+      "target_value": 48,
+      "status": "behind",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "Complete next-gen sensor prototype",
+      "key_result": "Pass TRL-6 review by end of Q3",
+      "current_value": 88,
+      "target_value": 100,
+      "status": "at_risk",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "Reduce component defect rate",
+      "key_result": "Defect rate below 1.5%",
+      "current_value": 1.8,
+      "target_value": 1.5,
+      "status": "behind",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "Achieve Arsenal-1 Phase 1 completion",
+      "key_result": "Production line qualification by Q4",
+      "current_value": 65,
+      "target_value": 100,
+      "status": "at_risk",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "Ramp production to 500 units/month",
+      "key_result": "Monthly output reaches 500",
+      "current_value": 280,
+      "target_value": 500,
+      "status": "behind",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "Secure $1.5B in new contract awards",
+      "key_result": "Cumulative new awards exceed $1.5B",
+      "current_value": 1180,
+      "target_value": 1500,
+      "status": "on_track",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "Expand pipeline to $5B",
+      "key_result": "Qualified pipeline exceeds $5B",
+      "current_value": 4200,
+      "target_value": 5000,
+      "status": "on_track",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "Achieve 95% milestone delivery on-time rate",
+      "key_result": "On-time delivery percentage",
+      "current_value": 82,
+      "target_value": 95,
+      "status": "behind",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "Implement standardized program review process",
+      "key_result": "All programs using new template",
+      "current_value": 60,
+      "target_value": 100,
+      "status": "at_risk",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "Stand up AUKUS program office",
+      "key_result": "Full team operational by Q3",
+      "current_value": 90,
+      "target_value": 100,
+      "status": "on_track",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "UK MoD first delivery milestone",
+      "key_result": "Initial capability demonstration",
+      "current_value": 70,
+      "target_value": 100,
+      "status": "on_track",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "Achieve CMMC Level 3 certification",
+      "key_result": "Pass assessment by Q4",
+      "current_value": 75,
+      "target_value": 100,
+      "status": "at_risk",
+      "period": "Q3 2025",
+      "level": "department"
+    },
+    {
+      "objective": "Complete Columbus SCIF",
+      "key_result": "SCIF operational for classified work",
+      "current_value": 55,
+      "target_value": 100,
+      "status": "behind",
+      "period": "Q3 2025",
+      "level": "department"
+    }
+  ],
+  "contracts": {
+    "list": [
+      {
+        "contract_id": "CNTR_0005",
+        "name": "SOCOM Phase 3 Autonomous ISR (Pending)",
+        "total_value": 500000000,
+        "current_year_value": 0,
+        "status": "pending_award",
+        "type": "development",
+        "vehicle": "TBD",
+        "pop_start": "2026-01-01",
+        "pop_end": "2030-12-31",
+        "renewal_probability": 0.64,
+        "segment": "Autonomous ISR",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0001",
+        "name": "SOCOM Phase 2 Autonomous ISR Production",
+        "total_value": 480000000,
+        "current_year_value": 155000000,
+        "status": "active",
+        "type": "production",
+        "vehicle": "IDIQ",
+        "pop_start": "2023-04-01",
+        "pop_end": "2027-03-31",
+        "renewal_probability": 0.78,
+        "segment": "Autonomous ISR",
+        "customer": "US SOCOM"
+      },
+      {
+        "contract_id": "CNTR_0002",
+        "name": "Counter-UAS Next Gen Development",
+        "total_value": 290000000,
+        "current_year_value": 95000000,
+        "status": "active",
+        "type": "development",
+        "vehicle": "cost-plus-fixed-fee",
+        "pop_start": "2024-01-15",
+        "pop_end": "2026-06-30",
+        "renewal_probability": 0.66,
+        "segment": "Counter-UAS Systems",
+        "customer": "US Army PEO Missiles & Space"
+      },
+      {
+        "contract_id": "CNTR_0004",
+        "name": "Dive-LD Undersea Production Block 2",
+        "total_value": 210000000,
+        "current_year_value": 58000000,
+        "status": "active",
+        "type": "production",
+        "vehicle": "firm-fixed-price",
+        "pop_start": "2022-09-01",
+        "pop_end": "2025-12-31",
+        "renewal_probability": 0.64,
+        "segment": "Undersea & Maritime",
+        "customer": "US Navy NAVWAR"
+      },
+      {
+        "contract_id": "CNTR_0003",
+        "name": "UK MoD Autonomous Systems Partnership",
+        "total_value": 185000000,
+        "current_year_value": 52000000,
+        "status": "active",
+        "type": "production",
+        "vehicle": "firm-fixed-price",
+        "pop_start": "2025-04-01",
+        "pop_end": "2029-12-31",
+        "renewal_probability": 0.7,
+        "segment": "International Programs",
+        "customer": "UK Ministry of Defence"
+      },
+      {
+        "contract_id": "CNTR_0030",
+        "name": "Five Eyes ISR Sharing Platform 31",
+        "total_value": 119800000,
+        "current_year_value": 31663287,
+        "status": "active",
+        "type": "sustainment",
+        "vehicle": "time-and-materials",
+        "pop_start": "2024-01-04",
+        "pop_end": "2027-10-16",
+        "renewal_probability": 0.65,
+        "segment": "International Programs",
+        "customer": "US Forest Service"
+      },
+      {
+        "contract_id": "CNTR_0008",
+        "name": "Anvil System Sustainment Contract 9",
+        "total_value": 114700000,
+        "current_year_value": 11470000,
+        "status": "completed",
+        "type": "development",
+        "vehicle": "IDIQ",
+        "pop_start": "2023-03-10",
+        "pop_end": "2025-06-21",
+        "renewal_probability": 0,
+        "segment": "Counter-UAS Systems",
+        "customer": "NATO Communications and Information Agency"
+      },
+      {
+        "contract_id": "CNTR_0025",
+        "name": "Lattice OS Integration Services 26",
+        "total_value": 111100000,
+        "current_year_value": 58263649,
+        "status": "at_risk",
+        "type": "study",
+        "vehicle": "cost-plus-fixed-fee",
+        "pop_start": "2023-06-26",
+        "pop_end": "2025-05-22",
+        "renewal_probability": 0.49,
+        "segment": "Command & Control (Lattice)",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0009",
+        "name": "Mobile Counter-Drone Platform 10",
+        "total_value": 103100000,
+        "current_year_value": 10310000,
+        "status": "completed",
+        "type": "study",
+        "vehicle": "cost-plus-fixed-fee",
+        "pop_start": "2023-07-25",
+        "pop_end": "2025-04-11",
+        "renewal_probability": 0,
+        "segment": "Counter-UAS Systems",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0014",
+        "name": "Tactical ISR Data Services 15",
+        "total_value": 102800000,
+        "current_year_value": 10280000,
+        "status": "completed",
+        "type": "production",
+        "vehicle": "time-and-materials",
+        "pop_start": "2022-10-31",
+        "pop_end": "2025-06-08",
+        "renewal_probability": 0,
+        "segment": "Autonomous ISR",
+        "customer": "US Air Force AFLCMC"
+      },
+      {
+        "contract_id": "CNTR_0006",
+        "name": "Mobile Counter-Drone Platform 7",
+        "total_value": 97800000,
+        "current_year_value": 20961245,
+        "status": "option_year",
+        "type": "licensing",
+        "vehicle": "cost-plus-fixed-fee",
+        "pop_start": "2023-04-23",
+        "pop_end": "2027-12-21",
+        "renewal_probability": 0.86,
+        "segment": "Counter-UAS Systems",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0023",
+        "name": "Joint C2 Platform License 24",
+        "total_value": 95600000,
+        "current_year_value": 21686762,
+        "status": "active",
+        "type": "production",
+        "vehicle": "firm-fixed-price",
+        "pop_start": "2024-08-30",
+        "pop_end": "2029-01-25",
+        "renewal_probability": 0.5,
+        "segment": "Command & Control (Lattice)",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0013",
+        "name": "Anvil System Sustainment Contract 14",
+        "total_value": 94400000,
+        "current_year_value": 20907767,
+        "status": "active",
+        "type": "sustainment",
+        "vehicle": "IDIQ",
+        "pop_start": "2023-10-15",
+        "pop_end": "2028-04-19",
+        "renewal_probability": 0.55,
+        "segment": "Counter-UAS Systems",
+        "customer": "Missile Defense Agency"
+      },
+      {
+        "contract_id": "CNTR_0021",
+        "name": "Lattice Sustainment & Training 22",
+        "total_value": 93700000,
+        "current_year_value": 28764087,
+        "status": "active",
+        "type": "study",
+        "vehicle": "SBIR",
+        "pop_start": "2023-04-28",
+        "pop_end": "2026-07-30",
+        "renewal_probability": 0.93,
+        "segment": "Command & Control (Lattice)",
+        "customer": "US DoD Agency 26"
+      },
+      {
+        "contract_id": "CNTR_0039",
+        "name": "Applied AI Research Contract 40",
+        "total_value": 89800000,
+        "current_year_value": 55180135,
+        "status": "active",
+        "type": "study",
+        "vehicle": "time-and-materials",
+        "pop_start": "2023-11-12",
+        "pop_end": "2025-06-28",
+        "renewal_probability": 0.53,
+        "segment": "Other / R&D Contracts",
+        "customer": "US DoD Agency 22"
+      },
+      {
+        "contract_id": "CNTR_0028",
+        "name": "Undersea Sensor Network Phase 29",
+        "total_value": 80600000,
+        "current_year_value": 43908955,
+        "status": "option_year",
+        "type": "development",
+        "vehicle": "cost-plus-fixed-fee",
+        "pop_start": "2024-06-26",
+        "pop_end": "2026-04-27",
+        "renewal_probability": 0.83,
+        "segment": "Undersea & Maritime",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0027",
+        "name": "Undersea Sensor Network Phase 28",
+        "total_value": 77500000,
+        "current_year_value": 41175400,
+        "status": "active",
+        "type": "licensing",
+        "vehicle": "OTA",
+        "pop_start": "2024-12-06",
+        "pop_end": "2026-10-24",
+        "renewal_probability": 0.92,
+        "segment": "Undersea & Maritime",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0007",
+        "name": "CUAS Integration Services 8",
+        "total_value": 74500000,
+        "current_year_value": 32295131,
+        "status": "active",
+        "type": "sustainment",
+        "vehicle": "time-and-materials",
+        "pop_start": "2024-10-31",
+        "pop_end": "2027-02-20",
+        "renewal_probability": 0.95,
+        "segment": "Counter-UAS Systems",
+        "customer": "UK Defence Science and Technology Laboratory"
+      },
+      {
+        "contract_id": "CNTR_0029",
+        "name": "Undersea Sensor Network Phase 30",
+        "total_value": 66400000,
+        "current_year_value": 25592397,
+        "status": "active",
+        "type": "sustainment",
+        "vehicle": "time-and-materials",
+        "pop_start": "2024-10-02",
+        "pop_end": "2027-05-07",
+        "renewal_probability": 0.66,
+        "segment": "Undersea & Maritime",
+        "customer": "FBI Critical Incident Response Group"
+      },
+      {
+        "contract_id": "CNTR_0034",
+        "name": "Applied AI Research Contract 35",
+        "total_value": 45500000,
+        "current_year_value": 9125000,
+        "status": "option_year",
+        "type": "production",
+        "vehicle": "time-and-materials",
+        "pop_start": "2023-05-30",
+        "pop_end": "2028-05-23",
+        "renewal_probability": 0.67,
+        "segment": "Other / R&D Contracts",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0015",
+        "name": "Ghost Platform Operations Support 16",
+        "total_value": 42200000,
+        "current_year_value": 12943697,
+        "status": "active",
+        "type": "licensing",
+        "vehicle": "SBIR",
+        "pop_start": "2024-02-18",
+        "pop_end": "2027-05-23",
+        "renewal_probability": 0.89,
+        "segment": "Autonomous ISR",
+        "customer": "US DoD Agency 19"
+      },
+      {
+        "contract_id": "CNTR_0012",
+        "name": "Counter-UAS Rapid Deployment Package 13",
+        "total_value": 41400000,
+        "current_year_value": 8962633,
+        "status": "active",
+        "type": "licensing",
+        "vehicle": "cost-plus-fixed-fee",
+        "pop_start": "2022-09-03",
+        "pop_end": "2027-04-16",
+        "renewal_probability": 0.44,
+        "segment": "Counter-UAS Systems",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0017",
+        "name": "Autonomous ISR Sustainment 18",
+        "total_value": 38800000,
+        "current_year_value": 9172280,
+        "status": "active",
+        "type": "study",
+        "vehicle": "cost-plus-fixed-fee",
+        "pop_start": "2022-09-23",
+        "pop_end": "2026-12-15",
+        "renewal_probability": 0.81,
+        "segment": "Autonomous ISR",
+        "customer": "BAE Systems"
+      },
+      {
+        "contract_id": "CNTR_0031",
+        "name": "Five Eyes ISR Sharing Platform 32",
+        "total_value": 35800000,
+        "current_year_value": 15838788,
+        "status": "active",
+        "type": "sustainment",
+        "vehicle": "OTA",
+        "pop_start": "2022-11-29",
+        "pop_end": "2025-03-03",
+        "renewal_probability": 0.83,
+        "segment": "International Programs",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0032",
+        "name": "Five Eyes ISR Sharing Platform 33",
+        "total_value": 32200000,
+        "current_year_value": 9447749,
+        "status": "active",
+        "type": "study",
+        "vehicle": "IDIQ",
+        "pop_start": "2024-01-25",
+        "pop_end": "2027-06-22",
+        "renewal_probability": 0.95,
+        "segment": "International Programs",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0022",
+        "name": "Lattice OS Integration Services 23",
+        "total_value": 31600000,
+        "current_year_value": 3160000,
+        "status": "completed",
+        "type": "sustainment",
+        "vehicle": "cost-plus-fixed-fee",
+        "pop_start": "2024-10-25",
+        "pop_end": "2025-07-25",
+        "renewal_probability": 0,
+        "segment": "Command & Control (Lattice)",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0019",
+        "name": "Multi-Domain C2 Pilot 20",
+        "total_value": 20700000,
+        "current_year_value": 5852440,
+        "status": "active",
+        "type": "study",
+        "vehicle": "firm-fixed-price",
+        "pop_start": "2022-06-26",
+        "pop_end": "2026-01-07",
+        "renewal_probability": 0.53,
+        "segment": "Command & Control (Lattice)",
+        "customer": "L3Harris Technologies"
+      },
+      {
+        "contract_id": "CNTR_0016",
+        "name": "Tactical ISR Data Services 17",
+        "total_value": 19700000,
+        "current_year_value": 11305818,
+        "status": "at_risk",
+        "type": "sustainment",
+        "vehicle": "firm-fixed-price",
+        "pop_start": "2022-08-11",
+        "pop_end": "2024-05-08",
+        "renewal_probability": 0.39,
+        "segment": "Autonomous ISR",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0037",
+        "name": "Applied AI Research Contract 38",
+        "total_value": 18200000,
+        "current_year_value": 5243094,
+        "status": "active",
+        "type": "study",
+        "vehicle": "IDIQ",
+        "pop_start": "2024-10-19",
+        "pop_end": "2028-04-08",
+        "renewal_probability": 0.89,
+        "segment": "Other / R&D Contracts",
+        "customer": "US DoD Agency 20"
+      },
+      {
+        "contract_id": "CNTR_0020",
+        "name": "Joint C2 Platform License 21",
+        "total_value": 17100000,
+        "current_year_value": 1710000,
+        "status": "completed",
+        "type": "production",
+        "vehicle": "IDIQ",
+        "pop_start": "2024-05-12",
+        "pop_end": "2025-04-26",
+        "renewal_probability": 0,
+        "segment": "Command & Control (Lattice)",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0010",
+        "name": "Counter-UAS Rapid Deployment Package 11",
+        "total_value": 17000000,
+        "current_year_value": 5848256,
+        "status": "active",
+        "type": "production",
+        "vehicle": "firm-fixed-price",
+        "pop_start": "2024-03-30",
+        "pop_end": "2027-02-24",
+        "renewal_probability": 0.73,
+        "segment": "Counter-UAS Systems",
+        "customer": "US Army Futures Command"
+      },
+      {
+        "contract_id": "CNTR_0033",
+        "name": "Applied AI Research Contract 34",
+        "total_value": 15100000,
+        "current_year_value": 6592703,
+        "status": "active",
+        "type": "development",
+        "vehicle": "IDIQ",
+        "pop_start": "2025-03-30",
+        "pop_end": "2027-07-14",
+        "renewal_probability": 0.5,
+        "segment": "Other / R&D Contracts",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0024",
+        "name": "Lattice OS Integration Services 25",
+        "total_value": 14800000,
+        "current_year_value": 1480000,
+        "status": "completed",
+        "type": "sustainment",
+        "vehicle": "OTA",
+        "pop_start": "2024-02-28",
+        "pop_end": "2025-04-25",
+        "renewal_probability": 0,
+        "segment": "Command & Control (Lattice)",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0038",
+        "name": "Advanced Concepts Study 39",
+        "total_value": 12400000,
+        "current_year_value": 9588983,
+        "status": "active",
+        "type": "study",
+        "vehicle": "IDIQ",
+        "pop_start": "2022-07-23",
+        "pop_end": "2023-11-07",
+        "renewal_probability": 0.7,
+        "segment": "Other / R&D Contracts",
+        "customer": "Unknown"
+      },
+      {
+        "contract_id": "CNTR_0036",
+        "name": "Rapid Prototyping Agreement 37",
+        "total_value": 10000000,
+        "current_year_value": 2101324,
+        "status": "active",
+        "type": "production",
+        "vehicle": "IDIQ",
+        "pop_start": "2023-01-08",
+        "pop_end": "2027-10-11",
+        "renewal_probability": 0.92,
+        "segment": "Other / R&D Contracts",
+        "customer": "US DoD Agency 23"
+      },
+      {
+        "contract_id": "CNTR_0011",
+        "name": "CUAS Integration Services 12",
+        "total_value": 8400000,
+        "current_year_value": 1868373,
+        "status": "active",
+        "type": "production",
+        "vehicle": "IDIQ",
+        "pop_start": "2023-05-12",
+        "pop_end": "2027-11-08",
+        "renewal_probability": 0.48,
+        "segment": "Counter-UAS Systems",
+        "customer": "General Dynamics Mission Systems"
+      },
+      {
+        "contract_id": "CNTR_0035",
+        "name": "SBIR Phase II Research 36",
+        "total_value": 8400000,
+        "current_year_value": 4324401,
+        "status": "option_year",
+        "type": "production",
+        "vehicle": "SBIR",
+        "pop_start": "2024-06-08",
+        "pop_end": "2026-05-18",
+        "renewal_probability": 0.59,
+        "segment": "Other / R&D Contracts",
+        "customer": "Australian Defence Force"
+      },
+      {
+        "contract_id": "CNTR_0040",
+        "name": "Advanced Concepts Study 41",
+        "total_value": 8000000,
+        "current_year_value": 2506438,
+        "status": "active",
+        "type": "production",
+        "vehicle": "OTA",
+        "pop_start": "2025-03-24",
+        "pop_end": "2028-06-01",
+        "renewal_probability": 0.71,
+        "segment": "Other / R&D Contracts",
+        "customer": "Booz Allen Hamilton"
+      },
+      {
+        "contract_id": "CNTR_0018",
+        "name": "Tactical ISR Data Services 19",
+        "total_value": 6700000,
+        "current_year_value": 2897512,
+        "status": "active",
+        "type": "sustainment",
+        "vehicle": "time-and-materials",
+        "pop_start": "2023-04-16",
+        "pop_end": "2025-08-07",
+        "renewal_probability": 0.44,
+        "segment": "Autonomous ISR",
+        "customer": "US DoD Agency 24"
+      },
+      {
+        "contract_id": "CNTR_0026",
+        "name": "Maritime Autonomous Systems Support 27",
+        "total_value": 6600000,
+        "current_year_value": 660000,
+        "status": "completed",
+        "type": "development",
+        "vehicle": "IDIQ",
+        "pop_start": "2023-01-10",
+        "pop_end": "2025-08-02",
+        "renewal_probability": 0,
+        "segment": "Undersea & Maritime",
+        "customer": "Unknown"
+      }
+    ],
+    "total_value": 3437400000,
+    "count": 40
+  },
+  "departments": {
+    "budget": {
+      "departments": [
+        "Executive",
+        "Finance & Legal",
+        "Software Engineering",
+        "Hardware Engineering",
+        "Manufacturing Operations",
+        "Government Affairs & BD",
+        "Program Management",
+        "People & Operations",
+        "International Programs",
+        "IT & Security"
+      ],
+      "dept_ids": [
+        "DEPT_001",
+        "DEPT_002",
+        "DEPT_003",
+        "DEPT_004",
+        "DEPT_005",
+        "DEPT_006",
+        "DEPT_007",
+        "DEPT_008",
+        "DEPT_009",
+        "DEPT_010"
+      ],
+      "quarters": [
+        "FY2025_Q1",
+        "FY2025_Q2",
+        "FY2025_Q3"
+      ],
+      "planned": {
+        "DEPT_001": 3600000,
+        "DEPT_002": 7200000,
+        "DEPT_003": 26200000,
+        "DEPT_004": 17800000,
+        "DEPT_005": 10900000,
+        "DEPT_006": 11400000,
+        "DEPT_007": 10800000,
+        "DEPT_008": 5400000,
+        "DEPT_009": 5200000,
+        "DEPT_010": 8800000
+      },
+      "actual": {
+        "DEPT_001": 3640000,
+        "DEPT_002": 7380000,
+        "DEPT_003": 27760000,
+        "DEPT_004": 18350000,
+        "DEPT_005": 12170000,
+        "DEPT_006": 11470000,
+        "DEPT_007": 10200000,
+        "DEPT_008": 5500000,
+        "DEPT_009": 5600000,
+        "DEPT_010": 9400000
+      }
+    },
+    "headcount": {
+      "DEPT_001": {
+        "fte": 9,
+        "contractor": 2,
+        "total_cost": 618571
+      },
+      "DEPT_002": {
+        "fte": 17,
+        "contractor": 3,
+        "total_cost": 1055740
+      },
+      "DEPT_003": {
+        "fte": 65,
+        "contractor": 7,
+        "total_cost": 3411336
+      },
+      "DEPT_004": {
+        "fte": 43,
+        "contractor": 5,
+        "total_cost": 2083271
+      },
+      "DEPT_005": {
+        "fte": 55,
+        "contractor": 18,
+        "total_cost": 3044261
+      },
+      "DEPT_006": {
+        "fte": 29,
+        "contractor": 3,
+        "total_cost": 1537988
+      },
+      "DEPT_007": {
+        "fte": 29,
+        "contractor": 4,
+        "total_cost": 1599723
+      },
+      "DEPT_008": {
+        "fte": 16,
+        "contractor": 1,
+        "total_cost": 748940
+      },
+      "DEPT_009": {
+        "fte": 17,
+        "contractor": 3,
+        "total_cost": 958540
+      },
+      "DEPT_010": {
+        "fte": 19,
+        "contractor": 5,
+        "total_cost": 1048229
+      }
+    },
+    "names": {
+      "DEPT_008": "People & Operations",
+      "DEPT_009": "International Programs",
+      "DEPT_010": "IT & Security",
+      "DEPT_001": "Executive",
+      "DEPT_002": "Finance & Legal",
+      "DEPT_003": "Software Engineering",
+      "DEPT_004": "Hardware Engineering",
+      "DEPT_005": "Manufacturing Operations",
+      "DEPT_006": "Government Affairs & BD",
+      "DEPT_007": "Program Management"
+    }
+  },
+  "workforce": {
+    "top_skills": [
+      {
+        "name": "CI/CD Pipelines",
+        "count": 4,
+        "avg_prof": 2.5
+      },
+      {
+        "name": "Sensor Fusion",
+        "count": 4,
+        "avg_prof": 2.25
+      },
+      {
+        "name": "Machine Learning",
+        "count": 4,
+        "avg_prof": 2.5
+      },
+      {
+        "name": "Python",
+        "count": 4,
+        "avg_prof": 2.0
+      },
+      {
+        "name": "C++",
+        "count": 4,
+        "avg_prof": 1.75
+      },
+      {
+        "name": "Contract Performance Management",
+        "count": 4,
+        "avg_prof": 3.25
+      },
+      {
+        "name": "AWS",
+        "count": 3,
+        "avg_prof": 2.0
+      },
+      {
+        "name": "Inspection Techniques",
+        "count": 3,
+        "avg_prof": 2.3333333333333335
+      },
+      {
+        "name": "ERP Systems",
+        "count": 3,
+        "avg_prof": 1.6666666666666667
+      },
+      {
+        "name": "gRPC/Protobuf",
+        "count": 3,
+        "avg_prof": 2.3333333333333335
+      },
+      {
+        "name": "Real-Time Systems",
+        "count": 3,
+        "avg_prof": 1.6666666666666667
+      },
+      {
+        "name": "CNC Operations",
+        "count": 3,
+        "avg_prof": 2.6666666666666665
+      },
+      {
+        "name": "System Architecture",
+        "count": 3,
+        "avg_prof": 1.3333333333333333
+      },
+      {
+        "name": "Treasury Management",
+        "count": 2,
+        "avg_prof": 3.5
+      },
+      {
+        "name": "Distributed Systems",
+        "count": 2,
+        "avg_prof": 2.5
+      }
+    ],
+    "time_alloc": {
+      "meetings": 24.4,
+      "focus": 13.4,
+      "admin": 7.7,
+      "travel": 0.7
+    },
+    "emp_types": {
+      "fte": 47,
+      "contractor": 3
+    },
+    "clearances": {
+      "TS/SCI": 6,
+      "TS": 19,
+      "Secret": 13,
+      "Uncleared": 8,
+      "Confidential": 3,
+      "Pending": 1
+    },
+    "total_employees": 50
+  },
+  "initiatives": {
+    "by_status": {
+      "in_progress": [
+        {
+          "name": "SOCOM Phase 2 Autonomous ISR Production",
+          "description": "Full-rate production and delivery of Ghost autonomous ISR platforms under SOCOM Phase 2 contract. In",
+          "status": "in_progress",
+          "priority": "high",
+          "budget": 11743740,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "Counter-UAS Next Gen Development",
+          "description": "Development of next-generation Anvil counter-drone interceptor system with improved autonomous engag",
+          "status": "in_progress",
+          "priority": "high",
+          "budget": 5437169,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-06-30"
+        },
+        {
+          "name": "UK MoD Autonomous Systems Partnership",
+          "description": "Establish production capability and delivery pipeline for autonomous surveillance systems under the ",
+          "status": "in_progress",
+          "priority": "high",
+          "budget": 6799834,
+          "type": "delivery",
+          "start_date": "2025-04-01",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "DSTL Counter-UAS Integration Package",
+          "description": "Integration and sustainment of Anvil counter-UAS systems for UK DSTL evaluation program. Includes mo",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 4182450,
+          "type": "delivery",
+          "start_date": "2024-10-31",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "Army Futures Rapid Counter-Drone Deployment",
+          "description": "Rapid fielding of counter-drone capability packages to Army Futures Command test units. Includes exp",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 788390,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "General Dynamics CUAS Subsystem Integration",
+          "description": "Provide Anvil counter-UAS subsystem components to General Dynamics Mission Systems for integration i",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 169673,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "MDA Anvil Sustainment Services",
+          "description": "Long-term sustainment and field support for deployed Anvil systems under Missile Defense Agency prog",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 2561605,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "Ghost Platform Operational Support \u2014 Agency Program",
+          "description": "Ongoing operational support and platform maintenance for Ghost autonomous ISR systems deployed under",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 763456,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "BAE Systems ISR Collaboration Study",
+          "description": "Joint study with BAE Systems on next-generation ISR data fusion architectures. Exploring integration",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 1316071,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "Agency Tactical ISR Support Services",
+          "description": "Tactical ISR data processing and analysis support for a DoD agency customer. Services include real-t",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 396279,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2025-08-07"
+        },
+        {
+          "name": "L3Harris Multi-Domain C2 Integration Pilot",
+          "description": "Pilot program to demonstrate Lattice OS integration with L3Harris tactical communications systems fo",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 703579,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-01-07"
+        },
+        {
+          "name": "Lattice Platform Sustainment & Operator Training",
+          "description": "Enterprise sustainment and operator training program for Lattice OS deployments across multiple DoD ",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 1610401,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-07-30"
+        },
+        {
+          "name": "Undersea Distributed Sensor Network \u2014 Phase 2",
+          "description": "Development and deployment of distributed undersea sensor network nodes for maritime domain awarenes",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 4625535,
+          "type": "delivery",
+          "start_date": "2024-12-06",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "Maritime Sensor Sustainment \u2014 Critical Infrastructure",
+          "description": "Ongoing sustainment of deployed maritime autonomous sensor systems supporting critical infrastructur",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 2265339,
+          "type": "delivery",
+          "start_date": "2024-10-02",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "Five Eyes ISR Data Sharing Platform",
+          "description": "Development and deployment of a secure ISR data sharing platform enabling intelligence product excha",
+          "status": "in_progress",
+          "priority": "high",
+          "budget": 3025320,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "UK DSTL ISR Platform Evaluation",
+          "description": "Technical evaluation program with UK DSTL to assess Anduril ISR platform capabilities for potential ",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 889909,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2025-03-03"
+        },
+        {
+          "name": "UK MoD ISR Integration Study",
+          "description": "Feasibility study for integrating Anduril ISR capabilities into UK MoD operational architecture. Cov",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 985657,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "Forest Service Autonomous Monitoring R&D",
+          "description": "Applied AI research contract developing autonomous wildfire detection and monitoring capabilities us",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 519811,
+          "type": "delivery",
+          "start_date": "2025-03-30",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "Rapid Prototyping \u2014 Next-Gen Effector Concepts",
+          "description": "Rapid prototyping of advanced effector concepts under DoD innovation pathway. Fast-cycle design-buil",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 107176,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "Applied AI Autonomy Research \u2014 Swarm Coordination",
+          "description": "Applied research in multi-agent autonomous coordination algorithms for contested RF environments. De",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 757529,
+          "type": "delivery",
+          "start_date": "2024-10-19",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "Army PEO Advanced Interceptor Study",
+          "description": "Advanced concept study for next-generation kinetic interceptor designs for Army PEO Missiles & Space",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 1356706,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2023-11-07"
+        },
+        {
+          "name": "Applied AI Research \u2014 Sensor Fusion Algorithms",
+          "description": "Development of advanced multi-modal sensor fusion algorithms for autonomous target identification an",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 4294984,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2025-06-28"
+        },
+        {
+          "name": "Booz Allen Advanced Analytics Collaboration",
+          "description": "Collaborative study with Booz Allen Hamilton on advanced data analytics methodologies for defense in",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 193173,
+          "type": "delivery",
+          "start_date": "2025-03-24",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "Arsenal-1 Production Scale-Up",
+          "description": "Validate and certify the Arsenal-1 manufacturing facility in Columbus, OH for full-rate production o",
+          "status": "in_progress",
+          "priority": "critical",
+          "budget": 12000000,
+          "type": "strategic",
+          "start_date": "2024-06-01",
+          "end_date": "2025-12-31"
+        },
+        {
+          "name": "SOCOM Phase 3 Capture Campaign",
+          "description": "Cross-functional capture campaign to win the SOCOM Phase 3 Autonomous ISR program, estimated at $500",
+          "status": "in_progress",
+          "priority": "critical",
+          "budget": 2500000,
+          "type": "strategic",
+          "start_date": "2025-01-15",
+          "end_date": "2026-03-31"
+        },
+        {
+          "name": "AUKUS Program Expansion",
+          "description": "Expand Anduril's presence in the AUKUS partnership through establishment of program offices in Sydne",
+          "status": "in_progress",
+          "priority": "high",
+          "budget": 5000000,
+          "type": "strategic",
+          "start_date": "2025-03-01",
+          "end_date": "2026-06-30"
+        },
+        {
+          "name": "CMMC Level 3 Compliance",
+          "description": "Achieve Cybersecurity Maturity Model Certification Level 3 across all Anduril facilities handling CU",
+          "status": "in_progress",
+          "priority": "high",
+          "budget": 2200000,
+          "type": "internal",
+          "start_date": "2025-01-01",
+          "end_date": "2025-09-30"
+        },
+        {
+          "name": "Engineering Process Standardization",
+          "description": "Establish standardized program delivery processes across engineering and program management to bridg",
+          "status": "in_progress",
+          "priority": "medium",
+          "budget": 800000,
+          "type": "internal",
+          "start_date": "2025-03-01",
+          "end_date": "2025-12-31"
+        },
+        {
+          "name": "Columbus SCIF Buildout",
+          "description": "Construction and accreditation of a Sensitive Compartmented Information Facility at the Columbus, OH",
+          "status": "in_progress",
+          "priority": "high",
+          "budget": 4500000,
+          "type": "internal",
+          "start_date": "2025-02-01",
+          "end_date": "2025-11-30"
+        }
+      ],
+      "completed": [
+        {
+          "name": "Dive-LD Undersea Production Block 2",
+          "description": "Final production block delivery of Dive-LD autonomous undersea vehicles for NAVWAR. Program achieved",
+          "status": "completed",
+          "priority": "high",
+          "budget": 6665964,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2025-12-31"
+        },
+        {
+          "name": "Workday Platform Migration",
+          "description": "Migration from legacy HR and financial management systems to Workday unified HCM platform. Completed",
+          "status": "completed",
+          "priority": "medium",
+          "budget": 650000,
+          "type": "internal",
+          "start_date": "2024-09-01",
+          "end_date": "2025-06-30"
+        }
+      ],
+      "on_hold": [
+        {
+          "name": "NATO NCIA Counter-Drone Licensing Program",
+          "description": "Platform licensing and technical data delivery for NATO member adoption of counter-UAS capabilities.",
+          "status": "on_hold",
+          "priority": "medium",
+          "budget": 602478,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-09-30"
+        },
+        {
+          "name": "SOCOM Joint C2 Lattice Deployment",
+          "description": "Enterprise deployment of Lattice OS command and control platform across SOCOM operational units. Pro",
+          "status": "on_hold",
+          "priority": "medium",
+          "budget": 1846288,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2026-09-30"
+        }
+      ],
+      "at_risk": [
+        {
+          "name": "AFLCMC Tactical ISR Data Services",
+          "description": "Delivery of ISR data processing and exploitation services under Air Force AFLCMC sustainment contrac",
+          "status": "at_risk",
+          "priority": "critical",
+          "budget": 923673,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2024-05-08"
+        },
+        {
+          "name": "AFLCMC Lattice OS Enterprise Integration",
+          "description": "Large-scale integration of Lattice OS into Air Force enterprise C2 infrastructure under AFLCMC contr",
+          "status": "at_risk",
+          "priority": "critical",
+          "budget": 7507882,
+          "type": "delivery",
+          "start_date": "2024-09-30",
+          "end_date": "2025-05-22"
+        },
+        {
+          "name": "Lattice OS NATO Certification",
+          "description": "Achieve NATO interoperability certification for Lattice OS platform to enable deployment across alli",
+          "status": "at_risk",
+          "priority": "high",
+          "budget": 3500000,
+          "type": "strategic",
+          "start_date": "2025-02-01",
+          "end_date": "2025-12-31"
+        }
+      ],
+      "planned": [
+        {
+          "name": "IPO Readiness Program",
+          "description": "Prepare Anduril for potential 2026 IPO through financial systems hardening, SOX compliance preparati",
+          "status": "planned",
+          "priority": "medium",
+          "budget": 1800000,
+          "type": "strategic",
+          "start_date": "2025-06-01",
+          "end_date": "2026-06-30"
+        }
+      ]
+    },
+    "total": 37,
+    "total_budget": 105990071
+  },
+  "vendors": {
+    "risk": [
+      {
+        "vendor": "Amazon Web Services",
+        "annual_value": 28000000,
+        "criticality": "critical",
+        "single_source": "True",
+        "category": "cloud_infrastructure",
+        "status": "active",
+        "contract_end": "2026-06-30",
+        "total_value": 84000000
+      },
+      {
+        "vendor": "Raytheon Sensors Division",
+        "annual_value": 42000000,
+        "criticality": "critical",
+        "single_source": "True",
+        "category": "manufacturing_supply",
+        "status": "expiring_soon",
+        "contract_end": "2025-12-31",
+        "total_value": 168000000
+      },
+      {
+        "vendor": "Cushman & Wakefield",
+        "annual_value": 8500000,
+        "criticality": "critical",
+        "single_source": "True",
+        "category": "facilities",
+        "status": "active",
+        "contract_end": "2033-05-31",
+        "total_value": 85000000
+      },
+      {
+        "vendor": "Workday",
+        "annual_value": 1800000,
+        "criticality": "high",
+        "single_source": "False",
+        "category": "software",
+        "status": "expiring_soon",
+        "contract_end": "2025-12-31",
+        "total_value": 5400000
+      },
+      {
+        "vendor": "Deloitte",
+        "annual_value": 3200000,
+        "criticality": "high",
+        "single_source": "False",
+        "category": "professional_services",
+        "status": "expiring_soon",
+        "contract_end": "2025-12-31",
+        "total_value": 3200000
+      },
+      {
+        "vendor": "Heidrick & Struggles",
+        "annual_value": 850000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "professional_services",
+        "status": "expiring_soon",
+        "contract_end": "2025-12-31",
+        "total_value": 850000
+      },
+      {
+        "vendor": "Palantir Technologies",
+        "annual_value": 2400000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "software",
+        "status": "active",
+        "contract_end": "2026-12-31",
+        "total_value": 7200000
+      },
+      {
+        "vendor": "Salesforce",
+        "annual_value": 480000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "software",
+        "status": "active",
+        "contract_end": "2026-11-30",
+        "total_value": 1440000
+      },
+      {
+        "vendor": "Unknown",
+        "annual_value": 180000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "software",
+        "status": "active",
+        "contract_end": "2027-02-05",
+        "total_value": 900000
+      },
+      {
+        "vendor": "Coupa",
+        "annual_value": 320000,
+        "criticality": "critical",
+        "single_source": "False",
+        "category": "software",
+        "status": "expired",
+        "contract_end": "2023-09-27",
+        "total_value": 640000
+      },
+      {
+        "vendor": "SAP",
+        "annual_value": 150000,
+        "criticality": "low",
+        "single_source": "False",
+        "category": "software",
+        "status": "active",
+        "contract_end": "2027-03-03",
+        "total_value": 300000
+      },
+      {
+        "vendor": "Greenhouse",
+        "annual_value": 210000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "software",
+        "status": "active",
+        "contract_end": "2028-10-05",
+        "total_value": 1050000
+      },
+      {
+        "vendor": "Lattice (HR)",
+        "annual_value": 100000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "software",
+        "status": "active",
+        "contract_end": "2026-08-22",
+        "total_value": 500000
+      },
+      {
+        "vendor": "GitHub",
+        "annual_value": 650000,
+        "criticality": "critical",
+        "single_source": "False",
+        "category": "software",
+        "status": "expired",
+        "contract_end": "2024-01-08",
+        "total_value": 1300000
+      },
+      {
+        "vendor": "Atlassian",
+        "annual_value": 380000,
+        "criticality": "high",
+        "single_source": "True",
+        "category": "software",
+        "status": "active",
+        "contract_end": "2029-04-06",
+        "total_value": 1900000
+      },
+      {
+        "vendor": "Unknown",
+        "annual_value": 180000,
+        "criticality": "critical",
+        "single_source": "False",
+        "category": "software",
+        "status": "active",
+        "contract_end": "2027-04-18",
+        "total_value": 900000
+      },
+      {
+        "vendor": "Dassault Systemes",
+        "annual_value": 520000,
+        "criticality": "high",
+        "single_source": "False",
+        "category": "software",
+        "status": "expired",
+        "contract_end": "2023-12-07",
+        "total_value": 520000
+      },
+      {
+        "vendor": "MathWorks",
+        "annual_value": 280000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "software",
+        "status": "active",
+        "contract_end": "2027-05-21",
+        "total_value": 1400000
+      },
+      {
+        "vendor": "Altium",
+        "annual_value": 190000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "software",
+        "status": "expired",
+        "contract_end": "2023-02-04",
+        "total_value": 190000
+      },
+      {
+        "vendor": "CrowdStrike",
+        "annual_value": 480000,
+        "criticality": "low",
+        "single_source": "False",
+        "category": "software",
+        "status": "expired",
+        "contract_end": "2022-09-10",
+        "total_value": 480000
+      },
+      {
+        "vendor": "Okta",
+        "annual_value": 350000,
+        "criticality": "medium",
+        "single_source": "True",
+        "category": "software",
+        "status": "expired",
+        "contract_end": "2025-07-25",
+        "total_value": 350000
+      },
+      {
+        "vendor": "Varonis",
+        "annual_value": 280000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "software",
+        "status": "expiring_soon",
+        "contract_end": "2025-12-19",
+        "total_value": 560000
+      },
+      {
+        "vendor": "Zscaler",
+        "annual_value": 220000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "software",
+        "status": "expiring_soon",
+        "contract_end": "2025-10-24",
+        "total_value": 220000
+      },
+      {
+        "vendor": "Unknown",
+        "annual_value": 360000,
+        "criticality": "high",
+        "single_source": "True",
+        "category": "software",
+        "status": "expiring_soon",
+        "contract_end": "2025-10-18",
+        "total_value": 720000
+      },
+      {
+        "vendor": "Google",
+        "annual_value": 540000,
+        "criticality": "high",
+        "single_source": "False",
+        "category": "software",
+        "status": "active",
+        "contract_end": "2030-02-25",
+        "total_value": 2700000
+      },
+      {
+        "vendor": "Datadog",
+        "annual_value": 420000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "cloud_infrastructure",
+        "status": "expired",
+        "contract_end": "2023-07-05",
+        "total_value": 420000
+      },
+      {
+        "vendor": "Snowflake",
+        "annual_value": 650000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "cloud_infrastructure",
+        "status": "expired",
+        "contract_end": "2023-08-30",
+        "total_value": 650000
+      },
+      {
+        "vendor": "Azure (secondary)",
+        "annual_value": 4600000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "cloud_infrastructure",
+        "status": "active",
+        "contract_end": "2027-02-14",
+        "total_value": 9200000
+      },
+      {
+        "vendor": "Insight Global",
+        "annual_value": 3240000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "staffing",
+        "status": "expiring_soon",
+        "contract_end": "2025-11-14",
+        "total_value": 3240000
+      },
+      {
+        "vendor": "TEKsystems",
+        "annual_value": 3480000,
+        "criticality": "low",
+        "single_source": "True",
+        "category": "staffing",
+        "status": "expired",
+        "contract_end": "2025-02-08",
+        "total_value": 3480000
+      },
+      {
+        "vendor": "Robert Half",
+        "annual_value": 4550000,
+        "criticality": "low",
+        "single_source": "True",
+        "category": "staffing",
+        "status": "expired",
+        "contract_end": "2024-03-27",
+        "total_value": 4550000
+      },
+      {
+        "vendor": "Hays",
+        "annual_value": 2960000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "staffing",
+        "status": "expired",
+        "contract_end": "2022-12-27",
+        "total_value": 2960000
+      },
+      {
+        "vendor": "Kelly Services",
+        "annual_value": 2460000,
+        "criticality": "low",
+        "single_source": "False",
+        "category": "staffing",
+        "status": "active",
+        "contract_end": "2029-01-29",
+        "total_value": 12300000
+      },
+      {
+        "vendor": "Adecco",
+        "annual_value": 2690000,
+        "criticality": "high",
+        "single_source": "True",
+        "category": "staffing",
+        "status": "active",
+        "contract_end": "2026-12-12",
+        "total_value": 5380000
+      },
+      {
+        "vendor": "Manpower Group",
+        "annual_value": 2190000,
+        "criticality": "high",
+        "single_source": "False",
+        "category": "staffing",
+        "status": "expired",
+        "contract_end": "2024-08-09",
+        "total_value": 2190000
+      },
+      {
+        "vendor": "Aerotek",
+        "annual_value": 3600000,
+        "criticality": "high",
+        "single_source": "True",
+        "category": "staffing",
+        "status": "active",
+        "contract_end": "2026-12-09",
+        "total_value": 10800000
+      },
+      {
+        "vendor": "CBRE Group",
+        "annual_value": 3190000,
+        "criticality": "high",
+        "single_source": "False",
+        "category": "facilities",
+        "status": "active",
+        "contract_end": "2027-01-06",
+        "total_value": 6380000
+      },
+      {
+        "vendor": "JLL",
+        "annual_value": 3470000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "facilities",
+        "status": "active",
+        "contract_end": "2026-12-01",
+        "total_value": 6940000
+      },
+      {
+        "vendor": "Cushman & Wakefield (satellite)",
+        "annual_value": 1190000,
+        "criticality": "low",
+        "single_source": "False",
+        "category": "facilities",
+        "status": "active",
+        "contract_end": "2029-11-04",
+        "total_value": 5950000
+      },
+      {
+        "vendor": "Allied Universal Security",
+        "annual_value": 1050000,
+        "criticality": "high",
+        "single_source": "False",
+        "category": "facilities",
+        "status": "active",
+        "contract_end": "2027-05-21",
+        "total_value": 5250000
+      },
+      {
+        "vendor": "Sodexo",
+        "annual_value": 1490000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "facilities",
+        "status": "active",
+        "contract_end": "2027-06-16",
+        "total_value": 7450000
+      },
+      {
+        "vendor": "ABM Industries",
+        "annual_value": 3650000,
+        "criticality": "low",
+        "single_source": "True",
+        "category": "facilities",
+        "status": "active",
+        "contract_end": "2027-02-25",
+        "total_value": 10950000
+      },
+      {
+        "vendor": "KPMG",
+        "annual_value": 900000,
+        "criticality": "critical",
+        "single_source": "True",
+        "category": "professional_services",
+        "status": "active",
+        "contract_end": "2028-11-01",
+        "total_value": 4500000
+      },
+      {
+        "vendor": "PwC",
+        "annual_value": 710000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "professional_services",
+        "status": "expired",
+        "contract_end": "2023-11-19",
+        "total_value": 1420000
+      },
+      {
+        "vendor": "McKinsey",
+        "annual_value": 4220000,
+        "criticality": "critical",
+        "single_source": "True",
+        "category": "professional_services",
+        "status": "expired",
+        "contract_end": "2022-11-10",
+        "total_value": 4220000
+      },
+      {
+        "vendor": "Ernst & Young",
+        "annual_value": 2050000,
+        "criticality": "high",
+        "single_source": "False",
+        "category": "professional_services",
+        "status": "active",
+        "contract_end": "2027-12-26",
+        "total_value": 10250000
+      },
+      {
+        "vendor": "Akin Gump (ITAR counsel)",
+        "annual_value": 920000,
+        "criticality": "high",
+        "single_source": "True",
+        "category": "professional_services",
+        "status": "expired",
+        "contract_end": "2024-05-12",
+        "total_value": 920000
+      },
+      {
+        "vendor": "Arnold & Porter",
+        "annual_value": 1210000,
+        "criticality": "low",
+        "single_source": "True",
+        "category": "professional_services",
+        "status": "expired",
+        "contract_end": "2024-05-14",
+        "total_value": 2420000
+      },
+      {
+        "vendor": "Hogan Lovells",
+        "annual_value": 2950000,
+        "criticality": "high",
+        "single_source": "False",
+        "category": "professional_services",
+        "status": "active",
+        "contract_end": "2029-07-27",
+        "total_value": 14750000
+      },
+      {
+        "vendor": "Perkins Coie",
+        "annual_value": 2660000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "professional_services",
+        "status": "expired",
+        "contract_end": "2025-09-07",
+        "total_value": 2660000
+      },
+      {
+        "vendor": "Gibson Dunn",
+        "annual_value": 2700000,
+        "criticality": "low",
+        "single_source": "False",
+        "category": "professional_services",
+        "status": "expiring_soon",
+        "contract_end": "2025-11-06",
+        "total_value": 8100000
+      },
+      {
+        "vendor": "Mercer (compensation)",
+        "annual_value": 3490000,
+        "criticality": "low",
+        "single_source": "False",
+        "category": "professional_services",
+        "status": "expired",
+        "contract_end": "2023-07-04",
+        "total_value": 3490000
+      },
+      {
+        "vendor": "Honeywell Aerospace",
+        "annual_value": 3710000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "manufacturing_supply",
+        "status": "expired",
+        "contract_end": "2022-12-27",
+        "total_value": 3710000
+      },
+      {
+        "vendor": "TE Connectivity",
+        "annual_value": 1600000,
+        "criticality": "critical",
+        "single_source": "False",
+        "category": "manufacturing_supply",
+        "status": "active",
+        "contract_end": "2027-12-17",
+        "total_value": 8000000
+      },
+      {
+        "vendor": "Amphenol",
+        "annual_value": 1950000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "manufacturing_supply",
+        "status": "expired",
+        "contract_end": "2025-02-21",
+        "total_value": 1950000
+      },
+      {
+        "vendor": "Curtiss-Wright",
+        "annual_value": 2450000,
+        "criticality": "low",
+        "single_source": "False",
+        "category": "manufacturing_supply",
+        "status": "expiring_soon",
+        "contract_end": "2025-11-06",
+        "total_value": 2450000
+      },
+      {
+        "vendor": "Mercury Systems",
+        "annual_value": 80000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "manufacturing_supply",
+        "status": "active",
+        "contract_end": "2026-10-26",
+        "total_value": 240000
+      },
+      {
+        "vendor": "DRS Technologies",
+        "annual_value": 1150000,
+        "criticality": "low",
+        "single_source": "False",
+        "category": "manufacturing_supply",
+        "status": "active",
+        "contract_end": "2029-02-12",
+        "total_value": 5750000
+      },
+      {
+        "vendor": "L3Harris (components)",
+        "annual_value": 3560000,
+        "criticality": "high",
+        "single_source": "False",
+        "category": "manufacturing_supply",
+        "status": "active",
+        "contract_end": "2029-08-19",
+        "total_value": 17800000
+      },
+      {
+        "vendor": "Collins Aerospace",
+        "annual_value": 410000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "manufacturing_supply",
+        "status": "active",
+        "contract_end": "2027-01-31",
+        "total_value": 2050000
+      },
+      {
+        "vendor": "Haas Automation",
+        "annual_value": 1630000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "equipment",
+        "status": "expiring_soon",
+        "contract_end": "2025-11-30",
+        "total_value": 4890000
+      },
+      {
+        "vendor": "FANUC",
+        "annual_value": 3730000,
+        "criticality": "high",
+        "single_source": "False",
+        "category": "equipment",
+        "status": "expiring_soon",
+        "contract_end": "2025-11-16",
+        "total_value": 3730000
+      },
+      {
+        "vendor": "Keyence",
+        "annual_value": 1930000,
+        "criticality": "low",
+        "single_source": "False",
+        "category": "equipment",
+        "status": "active",
+        "contract_end": "2027-11-20",
+        "total_value": 9650000
+      },
+      {
+        "vendor": "National Instruments",
+        "annual_value": 2130000,
+        "criticality": "low",
+        "single_source": "False",
+        "category": "equipment",
+        "status": "expired",
+        "contract_end": "2024-04-06",
+        "total_value": 4260000
+      },
+      {
+        "vendor": "Keysight Technologies",
+        "annual_value": 3380000,
+        "criticality": "medium",
+        "single_source": "False",
+        "category": "equipment",
+        "status": "active",
+        "contract_end": "2030-01-14",
+        "total_value": 16900000
+      }
+    ],
+    "total_count": 62,
+    "single_source_count": 65
+  }
+}
