@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Déjà Vu — Your Personal Knowledge Graph</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1a1a2e;background:#fafafa}
+.hero{background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);color:#fff;padding:80px 20px 100px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;bottom:-50px;left:0;right:0;height:100px;background:#fafafa;border-radius:50% 50% 0 0/100% 100% 0 0}
+.hero h1{font-size:3.5rem;font-weight:800;margin-bottom:12px;letter-spacing:-1px}
+.hero .accent{background:linear-gradient(90deg,#7f5af0,#2cb67d);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:1.25rem;max-width:600px;margin:0 auto 32px;opacity:.9;line-height:1.6}
+.cta{display:inline-block;padding:16px 40px;background:#7f5af0;color:#fff;text-decoration:none;border-radius:50px;font-weight:600;font-size:1.1rem;transition:transform .2s,box-shadow .2s}
+.cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(127,90,240,.4)}
+.section{max-width:900px;margin:0 auto;padding:60px 20px}
+.section h2{font-size:2rem;font-weight:700;margin-bottom:16px;text-align:center}
+.section .sub{text-align:center;color:#666;margin-bottom:48px;font-size:1.1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:28px}
+.card{background:#fff;border-radius:16px;padding:32px 24px;box-shadow:0 2px 20px rgba(0,0,0,.06);transition:transform .2s}
+.card:hover{transform:translateY(-4px)}
+.card .icon{font-size:2rem;margin-bottom:12px}
+.card h3{font-size:1.15rem;margin-bottom:8px}
+.card p{color:#555;line-height:1.6;font-size:.95rem}
+.how{background:#fff;margin:40px auto;border-radius:20px;max-width:900px;padding:60px 20px}
+.steps{display:flex;flex-direction:column;gap:24px;max-width:600px;margin:0 auto}
+.step{display:flex;align-items:flex-start;gap:16px}
+.step-num{background:#7f5af0;color:#fff;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0}
+.step-text h4{margin-bottom:4px}
+.step-text p{color:#666;font-size:.95rem}
+.pricing{text-align:center;padding:60px 20px}
+.price-cards{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:32px}
+.price-card{background:#fff;border-radius:16px;padding:32px;width:260px;box-shadow:0 2px 20px rgba(0,0,0,.06)}
+.price-card.featured{border:2px solid #7f5af0;position:relative}
+.price-card .tier{font-weight:700;font-size:1.1rem;margin-bottom:4px}
+.price-card .price{font-size:2.5rem;font-weight:800;margin:12px 0}
+.price-card .price span{font-size:.9rem;font-weight:400;color:#666}
+.price-card ul{list-style:none;text-align:left;margin:16px 0}
+.price-card li{padding:6px 0;color:#555;font-size:.9rem}
+.price-card li::before{content:'✓ ';color:#2cb67d;font-weight:700}
+footer{text-align:center;padding:40px 20px;color:#999;font-size:.85rem}
+.waitlist{background:linear-gradient(135deg,#302b63,#24243e);color:#fff;padding:60px 20px;text-align:center;border-radius:20px;max-width:700px;margin:0 auto 40px}
+.waitlist h2{margin-bottom:12px}
+.waitlist p{opacity:.8;margin-bottom:24px}
+.email-form{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.email-form input{padding:14px 20px;border:none;border-radius:50px;width:300px;font-size:1rem}
+.email-form button{padding:14px 28px;background:#7f5af0;color:#fff;border:none;border-radius:50px;font-weight:600;cursor:pointer;font-size:1rem}
+@media(max-width:600px){.hero h1{font-size:2.2rem}.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Never Lose <span class="accent">Context</span> Again</h1>
+  <p>Déjà Vu is a personal knowledge graph that captures, connects, and resurfaces everything you know — so you never have to re-derive the same conclusion twice.</p>
+  <a href="#waitlist" class="cta">Join the Waitlist →</a>
+</div>
+
+<div class="section">
+  <h2>The Problem</h2>
+  <p class="sub">Your best thinking is trapped in disconnected tools, forgotten threads, and your own fading memory.</p>
+  <div class="grid">
+    <div class="card">
+      <div class="icon">🔍</div>
+      <h3>Lost Decisions</h3>
+      <p>You made a well-researched decision 3 months ago. Now you need to explain it — and you can't remember why.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🧩</div>
+      <h3>Scattered Context</h3>
+      <p>The answer is split across Slack, email, Google Docs, and a conversation you had in a hallway.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🔄</div>
+      <h3>Repeated Research</h3>
+      <p>Your team re-researches the same topics every quarter because institutional knowledge walks out the door.</p>
+    </div>
+  </div>
+</div>
+
+<div class="how">
+  <h2 style="text-align:center;margin-bottom:32px">How It Works</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        <h4>Connect Your Tools</h4>
+        <p>Email, Slack, Google Docs, Notion, calendar, browser. Déjà Vu watches passively — no extra work.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        <h4>AI Extracts the Graph</h4>
+        <p>Entities, relationships, decisions, and timelines are automatically extracted and connected into your personal knowledge graph.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        <h4>Query Your Brain</h4>
+        <p>"What do I know about Project Aurora?" → People, decisions, documents, and timeline — all connected.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>Built Different</h2>
+  <p class="sub">Not another notes app. A knowledge graph that thinks in relationships.</p>
+  <div class="grid">
+    <div class="card">
+      <div class="icon">🕸️</div>
+      <h3>Graph-Native</h3>
+      <p>Every piece of knowledge is a node. Every connection is an edge. Ask questions that flat text can't answer.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🤖</div>
+      <h3>AI-Powered Extraction</h3>
+      <p>GPT-4 level entity extraction runs continuously on your data. You don't tag — it understands.</p>
+    </div>
+    <div class="card">
+      <div class="icon">🔒</div>
+      <h3>Privacy-First</h3>
+      <p>Local-first architecture. Your graph lives on your machine. Cloud sync is optional and encrypted.</p>
+    </div>
+    <div class="card">
+      <div class="icon">👥</div>
+      <h3>Team Graphs</h3>
+      <p>Share subgraphs with your team. Merge institutional knowledge without losing personal context.</p>
+    </div>
+  </div>
+</div>
+
+<div class="pricing" id="pricing">
+  <h2>Simple Pricing</h2>
+  <p class="sub">Start free. Scale when you're hooked.</p>
+  <div class="price-cards">
+    <div class="price-card">
+      <div class="tier">Free</div>
+      <div class="price">$0<span>/mo</span></div>
+      <ul>
+        <li>1,000 entities</li>
+        <li>Local only</li>
+        <li>Manual capture</li>
+        <li>Basic search</li>
+      </ul>
+    </div>
+    <div class="price-card featured">
+      <div class="tier">Pro</div>
+      <div class="price">$12<span>/mo</span></div>
+      <ul>
+        <li>Unlimited entities</li>
+        <li>Cloud sync + backup</li>
+        <li>All integrations</li>
+        <li>Natural language queries</li>
+        <li>AI auto-extraction</li>
+      </ul>
+    </div>
+    <div class="price-card">
+      <div class="tier">Team</div>
+      <div class="price">$25<span>/user/mo</span></div>
+      <ul>
+        <li>Everything in Pro</li>
+        <li>Shared team graph</li>
+        <li>Access controls</li>
+        <li>Knowledge gap analysis</li>
+        <li>SSO + admin</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="waitlist" id="waitlist">
+  <h2>Ready to Remember Everything?</h2>
+  <p>Join the waitlist. Early access starts Q2 2026.</p>
+  <div class="email-form">
+    <input type="email" placeholder="you@company.com">
+    <button>Get Early Access</button>
+  </div>
+</div>
+
+<footer>
+  <p>Déjà Vu — A concept by Jake · Built with graphs, powered by AI · 2026</p>
+</footer>
+
+</body>
+</html>
