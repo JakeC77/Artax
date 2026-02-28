@@ -390,30 +390,39 @@ def get_subgraph(name: str, depth: int = 2, user: dict = Depends(verify_api_key)
                 MATCH (start {{_norm_name: $norm, _graph_id: $graph_id}})
                 MATCH path = (start)-[*1..{depth}]-(connected)
                 WHERE connected._graph_id = $graph_id
-                WITH start, collect(DISTINCT connected) as nodes, 
-                     [r IN relationships(path) | r] as rels
-                RETURN start, nodes, rels
+                WITH start, collect(DISTINCT connected) as cnodes,
+                     collect(DISTINCT relationships(path)) as rel_lists
+                RETURN start, cnodes, rel_lists
             """, {"norm": norm, "graph_id": graph_id})
-            
             record = result.single()
             if not record:
                 raise HTTPException(status_code=404, detail=f"Entity '{name}' not found")
-            
-            # Format for visualization
-            all_nodes = [dict(record["start"])] + [dict(n) for n in record["nodes"]]
+            all_nodes = [dict(record["start"])] + [dict(n) for n in record["cnodes"]]
             nodes = []
-            seen = set()
+            seen_nodes = set()
             for n in all_nodes:
-                name_val = n.get("name", "unknown")
-                if name_val not in seen:
-                    seen.add(name_val)
-                    nodes.append({
-                        "id": n.get("name"),
-                        "label": n.get("label", "Entity"),
-                        "name": name_val,
-                    })
-            
-            return {"nodes": nodes, "edges": [], "links": [], "center": name}
+                n_name = n.get("name", "unknown")
+                if n_name not in seen_nodes:
+                    seen_nodes.add(n_name)
+                    nodes.append({"id": n_name, "name": n_name,
+                                  "label": n.get("label", "Entity"),
+                                  "type": n.get("label", "Entity")})
+            links = []
+            seen_links = set()
+            for rel_list in record["rel_lists"]:
+                for r in (rel_list if isinstance(rel_list, list) else [rel_list]):
+                    try:
+                        src = dict(r.start_node).get("name", "")
+                        tgt = dict(r.end_node).get("name", "")
+                        key = f"{src}-{r.type}-{tgt}"
+                        if key not in seen_links:
+                            seen_links.add(key)
+                            links.append({"source": src, "target": tgt,
+                                         "type": r.type,
+                                         "predicate": r.type.lower().replace("_"," ")})
+                    except Exception:
+                        pass
+            return {"nodes": nodes, "edges": links, "links": links, "center": name}
     
     # Format APOC result
     nodes = []
@@ -425,15 +434,15 @@ def get_subgraph(name: str, depth: int = 2, user: dict = Depends(verify_api_key)
             "name": props.get("name"),
         })
     
-    edges = []
+    links = []
     for r in record["relationships"]:
-        edges.append({
+        links.append({
             "source": dict(r.start_node).get("name"),
             "target": dict(r.end_node).get("name"),
             "type": r.type,
+            "predicate": r.type.lower().replace("_", " "),
         })
-    
-    return {"nodes": nodes, "edges": edges, "center": name}
+    return {"nodes": nodes, "edges": links, "links": links, "center": name}
 
 
 @app.post("/v1/search")
@@ -474,7 +483,8 @@ def timeline(limit: int = 50, user: dict = Depends(verify_api_key)):
         result = session.run("""
             MATCH (s {_graph_id: $graph_id})-[r]->(o {_graph_id: $graph_id})
             WHERE r.created_at IS NOT NULL
-            RETURN s.name as subject, type(r) as relationship, o.name as object,
+            RETURN s.name as subject, type(r) as relationship,
+                   toLower(type(r)) as predicate, o.name as object,
                    r.source as source, r.context as context,
                    toString(r.created_at) as created_at
             ORDER BY r.created_at DESC
@@ -542,6 +552,32 @@ def legacy_context(entity: str):
         return {"entity": None, "outgoing": [], "incoming": []}
 
 
+
+
+@app.get("/v1/graph")
+def get_full_graph(limit: int = 100, user: dict = Depends(verify_api_key)):
+    """Get the full graph for visualization (all nodes and relationships)."""
+    graph_id = user["graph_id"]
+    with driver.session() as session:
+        result = session.run("""
+            MATCH (s {_graph_id: $gid})-[r]->(o {_graph_id: $gid})
+            RETURN s.name as sname, s.label as slabel,
+                   type(r) as rtype,
+                   o.name as oname, o.label as olabel
+            LIMIT $limit
+        """, {"gid": graph_id, "limit": limit})
+        nodes = {}
+        links = []
+        for rec in result:
+            sn, sl = rec["sname"], rec["slabel"] or "Entity"
+            on, ol = rec["oname"], rec["olabel"] or "Entity"
+            rt = rec["rtype"]
+            if sn: nodes[sn] = {"id": sn, "name": sn, "label": sl, "type": sl}
+            if on: nodes[on] = {"id": on, "name": on, "label": ol, "type": ol}
+            if sn and on:
+                links.append({"source": sn, "target": on, "type": rt,
+                              "predicate": rt.lower().replace("_", " ")})
+        return {"nodes": list(nodes.values()), "links": links, "edges": links, "center": None}
 
 # ============ LemonSqueezy Webhook ============
 
