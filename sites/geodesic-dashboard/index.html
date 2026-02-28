@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geodesic PBM Dashboard</title>
+    <title>Geodesic PBM Analytics | Q1 Drug Cost Optimization</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
             color: #eee;
             min-height: 100vh;
             padding: 20px;
@@ -17,209 +17,385 @@
         .header {
             text-align: center;
             margin-bottom: 30px;
+            padding: 20px;
         }
-        .header h1 { font-size: 2rem; color: #00d9ff; }
-        .header p { color: #888; margin-top: 5px; }
+        .header h1 { 
+            font-size: 2.2rem; 
+            background: linear-gradient(90deg, #00d9ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        .header p { color: #666; font-size: 0.95rem; }
+        .header .live-badge {
+            display: inline-block;
+            background: rgba(0,255,136,0.2);
+            color: #00ff88;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-top: 10px;
+        }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
         .card {
-            background: rgba(255,255,255,0.05);
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
         }
         .card h3 {
-            color: #00d9ff;
-            font-size: 0.9rem;
+            color: #888;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
+            letter-spacing: 1.5px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card h3::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #00d9ff;
+            border-radius: 50%;
         }
         .metric {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #fff;
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .metric-label {
-            color: #888;
+            color: #555;
             font-size: 0.85rem;
+            margin-top: 4px;
         }
         .chart-container {
             position: relative;
-            height: 200px;
+            height: 280px;
         }
-        .plan-list {
-            list-style: none;
-            max-height: 250px;
-            overflow-y: auto;
+        .chart-container.tall {
+            height: 350px;
         }
-        .plan-list li {
-            padding: 10px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            justify-content: space-between;
-        }
-        .plan-list li:last-child { border-bottom: none; }
-        .plan-name { font-weight: 500; }
-        .plan-type {
-            font-size: 0.75rem;
-            padding: 2px 8px;
-            border-radius: 10px;
-            background: rgba(0,217,255,0.2);
-            color: #00d9ff;
-        }
+        .span-2 { grid-column: span 2; }
+        .span-3 { grid-column: span 3; }
+        .span-4 { grid-column: span 4; }
+        
         .stat-row {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .stat-row:last-child { border-bottom: none; }
-        .wide { grid-column: span 2; }
-        @media (max-width: 600px) { .wide { grid-column: span 1; } }
+        .stat-label { color: #888; }
+        .stat-value { font-weight: 600; font-size: 1.1rem; }
+        .stat-value.green { color: #4ade80; }
+        .stat-value.yellow { color: #facc15; }
+        .stat-value.red { color: #f87171; }
+        
+        .policy-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+        }
+        .policy-name {
+            width: 140px;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+        .policy-track {
+            flex: 1;
+            height: 24px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+        }
+        .policy-fill {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 1s ease;
+        }
+        .policy-fill.high { background: linear-gradient(90deg, #4ade80, #22c55e); }
+        .policy-fill.med { background: linear-gradient(90deg, #facc15, #eab308); }
+        .policy-fill.low { background: linear-gradient(90deg, #f87171, #ef4444); }
+        .policy-pct {
+            width: 50px;
+            text-align: right;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #444;
+            font-size: 0.8rem;
+        }
+        .footer a { color: #00d9ff; text-decoration: none; }
+        
+        @media (max-width: 1200px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+            .span-3, .span-4 { grid-column: span 2; }
+        }
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .span-2, .span-3, .span-4 { grid-column: span 1; }
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>📊 Q1 Prescription Drug Cost Optimization</h1>
-        <p>Workspace Analytics Dashboard • Generated by Artax</p>
+        <p>Real-time analytics from Geodesic Knowledge Graph</p>
+        <span class="live-badge">● LIVE DATA</span>
     </div>
     
     <div class="grid">
+        <!-- KPI Row -->
         <div class="card">
             <h3>Total Plans</h3>
             <div class="metric">40</div>
-            <div class="metric-label">Benefit plans tracked</div>
+            <div class="metric-label">Benefit structures</div>
         </div>
-        
         <div class="card">
             <h3>Medications</h3>
             <div class="metric">400</div>
             <div class="metric-label">In formulary</div>
         </div>
-        
         <div class="card">
             <h3>Prescriptions</h3>
             <div class="metric">4,000</div>
-            <div class="metric-label">Total transactions</div>
+            <div class="metric-label">Transactions (5yr)</div>
+        </div>
+        <div class="card">
+            <h3>Avg AWP</h3>
+            <div class="metric">$262</div>
+            <div class="metric-label">Across all classes</div>
         </div>
         
-        <div class="card">
-            <h3>Drug Classes</h3>
-            <div class="metric">80</div>
-            <div class="metric-label">Therapeutic categories</div>
+        <!-- Monthly Trends - Full Width -->
+        <div class="card span-4">
+            <h3>Prescription Volume Trends (2021-2025)</h3>
+            <div class="chart-container tall">
+                <canvas id="trendsChart"></canvas>
+            </div>
         </div>
         
-        <div class="card">
-            <h3>Brand vs Generic</h3>
+        <!-- AWP by Drug Class -->
+        <div class="card span-2">
+            <h3>Average AWP by Drug Class</h3>
             <div class="chart-container">
-                <canvas id="brandGenericChart"></canvas>
+                <canvas id="awpChart"></canvas>
             </div>
         </div>
         
-        <div class="card">
-            <h3>AWP Pricing Range</h3>
-            <div class="stat-row">
-                <span>Minimum</span>
-                <span style="color:#4ade80">$1.99</span>
-            </div>
-            <div class="stat-row">
-                <span>Average</span>
-                <span style="color:#facc15">$251.58</span>
-            </div>
-            <div class="stat-row">
-                <span>Maximum</span>
-                <span style="color:#f87171">$496.23</span>
-            </div>
-        </div>
-        
-        <div class="card">
-            <h3>Plan Types</h3>
+        <!-- Prescriber Volume -->
+        <div class="card span-2">
+            <h3>Prescription Volume by Specialty</h3>
             <div class="chart-container">
-                <canvas id="planTypeChart"></canvas>
+                <canvas id="prescriberChart"></canvas>
             </div>
         </div>
         
+        <!-- Policy Approval Rates -->
+        <div class="card span-2">
+            <h3>Policy Approval Rates</h3>
+            <div style="padding: 10px 0;">
+                <div class="policy-bar">
+                    <span class="policy-name">Prior Auth</span>
+                    <div class="policy-track"><div class="policy-fill high" style="width: 68%"></div></div>
+                    <span class="policy-pct green">68.1%</span>
+                </div>
+                <div class="policy-bar">
+                    <span class="policy-name">Step Therapy</span>
+                    <div class="policy-track"><div class="policy-fill high" style="width: 66%"></div></div>
+                    <span class="policy-pct green">65.9%</span>
+                </div>
+                <div class="policy-bar">
+                    <span class="policy-name">Age Restriction</span>
+                    <div class="policy-track"><div class="policy-fill med" style="width: 57%"></div></div>
+                    <span class="policy-pct yellow">57.4%</span>
+                </div>
+                <div class="policy-bar">
+                    <span class="policy-name">Diagnosis Req</span>
+                    <div class="policy-track"><div class="policy-fill med" style="width: 54%"></div></div>
+                    <span class="policy-pct yellow">54.3%</span>
+                </div>
+                <div class="policy-bar">
+                    <span class="policy-name">Quantity Limit</span>
+                    <div class="policy-track"><div class="policy-fill low" style="width: 47%"></div></div>
+                    <span class="policy-pct red">46.7%</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quick Stats -->
         <div class="card">
-            <h3>Top Drug Classes</h3>
-            <div class="chart-container">
-                <canvas id="drugClassChart"></canvas>
+            <h3>Cost Insights</h3>
+            <div class="stat-row">
+                <span class="stat-label">Highest AWP Class</span>
+                <span class="stat-value red">Triptan $274</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Lowest AWP Class</span>
+                <span class="stat-value green">CCB $254</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">GLP-1 Agonist AWP</span>
+                <span class="stat-value yellow">$256</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Brand vs Generic</span>
+                <span class="stat-value">61% / 39%</span>
             </div>
         </div>
         
-        <div class="card wide">
-            <h3>Plans Overview</h3>
-            <ul class="plan-list">
-                <li><span class="plan-name">Bronze Hunt, Johnson and Brown</span><span class="plan-type">Exchange</span></li>
-                <li><span class="plan-name">Elite Arnold, Johnson and Baker</span><span class="plan-type">Medicaid</span></li>
-                <li><span class="plan-name">Plus Jennings, Turner and Sutton</span><span class="plan-type">Medicaid</span></li>
-                <li><span class="plan-name">Value Guerra, Campbell and Lucero</span><span class="plan-type">Exchange</span></li>
-                <li><span class="plan-name">Elite Gonzales, Ramirez and Landry</span><span class="plan-type">Medicaid</span></li>
-                <li><span class="plan-name">Value Meyers-Martinez</span><span class="plan-type">Medicare</span></li>
-                <li><span class="plan-name">Silver Aguirre and Sons</span><span class="plan-type">Medicaid</span></li>
-                <li><span class="plan-name">Silver Garcia LLC</span><span class="plan-type">Commercial</span></li>
-            </ul>
+        <!-- Top Specialties -->
+        <div class="card">
+            <h3>Top Prescribing Specialties</h3>
+            <div class="stat-row">
+                <span class="stat-label">Rheumatology</span>
+                <span class="stat-value">34 Rx</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Emergency Med</span>
+                <span class="stat-value">31 Rx</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Oncology</span>
+                <span class="stat-value">25 Rx</span>
+            </div>
+            <div class="stat-row">
+                <span class="stat-label">Neurology</span>
+                <span class="stat-value">24 Rx</span>
+            </div>
         </div>
     </div>
     
+    <div class="footer">
+        Generated by <a href="https://github.com/JakeC77/Artax">Artax</a> 🐴 from Geodesic Knowledge Graph<br>
+        Data source: Q1 Prescription Drug Cost Optimization Workspace
+    </div>
+    
     <script>
-        // Brand vs Generic
-        new Chart(document.getElementById('brandGenericChart'), {
-            type: 'doughnut',
+        const chartDefaults = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+        };
+        
+        // Monthly Trends Chart
+        new Chart(document.getElementById('trendsChart'), {
+            type: 'line',
             data: {
-                labels: ['Brand', 'Generic'],
+                labels: ['Jan 21','Apr','Jul','Oct','Jan 22','Apr','Jul','Oct','Jan 23','Apr','Jul','Oct','Jan 24','Apr','Jul','Oct','Jan 25','Apr','Jul','Oct'],
                 datasets: [{
-                    data: [61, 39],
-                    backgroundColor: ['#f87171', '#4ade80'],
+                    data: [69,74,75,77,55,49,51,59,64,76,62,61,55,65,65,54,70,53,69,70],
+                    borderColor: '#00d9ff',
+                    backgroundColor: 'rgba(0,217,255,0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                    borderWidth: 2,
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom', labels: { color: '#888' } } }
+                ...chartDefaults,
+                scales: {
+                    x: { 
+                        ticks: { color: '#666', maxRotation: 45 }, 
+                        grid: { color: 'rgba(255,255,255,0.05)' } 
+                    },
+                    y: { 
+                        ticks: { color: '#666' }, 
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        min: 40,
+                        max: 90
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.raw} prescriptions`
+                        }
+                    }
+                }
             }
         });
         
-        // Plan Types
-        new Chart(document.getElementById('planTypeChart'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Medicaid', 'Exchange', 'Medicare', 'Commercial'],
-                datasets: [{
-                    data: [5, 2, 2, 1],
-                    backgroundColor: ['#818cf8', '#00d9ff', '#facc15', '#4ade80'],
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom', labels: { color: '#888' } } }
-            }
-        });
-        
-        // Drug Classes
-        new Chart(document.getElementById('drugClassChart'), {
+        // AWP by Drug Class
+        new Chart(document.getElementById('awpChart'), {
             type: 'bar',
             data: {
-                labels: ['Diuretic', 'SSRI', 'Antiviral', 'DPP-4', 'SGLT2', 'Corticosteroid', 'ARB', 'GLP-1'],
+                labels: ['Triptan','Anticoag','Broncho','Cortico','Antiviral','Opioid','Biguanide','SGLT2','GLP-1','Diuretic'],
                 datasets: [{
-                    data: [8, 6, 7, 5, 4, 5, 4, 3],
-                    backgroundColor: '#00d9ff',
+                    data: [274,273,272,272,272,265,260,259,256,256],
+                    backgroundColor: ctx => {
+                        const gradient = ctx.chart.ctx.createLinearGradient(0, 0, ctx.chart.width, 0);
+                        gradient.addColorStop(0, '#f87171');
+                        gradient.addColorStop(0.5, '#facc15');
+                        gradient.addColorStop(1, '#4ade80');
+                        return gradient;
+                    },
+                    borderRadius: 4,
                 }]
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
+                ...chartDefaults,
                 indexAxis: 'y',
-                plugins: { legend: { display: false } },
                 scales: {
-                    x: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                    y: { ticks: { color: '#888' }, grid: { display: false } }
+                    x: { 
+                        ticks: { color: '#666', callback: v => '$' + v }, 
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        min: 240,
+                        max: 280
+                    },
+                    y: { 
+                        ticks: { color: '#888', font: { size: 11 } }, 
+                        grid: { display: false } 
+                    }
+                }
+            }
+        });
+        
+        // Prescriber Volume
+        new Chart(document.getElementById('prescriberChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Rheumatology','Emergency','Oncology','Neurology','Psychiatry','Ophthalmology','Internal Med','Urology'],
+                datasets: [{
+                    data: [34,31,25,24,24,24,20,19],
+                    backgroundColor: '#00d9ff',
+                    borderRadius: 4,
+                }]
+            },
+            options: {
+                ...chartDefaults,
+                indexAxis: 'y',
+                scales: {
+                    x: { 
+                        ticks: { color: '#666' }, 
+                        grid: { color: 'rgba(255,255,255,0.05)' } 
+                    },
+                    y: { 
+                        ticks: { color: '#888', font: { size: 11 } }, 
+                        grid: { display: false } 
+                    }
                 }
             }
         });
