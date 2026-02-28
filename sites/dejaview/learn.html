@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Your Knowledge Is Broken — DejaView</title>
+<meta name="description" content="Your notes are everywhere and nowhere. Learn how a knowledge graph changes everything — and why DejaView is the fix.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBhMGUxNyIvPgogIDwhLS0gZWRnZXMgLS0+CiAgPGxpbmUgeDE9IjE2IiB5MT0iMTYiIHgyPSI4IiB5Mj0iOCIgc3Ryb2tlPSIjN2M1Y2ZjIiBzdHJva2Utd2lkdGg9IjEuNSIgb3BhY2l0eT0iMC43Ii8+CiAgPGxpbmUgeDE9IjE2IiB5MT0iMTYiIHgyPSIyNCIgeTI9IjEwIiBzdHJva2U9IiMwMGQ0ZmYiIHN0cm9rZS13aWR0aD0iMS41IiBvcGFjaXR5PSIwLjciLz4KICA8bGluZSB4MT0iMTYiIHkxPSIxNiIgeDI9IjI0IiB5Mj0iMjQiIHN0cm9rZT0iIzdjNWNmYyIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9IjAuNyIvPgogIDxsaW5lIHgxPSIxNiIgeTE9IjE2IiB4Mj0iOCIgeTI9IjI0IiBzdHJva2U9IiMwMGQ0ZmYiIHN0cm9rZS13aWR0aD0iMS41IiBvcGFjaXR5PSIwLjciLz4KICA8IS0tIHNhdGVsbGl0ZSBub2RlcyAtLT4KICA8Y2lyY2xlIGN4PSI4IiBjeT0iOCIgcj0iMyIgZmlsbD0iIzdjNWNmYyIvPgogIDxjaXJjbGUgY3g9IjI0IiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMwMGQ0ZmYiLz4KICA8Y2lyY2xlIGN4PSIyNCIgY3k9IjI0IiByPSIzIiBmaWxsPSIjN2M1Y2ZjIi8+CiAgPGNpcmNsZSBjeD0iOCIgY3k9IjI0IiByPSIzIiBmaWxsPSIjMDBkNGZmIi8+CiAgPCEtLSBjZW50ZXIgbm9kZSAtLT4KICA8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI1IiBmaWxsPSIjN2M1Y2ZjIi8+CiAgPGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMyIgZmlsbD0iIzAwZDRmZiIvPgo8L3N2Zz4=">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0e17;
+  --bg2:#111827;
+  --bg3:#1a2035;
+  --text:#e4e4ef;
+  --text2:#9494a8;
+  --text3:#6a6a80;
+  --accent:#7c5cfc;
+  --accent2:#a78bfa;
+  --accent3:#5b3fd9;
+  --cyan:#22d3ee;
+  --green:#34d399;
+  --pink:#f472b6;
+  --border:#ffffff0d;
+  --border2:#ffffff18;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;overflow-x:hidden}
+a{color:var(--accent2);text-decoration:none}
+img{max-width:100%;height:auto;display:block}
+
+nav{position:fixed;top:0;width:100%;z-index:100;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(20px);background:rgba(10,14,23,.85);border-bottom:1px solid var(--border)}
+.nav-logo{font-weight:800;font-size:1.2rem;letter-spacing:-.02em;color:var(--text)}
+.nav-logo span{color:var(--accent2)}
+.nav-links{display:flex;gap:1.5rem;align-items:center;list-style:none}
+.nav-links a{color:var(--text2);font-size:.875rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+.nav-back{display:flex;align-items:center;gap:.5rem;color:var(--text2);font-size:.875rem;font-weight:500;transition:color .2s}
+.nav-back:hover{color:var(--accent2)}
+.nav-cta{background:var(--accent);color:#fff;padding:.5rem 1.25rem;border-radius:8px;font-weight:600;font-size:.85rem;transition:background .2s;white-space:nowrap}
+.nav-cta:hover{background:var(--accent3);color:#fff}
+
+section{padding:6rem 2rem}
+.container{max-width:1000px;margin:0 auto}
+
+.hero{padding-top:9rem;padding-bottom:3rem;text-align:center}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.6rem;background:rgba(124,92,252,.12);border:1px solid rgba(124,92,252,.25);border-radius:100px;padding:.4rem 1rem;font-size:.78rem;font-weight:600;color:var(--accent2);letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.75rem}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent2);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hero h1{font-size:clamp(2.2rem,5.5vw,4rem);font-weight:900;letter-spacing:-.04em;line-height:1.1;margin-bottom:1.5rem}
+.hero h1 em{font-style:normal;color:var(--accent2)}
+.hero-subtitle{font-size:clamp(1rem,2.5vw,1.2rem);color:var(--text2);max-width:620px;margin:0 auto 3rem;line-height:1.7}
+.hero-image-wrap{position:relative;max-width:900px;margin:0 auto;border-radius:20px;overflow:hidden;border:1px solid var(--border2);box-shadow:0 40px 100px rgba(0,0,0,.5),0 0 60px rgba(124,92,252,.08)}
+.hero-image-wrap img{width:100%;object-fit:cover;max-height:480px}
+.hero-image-caption{padding:.75rem 1.25rem;background:rgba(10,14,23,.9);font-size:.8rem;color:var(--text3);text-align:center;border-top:1px solid var(--border)}
+
+.familiar{background:var(--bg2)}
+.familiar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:2.5rem}
+.familiar-card{background:var(--bg3);border:1px solid var(--border2);border-radius:16px;padding:1.5rem 1.75rem;display:flex;align-items:flex-start;gap:1rem;transition:border-color .3s,transform .3s}
+.familiar-card:hover{border-color:rgba(124,92,252,.35);transform:translateY(-2px)}
+.familiar-icon{font-size:1.5rem;min-width:36px;padding-top:.1rem;text-align:center}
+.familiar-card p{color:var(--text2);font-size:.95rem;line-height:1.65}
+.familiar-card p strong{color:var(--text);font-weight:600}
+
+.problem-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-top:3rem}
+.problem-text h2{font-size:clamp(1.6rem,3.5vw,2.2rem);font-weight:800;letter-spacing:-.035em;line-height:1.2;margin-bottom:1.25rem}
+.problem-text h2 em{font-style:normal;color:var(--accent2)}
+.problem-text p{color:var(--text2);font-size:1rem;margin-bottom:1rem;line-height:1.75}
+.analogy-box{background:rgba(124,92,252,.08);border:1px solid rgba(124,92,252,.2);border-radius:14px;padding:1.25rem 1.5rem;margin-top:1.5rem;font-size:.95rem;color:var(--text);line-height:1.75}
+.analogy-box strong{color:var(--accent2)}
+.problem-image{border-radius:20px;overflow:hidden;border:1px solid var(--border2);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.problem-image img{width:100%}
+.image-caption{font-size:.78rem;color:var(--text3);padding:.6rem 1rem;background:rgba(10,14,23,.8);text-align:center;border-top:1px solid var(--border)}
+
+.kg-section{background:var(--bg2)}
+.kg-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;margin-top:3rem}
+.kg-image{order:2;border-radius:20px;overflow:hidden;border:1px solid var(--border2);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+.kg-image img{width:100%}
+.kg-text{order:1}
+.kg-text h2{font-size:clamp(1.6rem,3.5vw,2.2rem);font-weight:800;letter-spacing:-.035em;line-height:1.2;margin-bottom:1.5rem}
+.kg-pills{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.75rem}
+.kg-pill{display:flex;align-items:center;gap:.5rem;background:var(--bg3);border:1px solid var(--border2);border-radius:100px;padding:.4rem .9rem;font-size:.85rem;font-weight:500;color:var(--text2)}
+.kg-pill .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-purple{background:var(--accent2)}
+.dot-cyan{background:var(--cyan)}
+.dot-green{background:var(--green)}
+.kg-text p{color:var(--text2);font-size:1rem;margin-bottom:1rem;line-height:1.75}
+
+.graph-demo{margin:3rem auto 0;max-width:700px;background:var(--bg);border:1px solid var(--border2);border-radius:20px;padding:2rem;text-align:center}
+.graph-demo h4{font-size:1rem;font-weight:600;margin-bottom:.4rem;color:var(--text)}
+.graph-demo p{font-size:.85rem;color:var(--text3);margin-bottom:1.5rem}
+#liveGraph{width:100%;height:280px;display:block}
+
+.usecases-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1rem;margin-top:2.5rem}
+.usecase-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:1.75rem;transition:all .3s;position:relative;overflow:hidden}
+.usecase-card:hover{border-color:rgba(124,92,252,.3);transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,92,252,.08)}
+.usecase-icon{font-size:1.8rem;margin-bottom:1rem;display:block}
+.usecase-card h3{font-size:1rem;font-weight:700;margin-bottom:.4rem}
+.usecase-card p{color:var(--text2);font-size:.9rem;line-height:1.6}
+
+.hiw-section{background:var(--bg2)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2rem;margin-top:3rem}
+.step{background:var(--bg3);border:1px solid var(--border2);border-radius:20px;padding:2.25rem 2rem;transition:all .3s}
+.step:hover{border-color:rgba(124,92,252,.3);transform:translateY(-3px);box-shadow:0 12px 40px rgba(124,92,252,.1)}
+.step-num{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:900;color:#fff;margin-bottom:1.25rem;box-shadow:0 4px 16px rgba(124,92,252,.3)}
+.step h3{font-size:1.15rem;font-weight:700;margin-bottom:.6rem}
+.step p{color:var(--text2);font-size:.95rem;line-height:1.7}
+.step-example{margin-top:1.25rem;background:rgba(10,14,23,.6);border:1px solid var(--border);border-radius:10px;padding:.75rem 1rem;font-family:monospace;font-size:.82rem;color:var(--cyan);line-height:1.65}
+
+.cta-section{text-align:center}
+.cta-box{background:linear-gradient(135deg,rgba(124,92,252,.12),rgba(34,211,238,.07));border:1px solid rgba(124,92,252,.25);border-radius:28px;padding:5rem 2rem;max-width:700px;margin:0 auto;position:relative;overflow:hidden}
+.cta-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(124,92,252,.15),transparent 70%);pointer-events:none}
+.cta-box h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;letter-spacing:-.04em;margin-bottom:.75rem;position:relative}
+.cta-box p{color:var(--text2);font-size:1.1rem;margin-bottom:2.5rem;position:relative}
+.cta-btn{display:inline-flex;align-items:center;gap:.6rem;background:var(--accent);color:#fff;padding:1rem 2.25rem;border-radius:12px;font-weight:700;font-size:1.05rem;transition:all .25s;position:relative;box-shadow:0 0 40px rgba(124,92,252,.35)}
+.cta-btn:hover{background:var(--accent3);color:#fff;transform:translateY(-2px);box-shadow:0 8px 40px rgba(124,92,252,.5)}
+.cta-sub{margin-top:1.25rem;font-size:.82rem;color:var(--text3);position:relative}
+
+footer{padding:2.5rem 2rem;text-align:center;border-top:1px solid var(--border);color:var(--text3);font-size:.85rem}
+footer .logo{font-weight:800;color:var(--text);margin-bottom:.5rem}
+footer .logo span{color:var(--accent2)}
+footer a{color:var(--text2)}
+
+.section-label{color:var(--accent2);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.6rem;display:block}
+.section-title{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;letter-spacing:-.04em;line-height:1.15;margin-bottom:.75rem}
+.section-desc{color:var(--text2);font-size:1.05rem;max-width:580px;line-height:1.75;margin-bottom:0}
+
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.fade-up.visible{opacity:1;transform:none}
+
+@media(max-width:768px){
+  nav .nav-links{display:none}
+  .problem-layout,.kg-layout{grid-template-columns:1fr;gap:2.5rem}
+  .kg-image,.kg-text{order:unset}
+  section{padding:4rem 1.25rem}
+  .hero{padding-top:7rem;padding-bottom:2rem}
+  .steps{grid-template-columns:1fr}
+}
+@media(max-width:500px){
+  nav{padding:.875rem 1.25rem}
+  .cta-box{padding:3rem 1.5rem}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-back">
+    <span>&larr;</span>
+    <span class="nav-logo">deja<span>View</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#familiar">Sound familiar?</a></li>
+    <li><a href="#problem">The problem</a></li>
+    <li><a href="#kg">Knowledge graphs</a></li>
+    <li><a href="#usecases">Use cases</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+  </ul>
+  <a href="https://dejaview.lemonsqueezy.com/checkout/buy/dc0a99c6-fe98-4e78-9baf-2d82bd46ffd3" target="_blank" class="nav-cta">Get Early Access</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow fade-up">The case for a knowledge graph</div>
+    <h1 class="fade-up">Why your knowledge is <em>broken</em><br>&#8212; and how to fix it</h1>
+    <p class="hero-subtitle fade-up">You know you saved that thing somewhere. You remember reading it, it was important. And now it&#8217;s just&#8230; gone &#8212; buried under open tabs and three apps you half-use.</p>
+    <div class="hero-image-wrap fade-up">
+      <img src="img/the-problem.png" alt="Knowledge fragmented across Notion, Slack, email, and notes apps" loading="lazy">
+      <div class="hero-image-caption">Your knowledge lives everywhere &#8212; and because of that, it&#8217;s effectively nowhere.</div>
+    </div>
+  </div>
+</section>
+
+<!-- SOUND FAMILIAR -->
+<section id="familiar" class="familiar">
+  <div class="container">
+    <span class="section-label fade-up">Sound familiar?</span>
+    <h2 class="section-title fade-up">You&#8217;re not forgetful.<br>Your tools just weren&#8217;t built for this.</h2>
+    <p class="section-desc fade-up">These aren&#8217;t brain failures &#8212; they&#8217;re tool failures. Every one of these has probably happened to you this week.</p>
+    <div class="familiar-grid">
+      <div class="familiar-card fade-up">
+        <div class="familiar-icon">&#128565;</div>
+        <p>You remember <strong>having a conversation with someone about a project</strong>, but you can&#8217;t find it &#8212; not in Slack, not in email, not in your notes.</p>
+      </div>
+      <div class="familiar-card fade-up">
+        <div class="familiar-icon">&#129300;</div>
+        <p>You know you <strong>made a decision six months ago</strong> &#8212; but you can&#8217;t for the life of you remember why, and now you&#8217;re second-guessing it again.</p>
+      </div>
+      <div class="familiar-card fade-up">
+        <div class="familiar-icon">&#128197;</div>
+        <p>You have a <strong>meeting with someone</strong> and you draw a complete blank on what you discussed last time. You wing it and hope they don&#8217;t notice.</p>
+      </div>
+      <div class="familiar-card fade-up">
+        <div class="familiar-icon">&#128203;</div>
+        <p>Your notes are <strong>everywhere &#8212; Notion, Apple Notes, Slack, email</strong> &#8212; and also somehow nowhere when you actually need them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE PROBLEM -->
+<section id="problem">
+  <div class="container">
+    <div class="problem-layout">
+      <div class="problem-text">
+        <span class="section-label fade-up">The real problem</span>
+        <h2 class="fade-up">Your tools think in lists.<br>Your brain thinks in <em>connections</em>.</h2>
+        <p class="fade-up">Spreadsheets, note apps, databases &#8212; they all store things in rows and columns. Neat little boxes, organized by category, sorted by date, filed by folder.</p>
+        <p class="fade-up">But that&#8217;s not how knowledge actually works. Knowledge isn&#8217;t about items &#8212; it&#8217;s about <strong style="color:var(--text)">relationships</strong>. It&#8217;s about how things connect, influence each other, and weave together into context.</p>
+        <p class="fade-up">A spreadsheet can tell you <em>Jake works at Acme Corp.</em> Full stop. It can&#8217;t tell you that Jake introduced you to Sarah, who&#8217;s working on Project Phoenix, which is using the same vendor as your other project &#8212; and that&#8217;s probably why the timeline is slipping.</p>
+        <div class="analogy-box fade-up">
+          <strong>&#8220;A spreadsheet stores facts. A knowledge graph stores understanding.&#8221;</strong><br><br>
+          When you can follow the connections, you stop searching and start discovering.
+        </div>
+      </div>
+      <div class="problem-image fade-up">
+        <img src="img/flat-vs-graph.png" alt="Flat list vs knowledge graph &#8212; same data, completely different power" loading="lazy">
+        <div class="image-caption">Same data. Completely different power. Left: a list. Right: a knowledge graph.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IS A KNOWLEDGE GRAPH -->
+<section id="kg" class="kg-section">
+  <div class="container">
+    <div class="kg-layout">
+      <div class="kg-text">
+        <span class="section-label fade-up">What is a knowledge graph?</span>
+        <h2 class="fade-up">Your brain, but it never forgets.</h2>
+        <div class="kg-pills fade-up">
+          <div class="kg-pill"><div class="dot dot-purple"></div>Nodes = things (people, projects, ideas)</div>
+          <div class="kg-pill"><div class="dot dot-cyan"></div>Edges = relationships (knows, decided, uses)</div>
+          <div class="kg-pill"><div class="dot dot-green"></div>Paths = insight you didn&#8217;t know you had</div>
+        </div>
+        <p class="fade-up">Think of it like this: a <strong style="color:var(--text)">node</strong> is anything that exists &#8212; a person, a project, a decision, an idea, a meeting. A <strong style="color:var(--text)">relationship</strong> is how two things connect: <em>knows, works_at, decided, depends_on, introduced_by.</em></p>
+        <p class="fade-up">The magic isn&#8217;t in the individual facts. It&#8217;s in what you can discover by <strong style="color:var(--text)">following the connections</strong>. You find things you didn&#8217;t know you knew. Context you forgot you had.</p>
+        <p class="fade-up">That&#8217;s a knowledge graph. Not a fancier file system &#8212; an actual second brain.</p>
+      </div>
+      <div class="kg-image fade-up">
+        <img src="img/kg-in-action.png" alt="A beautiful knowledge graph visualization showing connected nodes and relationships" loading="lazy">
+        <div class="image-caption">A real knowledge graph: people, projects, decisions &#8212; all connected.</div>
+      </div>
+    </div>
+
+    <div class="graph-demo fade-up">
+      <h4>&#9654; See it in motion</h4>
+      <p>Hover over any node to see its connections light up.</p>
+      <canvas id="liveGraph"></canvas>
+    </div>
+  </div>
+</section>
+
+<!-- USE CASES -->
+<section id="usecases">
+  <div class="container">
+    <span class="section-label fade-up">What can you do with DejaView?</span>
+    <h2 class="section-title fade-up">Concrete superpowers,<br>for real knowledge workers.</h2>
+    <p class="section-desc fade-up">Not theoretical. Not for data scientists. For you &#8212; in your next meeting, your next project, your next conversation.</p>
+    <div class="usecases-grid">
+      <div class="usecase-card fade-up">
+        <span class="usecase-icon">&#128269;</span>
+        <h3>Ask who you know at a company</h3>
+        <p>Instantly surface everyone in your graph who works at, used to work at, or is connected to any company &#8212; and how you know them.</p>
+      </div>
+      <div class="usecase-card fade-up">
+        <span class="usecase-icon">&#128161;</span>
+        <h3>Trace why a decision was made</h3>
+        <p>Follow the chain: who was in the room, what alternatives were considered, what context shaped the call. Never lose the &#8220;why&#8221; again.</p>
+      </div>
+      <div class="usecase-card fade-up">
+        <span class="usecase-icon">&#129309;</span>
+        <h3>See how two projects are connected</h3>
+        <p>Discover shared people, vendors, dependencies, or history between any two things in your graph &#8212; even ones you never consciously linked.</p>
+      </div>
+      <div class="usecase-card fade-up">
+        <span class="usecase-icon">&#129302;</span>
+        <h3>Give your AI assistant a real memory</h3>
+        <p>Connect DejaView to your AI tools. Now your assistant knows who Jake is, what Project Phoenix means, and what you decided last quarter.</p>
+      </div>
+      <div class="usecase-card fade-up">
+        <span class="usecase-icon">&#128203;</span>
+        <h3>Never lose context between meetings</h3>
+        <p>Before any call: pull up everything you know about who you&#8217;re meeting &#8212; conversations, decisions, shared projects, mutual connections.</p>
+      </div>
+      <div class="usecase-card fade-up">
+        <span class="usecase-icon">&#9889;</span>
+        <h3>Capture facts in seconds</h3>
+        <p>No forms. No structure. No friction. Just write what you know &#8212; DejaView maps the relationships automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" class="hiw-section">
+  <div class="container">
+    <span class="section-label fade-up">How it works</span>
+    <h2 class="section-title fade-up">Three steps.<br>Zero learning curve.</h2>
+    <p class="section-desc fade-up">You don&#8217;t need to think about graph theory. Just tell DejaView what you know &#8212; it does the rest.</p>
+    <div class="steps">
+      <div class="step fade-up">
+        <div class="step-num">1</div>
+        <h3>Capture</h3>
+        <p>Add facts in plain English &#8212; however they come to you. No templates. No categories to decide upfront.</p>
+        <div class="step-example">&#8220;Jake works at Geodesic&#8221;<br>&#8220;Met Sarah at the AI conference&#8221;<br>&#8220;Decided to use FastAPI for speed&#8221;</div>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">2</div>
+        <h3>Connect</h3>
+        <p>DejaView automatically extracts entities, maps relationship types, and infers context. Jake becomes a Person. Geodesic becomes an Org.</p>
+        <div class="step-example">Jake &#8594; [works_at] &#8594; Geodesic<br>Sarah &#8594; [met_at] &#8594; AI Conference<br>FastAPI &#8594; [chosen_for] &#8594; speed</div>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">3</div>
+        <h3>Explore</h3>
+        <p>Search, visualize, and query your graph. Follow connections. Recall context that would have been lost forever.</p>
+        <div class="step-example">&gt; Who do I know at Geodesic?<br>&#8594; Jake (works_at), Sarah (intro via Jake)<br>&#8594; 3 shared projects, 2 past meetings</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta" class="cta-section">
+  <div class="container">
+    <div class="cta-box">
+      <h2 class="fade-up">Ready to connect the dots?</h2>
+      <p class="fade-up">Start building your knowledge graph today. Your future self will thank you.</p>
+      <a href="https://dejaview.lemonsqueezy.com/checkout/buy/dc0a99c6-fe98-4e78-9baf-2d82bd46ffd3" target="_blank" class="cta-btn fade-up">Get Early Access &#8594;</a>
+      <div class="cta-sub fade-up">No credit card required to start &middot; Cancel anytime</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="logo">deja<span>View</span></div>
+    <p>Your knowledge, connected. &middot; <a href="index.html">Home</a> &middot; <a href="https://github.com/JakeC77/DejaView" target="_blank">GitHub</a></p>
+  </div>
+</footer>
+
+<script>
+// Scroll animations
+(function(){
+  var els=document.querySelectorAll('.fade-up');
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+  },{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+  els.forEach(function(el){obs.observe(el)});
+  // Immediately reveal hero elements
+  document.querySelectorAll('.hero .fade-up').forEach(function(el,i){
+    setTimeout(function(){el.classList.add('visible')},i*120);
+  });
+})();
+
+// Live graph demo
+(function(){
+  var canvas=document.getElementById('liveGraph');
+  if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  var W,H,mouse={x:-9999,y:-9999},t=0;
+
+  var ND=[
+    {label:'You',      color:'#7c5cfc',size:10,cx:.5,  cy:.48},
+    {label:'Jake',     color:'#a78bfa',size:7, cx:.22, cy:.22},
+    {label:'Sarah',    color:'#f472b6',size:7, cx:.75, cy:.2},
+    {label:'Project X',color:'#22d3ee',size:7, cx:.82, cy:.67},
+    {label:'Decision', color:'#34d399',size:6, cx:.5,  cy:.82},
+    {label:'Meeting',  color:'#22d3ee',size:6, cx:.15, cy:.67},
+    {label:'Geodesic', color:'#a78bfa',size:6, cx:.3,  cy:.75},
+    {label:'AI Conf',  color:'#f472b6',size:5, cx:.65, cy:.38},
+    {label:'FastAPI',  color:'#34d399',size:5, cx:.9,  cy:.4},
+  ];
+  var EDGES=[
+    [0,1,'knows'],[0,2,'met'],[0,3,'owns'],[0,4,'decided'],
+    [0,5,'attended'],[0,6,'works_at'],[1,6,'intro'],
+    [2,7,'met_at'],[3,8,'uses'],[4,3,'for'],[5,2,'with'],[7,2,'led_to'],
+  ];
+
+  var nodes=[];
+  function initNodes(){
+    nodes=ND.map(function(d,i){
+      return{x:d.cx*W,y:d.cy*H,tx:d.cx*W,ty:d.cy*H,
+        label:d.label,color:d.color,size:d.size,
+        fa:Math.random()*Math.PI*2,
+        fs:.003+Math.random()*.004,
+        fr:6+Math.random()*10};
+    });
+  }
+
+  function resize(){
+    var p=canvas.parentElement.getBoundingClientRect();
+    W=canvas.width=Math.floor(p.width-64);
+    H=canvas.height=280;
+    initNodes();
+  }
+
+  canvas.addEventListener('mousemove',function(e){
+    var r=canvas.getBoundingClientRect();
+    mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;
+  });
+  canvas.addEventListener('mouseleave',function(){mouse.x=-9999;mouse.y=-9999});
+
+  function draw(){
+    t++;
+    ctx.clearRect(0,0,W,H);
+
+    // Float nodes
+    nodes.forEach(function(n,i){
+      n.fa+=n.fs;
+      var bx=ND[i].cx*W,by=ND[i].cy*H;
+      var tx=bx+Math.cos(n.fa)*n.fr,ty=by+Math.sin(n.fa)*n.fr;
+      n.x+=(tx-n.x)*.04;n.y+=(ty-n.y)*.04;
+    });
+
+    // Hovered node
+    var hov=-1;
+    nodes.forEach(function(n,i){
+      var dx=mouse.x-n.x,dy=mouse.y-n.y;
+      if(Math.sqrt(dx*dx+dy*dy)<n.size+10)hov=i;
+    });
+
+    // Connected set
+    var conn={};
+    if(hov>=0){
+      conn[hov]=true;
+      EDGES.forEach(function(e){if(e[0]===hov||e[1]===hov){conn[e[0]]=true;conn[e[1]]=true}});
+    }
+
+    // Draw edges
+    EDGES.forEach(function(e){
+      var a=nodes[e[0]],b=nodes[e[1]];
+      var active=hov>=0&&conn[e[0]]&&conn[e[1]];
+      var alpha=hov<0?.15:(active?.72:.04);
+      ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+      ctx.strokeStyle=active?a.color:'rgba(255,255,255,.25)';
+      ctx.lineWidth=active?2:.6;ctx.globalAlpha=alpha;ctx.stroke();ctx.globalAlpha=1;
+
+      // Animated dash on active edge
+      if(active){
+        var pulse=.4+.4*Math.sin(t*.05);
+        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
+        ctx.strokeStyle=a.color;ctx.lineWidth=2.5;ctx.globalAlpha=pulse*.35;ctx.stroke();ctx.globalAlpha=1;
+      }
+
+      // Edge label
+      if(active&&e[2]){
+        var mx=(a.x+b.x)/2,my=(a.y+b.y)/2;
+        ctx.font='500 9px Inter,sans-serif';
+        ctx.textAlign='center';ctx.fillStyle=a.color;ctx.globalAlpha=.85;
+        ctx.fillText(e[2],mx,my-4);ctx.globalAlpha=1;
+      }
+    });
+
+    // Draw nodes
+    nodes.forEach(function(n,i){
+      var isH=hov===i,isC=!!conn[i],dim=hov>=0&&!isC;
+
+      if(isH||isC){
+        ctx.beginPath();ctx.arc(n.x,n.y,n.size+(isH?14:7),0,Math.PI*2);
+        ctx.fillStyle=n.color;ctx.globalAlpha=isH?.2:.07;ctx.fill();ctx.globalAlpha=1;
+      }
+
+      ctx.beginPath();ctx.arc(n.x,n.y,n.size,0,Math.PI*2);
+      ctx.fillStyle=dim?'rgba(255,255,255,.1)':n.color;
+      ctx.globalAlpha=dim?.25:1;ctx.fill();ctx.globalAlpha=1;
+
+      if(!dim){
+        ctx.beginPath();ctx.arc(n.x-n.size*.22,n.y-n.size*.28,n.size*.32,0,Math.PI*2);
+        ctx.fillStyle='rgba(255,255,255,.22)';ctx.fill();
+      }
+
+      if(isH||isC||hov<0){
+        ctx.font=(isH?'700':'500')+' '+(isH?11.5:9.5)+'px Inter,sans-serif';
+        ctx.fillStyle=isH?'#fff':(dim?'rgba(255,255,255,.2)':'rgba(255,255,255,.72)');
+        ctx.textAlign='center';
+        ctx.globalAlpha=dim?.3:1;
+        ctx.fillText(n.label,n.x,n.y-n.size-5);
+        ctx.globalAlpha=1;
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize',resize);
+  draw();
+})();
+</script>
+</body>
+</html>
