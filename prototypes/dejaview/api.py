@@ -20,6 +20,8 @@ import os
 import re
 import hashlib
 import secrets
+from dotenv import load_dotenv
+load_dotenv()
 
 app = FastAPI(
     title="DejaView API",
