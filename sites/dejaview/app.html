@@ -154,7 +154,7 @@ input,select,textarea{font-family:inherit;outline:none}
       <div class="login-card">
         <h2>Connect to DejaView</h2>
         <p>Enter your API key and endpoint to get started.</p>
-        <input type="text" id="login-endpoint" placeholder="API Endpoint" value="http://localhost:8000" />
+        <input type="text" id="login-endpoint" placeholder="API Endpoint" value="https://api.dejaview.io" />
         <input type="password" id="login-key" placeholder="API Key" />
         <button class="btn btn-primary" style="width:100%;height:44px;font-size:15px" id="login-btn">Connect</button>
         <div class="error" id="login-error"></div>
@@ -249,7 +249,7 @@ input,select,textarea{font-family:inherit;outline:none}
 </div>
 <div class="toast" id="toast"></div>
 <script>
-var state={endpoint:localStorage.getItem('dv_endpoint')||'http://localhost:8000',apiKey:localStorage.getItem('dv_apikey')||'',connected:false,demoMode:false,graphData:{nodes:[],links:[]},simulation:null,demoFacts:[{subject:'Jake',predicate:'works_at',object:'Geodesic Works',subject_type:'Person',object_type:'Organization'},{subject:'Jake',predicate:'founded',object:'Haven Tech',subject_type:'Person',object_type:'Organization'},{subject:'Artax',predicate:'is_agent_of',object:'Jake',subject_type:'Agent',object_type:'Person'},{subject:'Geodesic Works',predicate:'builds',object:'Knowledge Graphs',subject_type:'Organization',object_type:'Concept'},{subject:'SnapQuote',predicate:'built_with',object:'FastAPI',subject_type:'Project',object_type:'Technology'},{subject:'Haven Tech',predicate:'owns',object:'SnapQuote',subject_type:'Organization',object_type:'Project'}]};
+var state={endpoint:localStorage.getItem('dv_endpoint')||'https://api.dejaview.io',apiKey:localStorage.getItem('dv_apikey')||'',connected:false,demoMode:false,graphData:{nodes:[],links:[]},simulation:null,demoFacts:[{subject:'Jake',predicate:'works_at',object:'Geodesic Works',subject_type:'Person',object_type:'Organization'},{subject:'Jake',predicate:'founded',object:'Haven Tech',subject_type:'Person',object_type:'Organization'},{subject:'Artax',predicate:'is_agent_of',object:'Jake',subject_type:'Agent',object_type:'Person'},{subject:'Geodesic Works',predicate:'builds',object:'Knowledge Graphs',subject_type:'Organization',object_type:'Concept'},{subject:'SnapQuote',predicate:'built_with',object:'FastAPI',subject_type:'Project',object_type:'Technology'},{subject:'Haven Tech',predicate:'owns',object:'SnapQuote',subject_type:'Organization',object_type:'Project'}]};
 var typeColors={Person:'#3b82f6',Organization:'#22c55e',Project:'#a855f7',Technology:'#f59e0b',Concept:'#ec4899',Agent:'#f97316',Default:'#6366f1'};
 function getColor(t){return typeColors[t]||typeColors.Default}
 function api(method,path,body){if(state.demoMode)return demoApi(method,path,body);var opts={method:method,headers:{'Content-Type':'application/json'}};if(state.apiKey)opts.headers['Authorization']='Bearer '+state.apiKey;if(body)opts.body=JSON.stringify(body);return fetch(state.endpoint+path,opts).then(function(r){if(!r.ok)throw new Error(r.status+' '+r.statusText);return r.json()})}
