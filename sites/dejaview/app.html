@@ -377,14 +377,28 @@ function shareEntity(){
   api('POST', '/v1/share?name='+encodeURIComponent(currentShareEntity)+'&depth=2')
     .then(function(r){
       var url = r.url;
-      result.innerHTML = '<div style="color:#a78bfa;font-weight:600;margin-bottom:6px">&#128279; Shared!</div>'+
-        '<input readonly value="'+url+'" style="width:100%;background:#111827;border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:6px 8px;color:#e4e4ef;font-size:.78rem;font-family:monospace" onclick="this.select()" />'+
-        '<button onclick="navigator.clipboard.writeText(''+url+'').then(function(){this.textContent='Copied!';setTimeout(function(){document.querySelector(\'.copy-share-btn\').textContent=\'Copy URL\'}, 1500)}.bind(this))" class="copy-share-btn" style="margin-top:6px;width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:5px;color:#9494a8;font-size:.75rem;cursor:pointer;font-family:inherit">Copy URL</button>';
+      var inp = document.createElement('input');
+      inp.readOnly = true;
+      inp.value = url;
+      inp.style.cssText = 'width:100%;background:#111827;border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:6px 8px;color:#e4e4ef;font-size:.78rem;font-family:monospace;margin-bottom:6px;display:block';
+      inp.onclick = function(){ this.select(); };
+      var copyBtn = document.createElement('button');
+      copyBtn.textContent = 'Copy URL';
+      copyBtn.style.cssText = 'width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:5px;color:#9494a8;font-size:.75rem;cursor:pointer;font-family:inherit';
+      copyBtn.onclick = function(){
+        navigator.clipboard.writeText(url).then(function(){
+          copyBtn.textContent = 'Copied!';
+          setTimeout(function(){ copyBtn.textContent = 'Copy URL'; }, 1500);
+        });
+      };
+      result.innerHTML = '<div style="color:#a78bfa;font-weight:600;margin-bottom:8px">&#128279; Shared!</div>';
+      result.appendChild(inp);
+      result.appendChild(copyBtn);
       result.style.display='block';
-      btn.textContent='\u{1F517} Share this graph';
+      btn.textContent = '\uD83D\uDD17 Share this graph';
       btn.disabled = false;
     }).catch(function(e){
-      btn.textContent='\u{1F517} Share this graph';
+      btn.textContent = '\uD83D\uDD17 Share this graph';
       btn.disabled = false;
       toast('Share failed: '+e.message, 'error');
     });
