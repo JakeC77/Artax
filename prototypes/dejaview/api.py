@@ -675,6 +675,115 @@ async def lemonsqueezy_webhook(request: Request):
 
 
 
+
+
+# ============ Page Extraction (Browser Extension) ============
+
+class PageExtract(BaseModel):
+    text: str = Field(..., description="Page text content to extract facts from")
+    url: Optional[str] = Field(default=None, description="Page URL for context")
+    title: Optional[str] = Field(default=None, description="Page title for context")
+    max_facts: int = Field(default=8, ge=1, le=20)
+
+@app.post("/v1/extract")
+def extract_facts(body: PageExtract, user: dict = Depends(verify_api_key)):
+    """
+    Extract facts from arbitrary text using LLM.
+    Designed for the browser extension — send page content, get back
+    suggested subject-predicate-object triples ready to save.
+    """
+    import urllib.request as _ur, json as _js
+
+    context_hint = ""
+    if body.title:
+        context_hint += f"Page title: {body.title}\n"
+    if body.url:
+        context_hint += f"URL: {body.url}\n"
+
+    prompt = f"""{context_hint}
+Extract up to {body.max_facts} distinct, useful facts from the following text.
+Return ONLY a JSON array of objects with keys: subject, predicate, object
+Use specific predicates like: works_at, founded, knows, has_role, located_in,
+built_with, manages, attended, decided, expert_in, invested_in, acquired, partners_with
+
+Focus on: people, organizations, projects, relationships, roles, locations, decisions.
+Skip generic or obvious facts. Prefer specific, memorable relationships.
+
+Text:
+{body.text[:3000]}
+
+Return only valid JSON, no explanation:"""
+
+    # Try Anthropic
+    anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+    facts = []
+
+    if anthropic_key:
+        payload = _js.dumps({
+            "model": "claude-haiku-4-5",
+            "max_tokens": 1024,
+            "messages": [{"role": "user", "content": prompt}]
+        }).encode()
+        req = _ur.Request(
+            "https://api.anthropic.com/v1/messages",
+            data=payload,
+            headers={
+                "x-api-key": anthropic_key,
+                "anthropic-version": "2023-06-01",
+                "content-type": "application/json",
+            }
+        )
+        try:
+            with _ur.urlopen(req, timeout=20) as r:
+                text = _js.load(r)["content"][0]["text"].strip()
+                # Parse JSON from response
+                start = text.find("[")
+                end = text.rfind("]") + 1
+                if start >= 0 and end > start:
+                    facts = _js.loads(text[start:end])
+        except Exception as e:
+            print(f"Extract LLM error: {e}")
+
+    # Try OpenAI fallback
+    if not facts:
+        openai_key = os.getenv("OPENAI_API_KEY")
+        if openai_key:
+            payload = _js.dumps({
+                "model": "gpt-4o-mini",
+                "messages": [{"role": "user", "content": prompt}],
+                "max_tokens": 1024,
+                "response_format": {"type": "json_object"},
+            }).encode()
+            req = _ur.Request(
+                "https://api.openai.com/v1/chat/completions",
+                data=payload,
+                headers={"Authorization": f"Bearer {openai_key}", "Content-Type": "application/json"}
+            )
+            try:
+                with _ur.urlopen(req, timeout=20) as r:
+                    result = _js.load(r)
+                    text = result["choices"][0]["message"]["content"]
+                    parsed = _js.loads(text)
+                    facts = parsed if isinstance(parsed, list) else parsed.get("facts", [])
+            except Exception as e:
+                print(f"Extract OpenAI error: {e}")
+
+    if not facts:
+        raise HTTPException(status_code=503, detail="No LLM available for extraction. Set ANTHROPIC_API_KEY or OPENAI_API_KEY.")
+
+    # Validate and clean
+    cleaned = []
+    for f in facts[:body.max_facts]:
+        if isinstance(f, dict) and f.get("subject") and f.get("predicate") and f.get("object"):
+            cleaned.append({
+                "subject": str(f["subject"]).strip(),
+                "predicate": str(f["predicate"]).strip().lower().replace(" ", "_"),
+                "object": str(f["object"]).strip(),
+                "source": "browser-extension",
+            })
+
+    return {"facts": cleaned, "count": len(cleaned), "url": body.url, "title": body.title}
+
 # ============ Natural Language Query ============
 
 def _llm_synthesize(question: str, graph_context: str) -> str:

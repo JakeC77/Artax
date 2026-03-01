@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0e17;--bg2:#111827;--accent:#7c5cfc;--text:#e4e4ef;--text2:#9494a8;--border:rgba(255,255,255,.08)}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);width:320px;min-height:200px}
+.header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#080b12}
+.logo{font-weight:800;font-size:.95rem;letter-spacing:-.02em}
+.logo span{color:#a78bfa}
+.tab-bar{display:flex;border-bottom:1px solid var(--border)}
+.tab{flex:1;padding:9px;text-align:center;font-size:.8rem;font-weight:600;color:var(--text2);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
+.tab.active{color:#a78bfa;border-bottom-color:#7c5cfc}
+.pane{display:none;padding:14px}
+.pane.active{display:block}
+label{font-size:.75rem;color:var(--text2);display:block;margin-bottom:5px;font-weight:500}
+input,select{width:100%;background:#1a2035;border:1px solid var(--border);border-radius:7px;padding:8px 10px;color:var(--text);font-size:.83rem;font-family:inherit;outline:none;margin-bottom:10px;transition:border-color .2s}
+input:focus,select:focus{border-color:#7c5cfc}
+input::placeholder{color:#4a4a60}
+.btn{width:100%;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px;font-weight:600;font-size:.85rem;cursor:pointer;font-family:inherit;transition:background .2s}
+.btn:hover{background:#6a4de0}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-ghost{background:rgba(255,255,255,.05);color:var(--text2);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:#a78bfa;color:#a78bfa;background:transparent}
+.msg{font-size:.8rem;padding:8px 10px;border-radius:7px;margin-top:8px;display:none}
+.msg.success{background:rgba(52,211,153,.1);color:#34d399;border:1px solid rgba(52,211,153,.2)}
+.msg.error{background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.2)}
+.connected-badge{font-size:.72rem;padding:3px 8px;border-radius:10px;background:rgba(52,211,153,.12);color:#34d399;font-weight:600}
+.extract-btn{width:100%;background:rgba(124,92,252,.15);color:#a78bfa;border:1px solid rgba(124,92,252,.25);border-radius:8px;padding:10px;font-weight:600;font-size:.85rem;cursor:pointer;font-family:inherit;transition:all .2s;margin-bottom:8px}
+.extract-btn:hover{background:rgba(124,92,252,.25)}
+.hint{font-size:.75rem;color:var(--text2);line-height:1.5;text-align:center;padding:4px 0 8px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">deja<span>View</span></div>
+  <span id="conn-badge" class="connected-badge" style="display:none">Connected</span>
+</div>
+<div class="tab-bar">
+  <div class="tab active" data-tab="capture">Capture</div>
+  <div class="tab" data-tab="remember">Remember</div>
+  <div class="tab" data-tab="settings">Settings</div>
+</div>
+
+<div id="pane-capture" class="pane active">
+  <p class="hint">Auto-extract facts from the current page using AI</p>
+  <button class="extract-btn" id="extract-btn">🔍 Extract facts from this page</button>
+  <p class="hint" style="padding-top:0">or right-click any text → "Save to DejaView"</p>
+</div>
+
+<div id="pane-remember" class="pane">
+  <label>Subject</label>
+  <input id="f-subject" placeholder="e.g. Alice" />
+  <label>Predicate</label>
+  <input id="f-predicate" placeholder="e.g. works_at" list="pred-list" />
+  <datalist id="pred-list">
+    <option value="works_at"><option value="founded"><option value="knows">
+    <option value="has_status"><option value="built_with"><option value="manages">
+    <option value="attended"><option value="decided"><option value="prefers">
+    <option value="expert_in"><option value="interested_in"><option value="lives_in">
+  </datalist>
+  <label>Object</label>
+  <input id="f-object" placeholder="e.g. Orbit Labs" />
+  <label>Context <span style="color:#4a4a60">(optional)</span></label>
+  <input id="f-context" placeholder="e.g. As of March 2026" />
+  <button class="btn" id="save-btn">Save fact</button>
+  <div class="msg" id="save-msg"></div>
+</div>
+
+<div id="pane-settings" class="pane">
+  <label>API Key</label>
+  <input id="s-key" type="password" placeholder="dv_..." />
+  <label>Endpoint</label>
+  <input id="s-endpoint" placeholder="https://api.dejaview.io" />
+  <button class="btn" id="save-settings">Save settings</button>
+  <button class="btn btn-ghost" id="test-conn" style="margin-top:6px">Test connection</button>
+  <div class="msg" id="settings-msg"></div>
+</div>
+
+<script src="popup.js"></script>
+</body>
+</html>
