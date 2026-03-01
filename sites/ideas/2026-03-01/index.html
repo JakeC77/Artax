@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ContractMind — Know What You Signed</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1c1c28;
+      --border: #2a2a3d;
+      --accent: #6c63ff;
+      --accent2: #a78bfa;
+      --accent-glow: rgba(108, 99, 255, 0.2);
+      --text: #e8e8f0;
+      --muted: #8888a8;
+      --green: #4ade80;
+      --red: #f87171;
+      --yellow: #fbbf24;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ─────────────────────────────────────────────── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 2rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(10, 10, 15, 0.92);
+      backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+
+    .logo {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .logo span { color: var(--accent2); }
+
+    nav .cta-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1.25rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    nav .cta-btn:hover {
+      background: var(--accent2);
+      transform: translateY(-1px);
+    }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--accent2);
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      margin-bottom: 2rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .badge::before {
+      content: '●';
+      font-size: 0.5rem;
+      color: var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 .highlight {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1.2rem;
+      color: var(--muted);
+      max-width: 600px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.85rem 2rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 0 0 0 var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent2);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--accent-glow);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.85rem 2rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent2);
+    }
+
+    .social-proof {
+      margin-top: 2.5rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .social-proof strong { color: var(--text); }
+
+    /* ── PROBLEM SECTION ──────────────────────────────────── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+
+    .section-label {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.75rem, 4vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin: 0 auto 3.5rem;
+    }
+
+    /* Pain cards */
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .pain-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.75rem;
+      position: relative;
+    }
+
+    .pain-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .pain-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .pain-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .pain-card .cost-tag {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      background: rgba(248, 113, 113, 0.15);
+      color: var(--red);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    /* ── DEMO / PRODUCT SECTION ────────────────────────────── */
+    .demo-section {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .demo-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .demo-inner { grid-template-columns: 1fr; }
+    }
+
+    .demo-text h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      gap: 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .feature-list .icon {
+      width: 24px;
+      height: 24px;
+      background: rgba(108, 99, 255, 0.15);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 0.75rem;
+    }
+
+    /* Fake contract card */
+    .contract-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    .contract-card .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .doc-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+    }
+
+    .card-header-text { flex: 1; }
+    .card-header-text .doc-name { font-weight: 700; font-size: 0.9rem; }
+    .card-header-text .doc-type { color: var(--muted); font-size: 0.75rem; }
+
+    .status-badge {
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .status-badge.ok { background: rgba(74, 222, 128, 0.15); color: var(--green); }
+    .status-badge.warn { background: rgba(251, 191, 36, 0.15); color: var(--yellow); }
+    .status-badge.risk { background: rgba(248, 113, 113, 0.15); color: var(--red); }
+
+    .kv-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .kv {
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 0.6rem 0.75rem;
+    }
+
+    .kv .kv-label { color: var(--muted); font-size: 0.7rem; margin-bottom: 0.15rem; }
+    .kv .kv-value { font-weight: 600; font-size: 0.85rem; }
+
+    .risk-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.6rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .risk-item.ok { background: rgba(74, 222, 128, 0.08); }
+    .risk-item.warn { background: rgba(251, 191, 36, 0.08); }
+    .risk-item.risk { background: rgba(248, 113, 113, 0.08); }
+    .risk-item .risk-dot { flex-shrink: 0; margin-top: 0.15rem; }
+
+    .ask-box {
+      margin-top: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    /* ── HOW IT WORKS ─────────────────────────────────────── */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .step {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      position: relative;
+    }
+
+    .step-num {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin: 0 auto 1rem;
+    }
+
+    .step h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .step p {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    /* ── PRICING ─────────────────────────────────────────── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .plan-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .plan-card.featured {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, rgba(108, 99, 255, 0.08), var(--surface));
+    }
+
+    .plan-card .plan-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .plan-name {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+
+    .plan-price {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.25rem;
+    }
+
+    .plan-price span {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .plan-desc {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .plan-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+    }
+
+    .plan-features li::before {
+      content: '✓';
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .plan-btn {
+      width: 100%;
+      padding: 0.85rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .plan-btn.primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .plan-btn.primary:hover {
+      background: var(--accent2);
+    }
+
+    .plan-btn.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .plan-btn.secondary:hover {
+      border-color: var(--accent);
+    }
+
+    /* ── TESTIMONIALS / QUOTE ────────────────────────────── */
+    .quote-block {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 12px;
+      padding: 2rem;
+      margin: 3rem auto 0;
+      max-width: 700px;
+      text-align: center;
+    }
+
+    .quote-block blockquote {
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--text);
+      margin-bottom: 1rem;
+      line-height: 1.7;
+    }
+
+    .quote-author {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .quote-author strong { color: var(--accent2); }
+
+    /* ── EMAIL SIGNUP ──────────────────────────────────────── */
+    .signup-section {
+      background: linear-gradient(135deg, rgba(108, 99, 255, 0.12), rgba(167, 139, 250, 0.06));
+      border-top: 1px solid var(--border);
+    }
+
+    .signup-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+
+    .signup-inner h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+
+    .signup-inner p {
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    .email-form {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .email-form input {
+      flex: 1;
+      min-width: 240px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .email-form input:focus {
+      border-color: var(--accent);
+    }
+
+    .email-form input::placeholder {
+      color: var(--muted);
+    }
+
+    .form-note {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-top: 1rem;
+    }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .footer-logo {
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── SEPARATOR ───────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0 2rem;
+    }
+
+    /* ── GLOW BG ─────────────────────────────────────────── */
+    .hero-glow {
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse, rgba(108,99,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero-glow"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">Contract<span>Mind</span></div>
+    <div style="display:flex; gap: 1.5rem; align-items: center;">
+      <a href="#how" style="color: var(--muted); text-decoration: none; font-size: 0.9rem;">How it works</a>
+      <a href="#pricing" style="color: var(--muted); text-decoration: none; font-size: 0.9rem;">Pricing</a>
+      <button class="cta-btn" onclick="document.getElementById('email-input').focus()">Get early access</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge">Early Access</div>
+    <h1>Know exactly what<br>you <span class="highlight">signed.</span></h1>
+    <p class="hero-sub">
+      ContractMind reads your contracts so you don't have to. Instant summaries, 
+      key date alerts, and plain-English answers to "wait, what does that clause mean?"
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('email-input').focus()">
+        Get early access — it's free
+      </button>
+      <button class="btn-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">
+        See how it works
+      </button>
+    </div>
+    <p class="social-proof">Designed for <strong>freelancers, consultants, and small teams</strong> — not law firms.</p>
+  </section>
+
+  <!-- PROBLEM -->
+  <div class="divider"></div>
+  <section class="section">
+    <p class="section-label">The Problem</p>
+    <h2 class="section-title">You signed it. You forgot what's in it.</h2>
+    <p class="section-sub">
+      Most professionals manage a dozen or more active contracts at any time — and remember about 10% of what's in them.
+    </p>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="cost-tag">Avg cost: $3,200</div>
+        <div class="pain-icon">🔄</div>
+        <h3>Surprise auto-renewals</h3>
+        <p>That SaaS tool quietly renewed for another year while you were too busy to notice the email. Again.</p>
+      </div>
+      <div class="pain-card">
+        <div class="cost-tag">8 hrs of searching</div>
+        <div class="pain-icon">🔍</div>
+        <h3>Contract archaeology</h3>
+        <p>Finding the right contract, then finding the right clause in it, then understanding what it actually means.</p>
+      </div>
+      <div class="pain-card">
+        <div class="cost-tag">Real exposure</div>
+        <div class="pain-icon">⚠️</div>
+        <h3>Non-competes you forgot</h3>
+        <p>You took a new client. Turns out your old agreement had something to say about that.</p>
+      </div>
+      <div class="pain-card">
+        <div class="cost-tag">$350–$500/hr</div>
+        <div class="pain-icon">⚖️</div>
+        <h3>Lawyer for basic questions</h3>
+        <p>"Can I use this code commercially?" "Who owns the IP here?" Simple questions with expensive answers.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO -->
+  <div class="demo-section">
+    <div class="demo-inner">
+      <div class="demo-text">
+        <h2>Upload once. Understand forever.</h2>
+        <ul class="feature-list">
+          <li>
+            <div class="icon">🧠</div>
+            <div><strong>AI extraction</strong> — parties, dates, payment terms, IP clauses, non-competes, renewal windows. All auto-extracted from any PDF or DOCX.</div>
+          </li>
+          <li>
+            <div class="icon">📅</div>
+            <div><strong>Smart reminders</strong> — calendar alerts for expiration dates, renewal deadlines, and payment milestones. Never miss a window again.</div>
+          </li>
+          <li>
+            <div class="icon">💬</div>
+            <div><strong>Ask your contract</strong> — type a question in plain English, get a plain-English answer. No legalese decoding required.</div>
+          </li>
+          <li>
+            <div class="icon">🚩</div>
+            <div><strong>Risk highlights</strong> — automatic flagging of unusual clauses: broad non-competes, aggressive IP grabs, one-sided termination rights.</div>
+          </li>
+        </ul>
+      </div>
+
+      <!-- FAKE CONTRACT CARD -->
+      <div class="contract-card">
+        <div class="card-header">
+          <div class="doc-icon">📄</div>
+          <div class="card-header-text">
+            <div class="doc-name">Acme Corp — Client Agreement</div>
+            <div class="doc-type">Service Agreement · Uploaded 2 min ago</div>
+          </div>
+          <span class="status-badge warn">2 flags</span>
+        </div>
+
+        <div class="kv-grid">
+          <div class="kv">
+            <div class="kv-label">Parties</div>
+            <div class="kv-value">You + Acme Corp</div>
+          </div>
+          <div class="kv">
+            <div class="kv-label">Term</div>
+            <div class="kv-value">12 months</div>
+          </div>
+          <div class="kv">
+            <div class="kv-label">Expires</div>
+            <div class="kv-value" style="color: var(--yellow);">Mar 15, 2026 ⏰</div>
+          </div>
+          <div class="kv">
+            <div class="kv-label">Payment</div>
+            <div class="kv-value">$8,500 / month</div>
+          </div>
+        </div>
+
+        <div class="risk-item ok">
+          <div class="risk-dot">✅</div>
+          <div>IP created during engagement belongs to you, licensed to Acme.</div>
+        </div>
+        <div class="risk-item warn">
+          <div class="risk-dot">⚠️</div>
+          <div>Auto-renews unless canceled <strong>60 days before expiry</strong> — deadline is Jan 14.</div>
+        </div>
+        <div class="risk-item risk">
+          <div class="risk-dot">🚩</div>
+          <div>Non-compete clause covers <strong>all direct competitors</strong> for 12 months post-termination. Broader than usual.</div>
+        </div>
+
+        <div class="ask-box">
+          <span>💬</span>
+          <span>Ask: "Can I take on similar clients after this ends?" ...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <p class="section-label">How it works</p>
+    <h2 class="section-title">Three steps to contract clarity</h2>
+    <p class="section-sub">No setup required. Drop in a PDF and you're done.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Upload</h3>
+        <p>Drop any PDF, DOCX, or paste text. Works with NDAs, client agreements, SaaS terms, employment contracts — anything.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>Extract</h3>
+        <p>AI reads the whole document and pulls out the stuff that matters: key dates, obligations, risks, parties, and terms.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Stay informed</h3>
+        <p>Get calendar alerts for deadlines, chat with your contracts anytime, and share summaries with collaborators — not the full doc.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <div class="divider"></div>
+  <section class="section" id="pricing">
+    <p class="section-label">Pricing</p>
+    <h2 class="section-title">Simple pricing. No lawyer required.</h2>
+    <p class="section-sub">Start free. Upgrade when you need more.</p>
+
+    <div class="pricing-grid">
+      <div class="plan-card">
+        <div class="plan-name">Free</div>
+        <div class="plan-price">$0 <span>/ month</span></div>
+        <div class="plan-desc">For trying it out</div>
+        <ul class="plan-features">
+          <li>3 contracts</li>
+          <li>AI extraction + summary</li>
+          <li>Risk highlights</li>
+          <li>Basic search</li>
+        </ul>
+        <button class="plan-btn secondary" onclick="document.getElementById('email-input').focus()">Get started free</button>
+      </div>
+
+      <div class="plan-card featured">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$19 <span>/ month</span></div>
+        <div class="plan-desc">For active freelancers and consultants</div>
+        <ul class="plan-features">
+          <li>Unlimited contracts</li>
+          <li>Everything in Free</li>
+          <li>Calendar sync (Google + iCal)</li>
+          <li>Ask your contract chat</li>
+          <li>Email reminders</li>
+          <li>PDF export of summaries</li>
+        </ul>
+        <button class="plan-btn primary" onclick="document.getElementById('email-input').focus()">Get early access</button>
+      </div>
+
+      <div class="plan-card">
+        <div class="plan-name">Team</div>
+        <div class="plan-price">$49 <span>/ month</span></div>
+        <div class="plan-desc">For small agencies and teams</div>
+        <ul class="plan-features">
+          <li>Up to 5 users</li>
+          <li>Everything in Pro</li>
+          <li>Shared contract vault</li>
+          <li>Access controls</li>
+          <li>Audit log</li>
+          <li>Priority support</li>
+        </ul>
+        <button class="plan-btn secondary" onclick="document.getElementById('email-input').focus()">Get early access</button>
+      </div>
+    </div>
+
+    <div class="quote-block">
+      <blockquote>
+        "I've been burned by auto-renewal clauses twice. Once cost me $4,000. The second time 
+        I caught it because I actually remembered to check. I shouldn't have to remember to check."
+      </blockquote>
+      <div class="quote-author">
+        — <strong>Independent consultant</strong>, 7 years freelancing
+      </div>
+    </div>
+  </section>
+
+  <!-- EMAIL SIGNUP -->
+  <div class="signup-section">
+    <div class="signup-inner">
+      <h2>Get early access</h2>
+      <p>ContractMind is in development. Join the waitlist — free Pro tier for founding members.</p>
+
+      <form class="email-form" onsubmit="handleSubmit(event)">
+        <input type="email" id="email-input" placeholder="you@example.com" required>
+        <button type="submit" class="btn-primary">Join the waitlist</button>
+      </form>
+      <p class="form-note">No spam. No credit card. Just early access when we launch.</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">ContractMind</div>
+    <p>Know what you signed. Built for freelancers.</p>
+    <p style="margin-top: 1rem; font-size: 0.75rem; opacity: 0.5;">
+      © 2026 ContractMind. All rights reserved.
+    </p>
+  </footer>
+
+  <script>
+    function handleSubmit(e) {
+      e.preventDefault();
+      const email = document.getElementById('email-input').value;
+      const btn = e.target.querySelector('button');
+      btn.textContent = '✓ You\'re on the list!';
+      btn.style.background = 'var(--green)';
+      btn.disabled = true;
+      console.log('Waitlist signup:', email);
+      // TODO: POST to /api/waitlist or a Formspree endpoint
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
