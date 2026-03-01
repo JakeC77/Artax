@@ -115,6 +115,27 @@ input,select,textarea{font-family:inherit;outline:none}
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+#ask-page{padding:24px;flex-direction:column;gap:16px}
+.ask-input-row{display:flex;gap:10px}
+#ask-input{flex:1;background:#1a2035;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 16px;color:#e4e4ef;font-size:15px;font-family:inherit;outline:none;transition:border-color .2s}
+#ask-input:focus{border-color:#7c5cfc}
+#ask-input::placeholder{color:#6a6a80}
+#ask-btn{background:#7c5cfc;color:#fff;border:none;border-radius:10px;padding:12px 20px;font-weight:600;font-size:14px;cursor:pointer;font-family:inherit;transition:background .2s;white-space:nowrap}
+#ask-btn:hover{background:#6a4de0}
+#ask-btn:disabled{opacity:.5;cursor:not-allowed}
+.ask-answer{background:#111827;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:20px;line-height:1.7;color:#e4e4ef;white-space:pre-wrap;font-size:.95rem}
+.ask-citations{margin-top:12px}
+.ask-citations h4{font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#6a6a80;margin-bottom:10px}
+.cite-card{background:#0a0e17;border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:10px 14px;margin-bottom:6px;font-size:.82rem}
+.cite-entity{font-weight:600;color:#7c5cfc;margin-bottom:4px}
+.cite-rel{color:#9494a8;line-height:1.6}
+.ask-empty{text-align:center;color:#6a6a80;padding:60px 20px;font-size:.95rem}
+.ask-thinking{display:flex;align-items:center;gap:10px;color:#9494a8;font-size:.9rem;padding:16px 0}
+.ask-dot{width:8px;height:8px;border-radius:50%;background:#7c5cfc;animation:askPulse 1.2s ease-in-out infinite}
+.ask-dot:nth-child(2){animation-delay:.2s}.ask-dot:nth-child(3){animation-delay:.4s}
+@keyframes askPulse{0%,80%,100%{opacity:.2;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}
+
 </style>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iOCIgZmlsbD0iIzBhMGUxNyIvPgogIDwhLS0gZWRnZXMgLS0+CiAgPGxpbmUgeDE9IjE2IiB5MT0iMTYiIHgyPSI4IiB5Mj0iOCIgc3Ryb2tlPSIjN2M1Y2ZjIiBzdHJva2Utd2lkdGg9IjEuNSIgb3BhY2l0eT0iMC43Ii8+CiAgPGxpbmUgeDE9IjE2IiB5MT0iMTYiIHgyPSIyNCIgeTI9IjEwIiBzdHJva2U9IiMwMGQ0ZmYiIHN0cm9rZS13aWR0aD0iMS41IiBvcGFjaXR5PSIwLjciLz4KICA8bGluZSB4MT0iMTYiIHkxPSIxNiIgeDI9IjI0IiB5Mj0iMjQiIHN0cm9rZT0iIzdjNWNmYyIgc3Ryb2tlLXdpZHRoPSIxLjUiIG9wYWNpdHk9IjAuNyIvPgogIDxsaW5lIHgxPSIxNiIgeTE9IjE2IiB4Mj0iOCIgeTI9IjI0IiBzdHJva2U9IiMwMGQ0ZmYiIHN0cm9rZS13aWR0aD0iMS41IiBvcGFjaXR5PSIwLjciLz4KICA8IS0tIHNhdGVsbGl0ZSBub2RlcyAtLT4KICA8Y2lyY2xlIGN4PSI4IiBjeT0iOCIgcj0iMyIgZmlsbD0iIzdjNWNmYyIvPgogIDxjaXJjbGUgY3g9IjI0IiBjeT0iMTAiIHI9IjMiIGZpbGw9IiMwMGQ0ZmYiLz4KICA8Y2lyY2xlIGN4PSIyNCIgY3k9IjI0IiByPSIzIiBmaWxsPSIjN2M1Y2ZjIi8+CiAgPGNpcmNsZSBjeD0iOCIgY3k9IjI0IiByPSIzIiBmaWxsPSIjMDBkNGZmIi8+CiAgPCEtLSBjZW50ZXIgbm9kZSAtLT4KICA8Y2lyY2xlIGN4PSIxNiIgY3k9IjE2IiByPSI1IiBmaWxsPSIjN2M1Y2ZjIi8+CiAgPGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMyIgZmlsbD0iIzAwZDRmZiIvPgo8L3N2Zz4=">
 </head>
@@ -134,7 +155,10 @@ input,select,textarea{font-family:inherit;outline:none}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><circle cx="12" cy="6" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="18" r="2"/></svg>
   </button>
   <div class="sidebar-spacer"></div>
-  <button class="nav-btn" data-page="settings" title="Settings">
+  <button class="nav-btn" data-page="ask" title="Ask">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    </button>
+    <button class="nav-btn" data-page="settings" title="Settings">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
   </button>
 </nav>
@@ -204,6 +228,17 @@ input,select,textarea{font-family:inherit;outline:none}
       <p style="color:var(--text2);font-size:14px;margin-bottom:16px">Recently added facts</p>
       <div id="timeline-list"></div>
     </div>
+
+    <div id="ask-page" class="page">
+      <div class="ask-input-row">
+        <input id="ask-input" type="text" placeholder="What do I know about...?" autocomplete="off" />
+        <button id="ask-btn">Ask</button>
+      </div>
+      <div id="ask-results">
+        <p class="ask-empty">Ask anything about your knowledge graph.<br>Examples: "Who is JR?" &nbsp;&middot;&nbsp; "What is SnapQuote?" &nbsp;&middot;&nbsp; "What projects am I working on?"</p>
+      </div>
+    </div>
+
     <div id="settings-page" class="page">
       <h2>Settings</h2>
       <div class="setting-row">
@@ -287,6 +322,46 @@ document.getElementById('fact-submit').addEventListener('click',function(){var s
 document.getElementById('settings-save').addEventListener('click',function(){state.endpoint=document.getElementById('settings-endpoint').value.replace(/\/+$/,'');state.apiKey=document.getElementById('settings-key').value;localStorage.setItem('dv_endpoint',state.endpoint);localStorage.setItem('dv_apikey',state.apiKey);toast('Settings saved','success')});
 document.getElementById('settings-logout').addEventListener('click',function(){localStorage.removeItem('dv_endpoint');localStorage.removeItem('dv_apikey');state.connected=false;state.demoMode=false;state.graphData={nodes:[],links:[]};document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});var lp=document.getElementById('login-page');lp.classList.add('active');lp.style.display='flex';toast('Disconnected')});
 (function(){document.getElementById('login-endpoint').value=state.endpoint;document.getElementById('settings-endpoint').value=state.endpoint;document.getElementById('settings-key').value=state.apiKey;if(state.apiKey){api('GET','/v1/health').then(function(){state.connected=true;navigate('dashboard')}).catch(function(){})}})();
+
+// ── Ask ──────────────────────────────────────────────────────
+function loadAsk(){}  // no auto-load needed
+
+function submitAsk(){
+  var q = document.getElementById('ask-input').value.trim();
+  if(!q) return;
+  var results = document.getElementById('ask-results');
+  var btn = document.getElementById('ask-btn');
+  btn.disabled = true;
+  results.innerHTML = '<div class="ask-thinking"><div class="ask-dot"></div><div class="ask-dot"></div><div class="ask-dot"></div><span>Searching graph...</span></div>';
+  api('POST','/v1/ask',{question:q}).then(function(r){
+    var html = '<div class="ask-answer">'+escHtml(r.answer)+'</div>';
+    var cites = r.citations||[];
+    if(cites.length){
+      html += '<div class="ask-citations"><h4>Sources ('+cites.length+' entities)</h4>';
+      cites.forEach(function(c){
+        var rels = (c.outgoing||[]).slice(0,4).map(function(r){
+          return (r.rel||'').toLowerCase().replace(/_/g,' ')+' <strong>'+escHtml(r.target||'')+'</strong>'+(r.ctx?' <em>('+escHtml(r.ctx)+')</em>':'');
+        });
+        (c.incoming||[]).slice(0,2).forEach(function(r){
+          rels.push('<strong>'+escHtml(r.source||'')+'</strong> '+(r.rel||'').toLowerCase().replace(/_/g,' '));
+        });
+        html += '<div class="cite-card"><div class="cite-entity">'+escHtml(c.entity||'')+'</div><div class="cite-rel">'+rels.join('<br>')+'</div></div>';
+      });
+      html += '</div>';
+    }
+    results.innerHTML = html;
+  }).catch(function(e){
+    results.innerHTML = '<p style="color:#ef4444;padding:16px">Error: '+escHtml(String(e))+'</p>';
+  }).finally(function(){ btn.disabled=false; });
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+document.getElementById('ask-btn').addEventListener('click', submitAsk);
+document.getElementById('ask-input').addEventListener('keydown', function(e){
+  if(e.key==='Enter') submitAsk();
+});
+
 </script>
 </body>
 </html>
