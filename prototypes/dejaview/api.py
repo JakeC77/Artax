@@ -844,6 +844,146 @@ def ask(query: NLQuery, user: dict = Depends(verify_api_key)):
         "entities_found": len(citations),
     }
 
+
+
+# ============ Public Subgraph Sharing ============
+
+import hashlib as _share_hashlib
+
+@app.post("/v1/share")
+def create_share(
+    name: str,
+    depth: int = 2,
+    title: Optional[str] = None,
+    user: dict = Depends(verify_api_key)
+):
+    """
+    Create a public read-only shareable link for any entity's subgraph.
+    Returns a share_id — accessible at GET /v1/public/{share_id} without auth.
+    """
+    graph_id = user["graph_id"]
+    depth = min(depth, 3)
+    norm = _normalize_name(name)
+
+    # Fetch the subgraph
+    with driver.session() as session:
+        result = session.run(f"""
+            MATCH (start {{_norm_name: $norm, _graph_id: $gid}})
+            MATCH path = (start)-[*0..{depth}]-(connected)
+            WHERE connected._graph_id = $gid
+            WITH start, collect(DISTINCT connected) as cnodes,
+                 collect(DISTINCT relationships(path)) as rel_lists
+            RETURN start, cnodes, rel_lists
+        """, {"norm": norm, "gid": graph_id})
+
+        record = result.single()
+        if not record:
+            raise HTTPException(status_code=404, detail=f"Entity '{name}' not found")
+
+        all_nodes = [dict(record["start"])] + [dict(n) for n in record["cnodes"]]
+        nodes = []
+        seen_nodes = set()
+        for n in all_nodes:
+            n_name = n.get("name", "unknown")
+            if n_name not in seen_nodes:
+                seen_nodes.add(n_name)
+                nodes.append({"id": n_name, "type": n.get("label", "Entity")})
+
+        links = []
+        seen_links = set()
+        for rel_list in record["rel_lists"]:
+            for r in (rel_list if isinstance(rel_list, list) else [rel_list]):
+                try:
+                    src = dict(r.start_node).get("name", "")
+                    tgt = dict(r.end_node).get("name", "")
+                    key = f"{src}-{r.type}-{tgt}"
+                    if key not in seen_links and src and tgt:
+                        seen_links.add(key)
+                        links.append({"source": src, "target": tgt,
+                                     "predicate": r.type.lower().replace("_", " ")})
+                except Exception:
+                    pass
+
+    import secrets as _sec
+    share_id = _sec.token_urlsafe(12)
+    share_title = title or f"{name} — Knowledge Graph"
+
+    import json as _json
+    graph_snapshot = _json.dumps({"nodes": nodes, "links": links})
+
+    with driver.session() as session:
+        session.run("""
+            CREATE (s:DejaViewShare {
+                share_id: $sid,
+                entity: $entity,
+                title: $title,
+                graph_id: $gid,
+                user_id: $uid,
+                graph_snapshot: $snapshot,
+                depth: $depth,
+                created_at: datetime(),
+                views: 0
+            })
+        """, {
+            "sid": share_id, "entity": name, "title": share_title,
+            "gid": graph_id, "uid": user["user_id"],
+            "snapshot": graph_snapshot, "depth": depth
+        })
+
+    base_url = "https://dejaview.io"
+    return {
+        "share_id": share_id,
+        "entity": name,
+        "title": share_title,
+        "url": f"{base_url}/share.html#{share_id}",
+        "nodes": len(nodes),
+        "links": len(links),
+    }
+
+
+@app.get("/v1/public/{share_id}")
+def get_share(share_id: str):
+    """Get a public shared subgraph — no auth required."""
+    import json as _json
+    with driver.session() as session:
+        result = session.run("""
+            MATCH (s:DejaViewShare {share_id: $sid})
+            SET s.views = coalesce(s.views, 0) + 1
+            RETURN s.entity as entity, s.title as title,
+                   s.graph_snapshot as snapshot, s.created_at as created,
+                   s.views as views, s.depth as depth
+        """, {"sid": share_id})
+        record = result.single()
+        if not record:
+            raise HTTPException(status_code=404, detail="Share not found or expired")
+
+    graph = _json.loads(record["snapshot"])
+    return {
+        "share_id": share_id,
+        "entity": record["entity"],
+        "title": record["title"],
+        "created_at": str(record["created"]),
+        "views": record["views"],
+        "depth": record["depth"],
+        "nodes": graph["nodes"],
+        "links": graph["links"],
+    }
+
+
+@app.delete("/v1/share/{share_id}")
+def delete_share(share_id: str, user: dict = Depends(verify_api_key)):
+    """Delete a share you created."""
+    with driver.session() as session:
+        result = session.run("""
+            MATCH (s:DejaViewShare {share_id: $sid, user_id: $uid})
+            DELETE s
+            RETURN count(s) as deleted
+        """, {"sid": share_id, "uid": user["user_id"]})
+        record = result.single()
+        if not record or record["deleted"] == 0:
+            raise HTTPException(status_code=404, detail="Share not found or not yours")
+    return {"deleted": share_id}
+
 # ============ Delete Endpoints ============
 
 class FactDelete(BaseModel):

@@ -271,5 +271,26 @@ def ask(question: str) -> str:
     return "\n".join(lines)
 
 
+@mcp.tool()
+def share(entity: str, depth: int = 2, title: str = None) -> str:
+    """Create a public shareable link for any entity's subgraph.
+
+    Returns a URL anyone can open — no account needed. Shows an
+    interactive D3 graph of the entity and its connections.
+
+    Examples:
+      share("SnapQuote")
+      share("Project Atlas", depth=3, title="Atlas Project Map")
+    """
+    params = f"name={entity}&depth={depth}"
+    if title:
+        params += f"&title={title}"
+    result = _call("POST", f"/v1/share?{params}")
+    url = result.get("url", "")
+    nodes = result.get("nodes", 0)
+    links = result.get("links", 0)
+    return f"Shared! {nodes} entities, {links} relationships\n{url}"
+
+
 if __name__ == "__main__":
     mcp.run()

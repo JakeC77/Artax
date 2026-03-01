@@ -232,6 +232,34 @@
           "name"
         ]
       }
+    },
+    {
+      "name": "share",
+      "description": "Create a public shareable link for any entity's subgraph. Returns a URL anyone can open \u2014 no account needed. Interactive D3 graph.",
+      "method": "POST",
+      "path": "/v1/share",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Entity to share"
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3,
+            "default": 2
+          },
+          "title": {
+            "type": "string",
+            "description": "Optional custom title for the shared page"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      }
     }
   ],
   "usage_tips": [
