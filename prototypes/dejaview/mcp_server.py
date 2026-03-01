@@ -205,5 +205,42 @@ def agent_context() -> str:
     return result.get("context", "Knowledge graph is empty or unavailable.")
 
 
+
+@mcp.tool()
+def forget(subject: str, predicate: str, object: str) -> str:
+    """Remove a specific fact from the knowledge graph.
+
+    Deletes the relationship between subject and object but leaves
+    both entities intact. Use to correct wrong or outdated facts.
+
+    Example:
+      forget("SnapQuote", "is_a", "Insurance Quoting Platform")
+    """
+    try:
+        result = _call("DELETE", "/v1/facts",
+                       json={"subject": subject, "predicate": predicate, "object": object})
+        return f"Forgotten: {subject} {predicate} {object}"
+    except Exception as e:
+        return f"Could not delete: {e}"
+
+
+@mcp.tool()
+def forget_entity(name: str) -> str:
+    """Remove an entity AND all its relationships from the knowledge graph.
+
+    Use with care — this wipes the node and every edge connected to it.
+    Good for removing entirely wrong or duplicate entities.
+
+    Example:
+      forget_entity("Insurance Quoting Platform")
+    """
+    try:
+        result = _call("DELETE", f"/v1/entities/{name}")
+        rels = result.get("relationships_removed", 0)
+        return f"Deleted entity '{name}' and {rels} relationship(s)."
+    except Exception as e:
+        return f"Could not delete: {e}"
+
+
 if __name__ == "__main__":
     mcp.run()

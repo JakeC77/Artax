@@ -671,6 +671,74 @@ async def lemonsqueezy_webhook(request: Request):
         return {"status": "ok", "provisioned": email}
     return {"status": "ok", "event": event_name}
 
+
+
+# ============ Delete Endpoints ============
+
+class FactDelete(BaseModel):
+    subject: str = Field(..., description="Subject entity name")
+    predicate: str = Field(..., description="Relationship type to delete")
+    object: str = Field(..., description="Object entity name")
+
+@app.delete("/v1/facts")
+def delete_fact(fact: FactDelete, user: dict = Depends(verify_api_key)):
+    """
+    Delete a specific fact (subject-predicate-object triple).
+    Removes the relationship but leaves the entities intact.
+    """
+    graph_id = user["graph_id"]
+    rel_type = _predicate_to_rel_type(fact.predicate)
+    subj_norm = _normalize_name(fact.subject)
+    obj_norm   = _normalize_name(fact.object)
+
+    with driver.session() as session:
+        result = session.run(f"""
+            MATCH (s {{_norm_name: $sn, _graph_id: $gid}})-[r:{rel_type}]->(o {{_norm_name: $on, _graph_id: $gid}})
+            DELETE r
+            RETURN count(r) as deleted
+        """, {"sn": subj_norm, "on": obj_norm, "gid": graph_id})
+        record = result.single()
+        deleted = record["deleted"] if record else 0
+
+    if deleted == 0:
+        raise HTTPException(status_code=404, detail=f"Fact not found: {fact.subject} -{fact.predicate}-> {fact.object}")
+    return {"deleted": deleted, "fact": f"{fact.subject} -{fact.predicate}-> {fact.object}"}
+
+
+@app.delete("/v1/entities/{name}")
+def delete_entity(name: str, user: dict = Depends(verify_api_key)):
+    """
+    Delete an entity and ALL its relationships.
+    Use with care — this removes the node and every edge connected to it.
+    """
+    graph_id = user["graph_id"]
+    norm = _normalize_name(name)
+
+    with driver.session() as session:
+        # Count first so we can report what was removed
+        count = session.run("""
+            MATCH (n {_norm_name: $norm, _graph_id: $gid})
+            OPTIONAL MATCH (n)-[r]-()
+            RETURN count(DISTINCT n) as nodes, count(r) as rels
+        """, {"norm": norm, "gid": graph_id}).single()
+
+        if not count or count["nodes"] == 0:
+            raise HTTPException(status_code=404, detail=f"Entity '{name}' not found")
+
+        nodes_count = count["nodes"]
+        rels_count  = count["rels"]
+
+        session.run("""
+            MATCH (n {_norm_name: $norm, _graph_id: $gid})
+            DETACH DELETE n
+        """, {"norm": norm, "gid": graph_id})
+
+    return {
+        "deleted": name,
+        "nodes_removed": nodes_count,
+        "relationships_removed": rels_count,
+    }
+
 # ============ Startup ============
 
 @app.on_event("startup")

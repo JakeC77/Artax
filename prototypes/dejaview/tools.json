@@ -22,33 +22,65 @@
             "items": {
               "type": "object",
               "properties": {
-                "subject":    { "type": "string", "description": "The entity this fact is about, e.g. 'Alice'" },
-                "predicate":  { "type": "string", "description": "Relationship type, e.g. 'works_at', 'founded', 'prefers'" },
-                "object":     { "type": "string", "description": "The related entity or value, e.g. 'Orbit Labs'" },
-                "context":    { "type": "string", "description": "Optional extra context" },
-                "confidence": { "type": "number", "minimum": 0, "maximum": 1, "default": 1.0 },
-                "source":     { "type": "string", "description": "Where this came from", "default": "agent" }
+                "subject": {
+                  "type": "string",
+                  "description": "The entity this fact is about, e.g. 'Alice'"
+                },
+                "predicate": {
+                  "type": "string",
+                  "description": "Relationship type, e.g. 'works_at', 'founded', 'prefers'"
+                },
+                "object": {
+                  "type": "string",
+                  "description": "The related entity or value, e.g. 'Orbit Labs'"
+                },
+                "context": {
+                  "type": "string",
+                  "description": "Optional extra context"
+                },
+                "confidence": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1,
+                  "default": 1.0
+                },
+                "source": {
+                  "type": "string",
+                  "description": "Where this came from",
+                  "default": "agent"
+                }
               },
-              "required": ["subject", "predicate", "object"]
+              "required": [
+                "subject",
+                "predicate",
+                "object"
+              ]
             },
             "minItems": 1,
             "maxItems": 100
           }
         },
-        "required": ["facts"]
+        "required": [
+          "facts"
+        ]
       }
     },
     {
       "name": "recall",
-      "description": "Get everything known about an entity — all incoming and outgoing relationships.",
+      "description": "Get everything known about an entity \u2014 all incoming and outgoing relationships.",
       "method": "GET",
       "path": "/v1/entities/{name}",
       "parameters": {
         "type": "object",
         "properties": {
-          "name": { "type": "string", "description": "Entity name to look up" }
+          "name": {
+            "type": "string",
+            "description": "Entity name to look up"
+          }
         },
-        "required": ["name"]
+        "required": [
+          "name"
+        ]
       }
     },
     {
@@ -59,10 +91,20 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "q":     { "type": "string", "description": "Search query (partial name match)" },
-          "limit": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 }
+          "q": {
+            "type": "string",
+            "description": "Search query (partial name match)"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 20
+          }
         },
-        "required": ["q"]
+        "required": [
+          "q"
+        ]
       }
     },
     {
@@ -73,7 +115,12 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "limit": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 }
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 20
+          }
         }
       }
     },
@@ -82,14 +129,20 @@
       "description": "Get entity count, relationship count, and type breakdown for the graph.",
       "method": "GET",
       "path": "/v1/stats",
-      "parameters": { "type": "object", "properties": {} }
+      "parameters": {
+        "type": "object",
+        "properties": {}
+      }
     },
     {
       "name": "agent_context",
       "description": "Get a complete natural-language context block summarizing the graph. Inject into system prompt at session start.",
       "method": "GET",
       "path": "/v1/agent-context",
-      "parameters": { "type": "object", "properties": {} }
+      "parameters": {
+        "type": "object",
+        "properties": {}
+      }
     },
     {
       "name": "subgraph",
@@ -99,10 +152,67 @@
       "parameters": {
         "type": "object",
         "properties": {
-          "name":  { "type": "string", "description": "Center entity name" },
-          "depth": { "type": "integer", "minimum": 1, "maximum": 3, "default": 2, "description": "Hop depth" }
+          "name": {
+            "type": "string",
+            "description": "Center entity name"
+          },
+          "depth": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3,
+            "default": 2,
+            "description": "Hop depth"
+          }
         },
-        "required": ["name"]
+        "required": [
+          "name"
+        ]
+      }
+    },
+    {
+      "name": "forget",
+      "description": "Delete a specific fact (subject-predicate-object triple). Removes the relationship, leaves entities intact. Use to correct wrong or outdated facts.",
+      "method": "DELETE",
+      "path": "/v1/facts",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "subject": {
+            "type": "string",
+            "description": "Subject entity name"
+          },
+          "predicate": {
+            "type": "string",
+            "description": "Relationship type to delete"
+          },
+          "object": {
+            "type": "string",
+            "description": "Object entity name"
+          }
+        },
+        "required": [
+          "subject",
+          "predicate",
+          "object"
+        ]
+      }
+    },
+    {
+      "name": "forget_entity",
+      "description": "Delete an entity AND all its relationships. Use with care \u2014 permanently removes the node and every edge connected to it.",
+      "method": "DELETE",
+      "path": "/v1/entities/{name}",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Entity name to delete"
+          }
+        },
+        "required": [
+          "name"
+        ]
       }
     }
   ],
@@ -110,8 +220,10 @@
     "Call agent_context() at session start to bootstrap memory.",
     "Use remember_many (batch facts) instead of looping remember() for efficiency.",
     "search() before recall() if you are not sure of the exact entity name.",
-    "Store facts with specific predicates — 'works_at' is better than 'related_to'.",
+    "Store facts with specific predicates \u2014 'works_at' is better than 'related_to'.",
     "Add context field for time-sensitive facts: 'As of March 2026'.",
-    "Entity labels are inferred from predicates — 'works_at' marks subject as Person, object as Organization."
+    "Entity labels are inferred from predicates \u2014 'works_at' marks subject as Person, object as Organization.",
+    "Use forget() to correct wrong facts \u2014 it removes the relationship but keeps both entities.",
+    "Use forget_entity() to nuke a bad entity entirely \u2014 removes node AND all its edges."
   ]
 }
