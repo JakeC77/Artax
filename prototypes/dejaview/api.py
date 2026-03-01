@@ -579,6 +579,72 @@ def get_full_graph(limit: int = 100, user: dict = Depends(verify_api_key)):
                               "predicate": rt.lower().replace("_", " ")})
         return {"nodes": list(nodes.values()), "links": links, "edges": links, "center": None}
 
+
+
+@app.get("/v1/agent-context")
+def agent_context_endpoint(user: dict = Depends(verify_api_key)):
+    """
+    Returns a natural-language context block summarizing the knowledge graph.
+    Designed for injection into agent system prompts at session start.
+    """
+    graph_id = user["graph_id"]
+    with driver.session() as session:
+        type_counts = list(session.run("""
+            MATCH (n {_graph_id: $gid})
+            RETURN coalesce(n.label, 'Entity') as label, count(n) as count
+            ORDER BY count DESC
+        """, {"gid": graph_id}))
+
+        rel_count_result = session.run("""
+            MATCH ({_graph_id: $gid})-[r]->({_graph_id: $gid})
+            RETURN count(r) as count
+        """, {"gid": graph_id}).single()
+        rel_count = rel_count_result["count"] if rel_count_result else 0
+
+        top_entities = list(session.run("""
+            MATCH (n {_graph_id: $gid})
+            OPTIONAL MATCH (n)-[r]-()
+            RETURN n.name as name, coalesce(n.label, 'Entity') as label, count(r) as conns
+            ORDER BY conns DESC
+            LIMIT 7
+        """, {"gid": graph_id}))
+
+        recent = list(session.run("""
+            MATCH (s {_graph_id: $gid})-[r]->(o {_graph_id: $gid})
+            WHERE r.created_at IS NOT NULL
+            RETURN s.name as subject, type(r) as rel, o.name as object
+            ORDER BY r.created_at DESC
+            LIMIT 10
+        """, {"gid": graph_id}))
+
+    total_entities = sum(r["count"] for r in type_counts)
+    lines = ["## DejaView Knowledge Graph", ""]
+
+    if total_entities == 0:
+        lines.append("The knowledge graph is empty. Use remember() to start building it.")
+    else:
+        type_str = ", ".join(f"{r['label']} ({r['count']})" for r in type_counts if r["label"])
+        lines.append(f"**{total_entities} entities** across: {type_str}")
+        lines.append(f"**{rel_count} relationships** total")
+        lines.append("")
+
+        if top_entities:
+            lines.append("**Most connected:**")
+            for r in top_entities:
+                if r["name"]:
+                    lines.append(f"  - {r['name']} ({r['label']}, {r['conns']} connections)")
+            lines.append("")
+
+        if recent:
+            lines.append("**Recent activity:**")
+            for r in recent:
+                pred = (r["rel"] or "").lower().replace("_", " ")
+                lines.append(f"  - {r['subject']} {pred} {r['object']}")
+            lines.append("")
+
+    lines.append("Tools: recall(entity) | remember(s,p,o) | search(query) | timeline()")
+    return {"context": "\n".join(lines), "entities": total_entities, "relationships": rel_count}
+
 # ============ LemonSqueezy Webhook ============
 
 @app.post("/webhooks/lemonsqueezy")

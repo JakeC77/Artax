@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "service": "DejaView",
+  "base_url": "https://api.dejaview.io",
+  "auth": {
+    "type": "bearer",
+    "header": "Authorization",
+    "format": "Bearer {api_key}"
+  },
+  "tools": [
+    {
+      "name": "remember",
+      "description": "Store a fact as a subject-predicate-object triple. Use for any relationship, preference, decision, or event worth keeping across sessions.",
+      "method": "POST",
+      "path": "/v1/facts",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "facts": {
+            "type": "array",
+            "description": "Array of facts to store",
+            "items": {
+              "type": "object",
+              "properties": {
+                "subject":    { "type": "string", "description": "The entity this fact is about, e.g. 'Alice'" },
+                "predicate":  { "type": "string", "description": "Relationship type, e.g. 'works_at', 'founded', 'prefers'" },
+                "object":     { "type": "string", "description": "The related entity or value, e.g. 'Orbit Labs'" },
+                "context":    { "type": "string", "description": "Optional extra context" },
+                "confidence": { "type": "number", "minimum": 0, "maximum": 1, "default": 1.0 },
+                "source":     { "type": "string", "description": "Where this came from", "default": "agent" }
+              },
+              "required": ["subject", "predicate", "object"]
+            },
+            "minItems": 1,
+            "maxItems": 100
+          }
+        },
+        "required": ["facts"]
+      }
+    },
+    {
+      "name": "recall",
+      "description": "Get everything known about an entity — all incoming and outgoing relationships.",
+      "method": "GET",
+      "path": "/v1/entities/{name}",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "Entity name to look up" }
+        },
+        "required": ["name"]
+      }
+    },
+    {
+      "name": "search",
+      "description": "Search for entities in the graph by name (partial match). Use before recall() if unsure of exact name.",
+      "method": "POST",
+      "path": "/v1/search",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "q":     { "type": "string", "description": "Search query (partial name match)" },
+          "limit": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 }
+        },
+        "required": ["q"]
+      }
+    },
+    {
+      "name": "timeline",
+      "description": "Get recent facts in reverse chronological order. Call at session start to see recent activity.",
+      "method": "GET",
+      "path": "/v1/timeline",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "limit": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 }
+        }
+      }
+    },
+    {
+      "name": "graph_stats",
+      "description": "Get entity count, relationship count, and type breakdown for the graph.",
+      "method": "GET",
+      "path": "/v1/stats",
+      "parameters": { "type": "object", "properties": {} }
+    },
+    {
+      "name": "agent_context",
+      "description": "Get a complete natural-language context block summarizing the graph. Inject into system prompt at session start.",
+      "method": "GET",
+      "path": "/v1/agent-context",
+      "parameters": { "type": "object", "properties": {} }
+    },
+    {
+      "name": "subgraph",
+      "description": "Get a subgraph (nodes + edges) around an entity, up to N hops out. Use for visualization or deep relationship traversal.",
+      "method": "GET",
+      "path": "/v1/graph/{name}",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name":  { "type": "string", "description": "Center entity name" },
+          "depth": { "type": "integer", "minimum": 1, "maximum": 3, "default": 2, "description": "Hop depth" }
+        },
+        "required": ["name"]
+      }
+    }
+  ],
+  "usage_tips": [
+    "Call agent_context() at session start to bootstrap memory.",
+    "Use remember_many (batch facts) instead of looping remember() for efficiency.",
+    "search() before recall() if you are not sure of the exact entity name.",
+    "Store facts with specific predicates — 'works_at' is better than 'related_to'.",
+    "Add context field for time-sensitive facts: 'As of March 2026'.",
+    "Entity labels are inferred from predicates — 'works_at' marks subject as Person, object as Organization."
+  ]
+}
