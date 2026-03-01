@@ -213,7 +213,7 @@ async def ask_for_missing(sender: str, convo, field: str) -> str:
         items = convo.quote.items
         total = sum(float(i.get("amount") or 0) for i in items)
         item_names = ", ".join(i['description'] for i in items[:3])
-        response = f"Nice — {item_names} for ${total:,.0f}. Last thing: give me a quick description of the project (one line is fine)."
+        response = f"Nice — {item_names} for ${total:,.0f}. What's the one-liner for this job? (e.g. \"Kitchen remodel\", \"Roof repair\") — or text \"skip\" to use your line items."
         
     else:
         response = "Hmm, something got confused. Text 'new' to start fresh!"
@@ -296,13 +296,34 @@ async def handle_items(sender: str, body: str, convo) -> str:
 
 async def handle_description(sender: str, body: str, convo) -> str:
     """Handle project description input"""
-    convo.quote.project_description = body.strip()
-    
-    missing = convo.quote.get_missing()
-    if not missing:
-        return await generate_and_send_quote(sender, convo)
-    
-    return await ask_for_missing(sender, convo, missing[0])
+    lower = body.lower().strip()
+
+    # Detect confusion or skip intent — rephrase instead of accepting garbage
+    confusion_signals = [
+        "don't understand", "dont understand", "what do you mean", "what?",
+        "huh", "i don't know", "i dont know", "skip", "n/a", "na", "idk",
+        "what is that", "not sure", "unclear", "confused"
+    ]
+    if any(sig in lower for sig in confusion_signals) or lower in ["?", "??", "???"]:
+        items = convo.quote.items or []
+        item_names = ", ".join(i["description"] for i in items[:3])
+        response = (f"No worries! Just a one-liner about the job — like "
+                    f'"Kitchen remodel" or "Backyard deck build". '
+                    f'Or text "skip" and I'll use your line items ({item_names}) as the description.')
+        await send_sms(sender, response)
+        return response
+
+    # "skip" → auto-generate description from items
+    if lower in ["skip", "s", "none", "nope", "no"]:
+        items = convo.quote.items or []
+        if items:
+            convo.quote.project_description = ", ".join(i["description"] for i in items)
+        else:
+            convo.quote.project_description = "General contracting work"
+    else:
+        convo.quote.project_description = body.strip()
+
+    return await generate_and_send_quote(sender, convo)
 
 
 async def generate_and_send_quote(sender: str, convo) -> str:
