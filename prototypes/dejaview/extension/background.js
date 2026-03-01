@@ -1,6 +1,5 @@
 const API = 'https://api.dejaview.io';
 
-// Context menu — right-click any selected text
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: 'dv-save',
@@ -14,15 +13,19 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-chrome.contextMenus.onClicked.addListener(async (info, tab) => {
+chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === 'dv-save') {
-    // Open popup with selected text pre-filled
-    await chrome.storage.session.set({ prefill: info.selectionText });
-    await chrome.action.openPopup();
+    // Show inline quick-save panel with selected text pre-filled
+    chrome.tabs.sendMessage(tab.id, {
+      type: 'QUICK_SAVE',
+      selection: info.selectionText || '',
+    });
   }
   if (info.menuItemId === 'dv-extract') {
-    // Inject extraction into the tab
-    chrome.tabs.sendMessage(tab.id, { type: 'EXTRACT', selection: info.selectionText || '' });
+    chrome.tabs.sendMessage(tab.id, {
+      type: 'EXTRACT',
+      selection: info.selectionText || '',
+    });
   }
 });
 
@@ -31,19 +34,22 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     apiCall(msg.method, msg.path, msg.body)
       .then(data => sendResponse({ ok: true, data }))
       .catch(err => sendResponse({ ok: false, error: err.message }));
-    return true; // keep channel open for async
+    return true;
   }
 });
 
 async function apiCall(method, path, body) {
   const { apiKey } = await chrome.storage.sync.get('apiKey');
-  if (!apiKey) throw new Error('No API key set — open DejaView extension to configure.');
+  if (!apiKey) throw new Error('No API key — click the DejaView icon to set one.');
   const opts = {
     method,
     headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
   };
   if (body) opts.body = JSON.stringify(body);
   const r = await fetch(API + path, opts);
-  if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+  if (!r.ok) {
+    const text = await r.text().catch(() => r.statusText);
+    throw new Error(`${r.status}: ${text}`);
+  }
   return r.json();
 }
