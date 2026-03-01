@@ -723,7 +723,7 @@ Return only valid JSON, no explanation:"""
 
     if anthropic_key:
         payload = _js.dumps({
-            "model": "claude-haiku-4-5",
+            "model": "claude-3-5-haiku-20241022",
             "max_tokens": 1024,
             "messages": [{"role": "user", "content": prompt}]
         }).encode()
@@ -810,7 +810,7 @@ Answer based only on the above context:"""
     anthropic_key = os.getenv("ANTHROPIC_API_KEY")
     if anthropic_key:
         payload = _js.dumps({
-            "model": "claude-haiku-4-5",
+            "model": "claude-3-5-haiku-20241022",
             "max_tokens": 1024,
             "system": system,
             "messages": [{"role": "user", "content": prompt}]
