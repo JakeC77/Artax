@@ -4,6 +4,7 @@ Conversational quote builder via text
 """
 
 import os
+import json
 import httpx
 from typing import Optional
 
@@ -12,12 +13,15 @@ from .parser import parse_estimate
 from .pdf_gen import generate_quote_pdf
 from .logos import get_logo_path
 from .tax import get_tax_rate, format_tax_rate
+from . import db
 
 
 CLICKSEND_USERNAME = os.getenv("CLICKSEND_USERNAME")
 CLICKSEND_API_KEY = os.getenv("CLICKSEND_API_KEY")
 SNAPQUOTE_NUMBER = os.getenv("SNAPQUOTE_NUMBER", "+18335154305")
 BASE_URL = os.getenv("BASE_URL", "https://snapquote.haventechsolutions.com")
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")
+ADMIN_EMAILS = os.getenv("ADMIN_EMAILS", "jake0christensen@gmail.com,jrcarlson77@gmail.com")
 
 
 async def send_sms(to: str, message: str) -> bool:
@@ -40,6 +44,85 @@ async def send_sms(to: str, message: str) -> bool:
         )
         print(f"SMS send response: {response.status_code}", flush=True)
         return response.status_code == 200
+
+
+async def send_quote_email(quote_id: str, quote, quote_url: str) -> bool:
+    """Send email notification via Resend API when a new quote is generated"""
+    if not RESEND_API_KEY:
+        print("[email] No RESEND_API_KEY — skipping email notification", flush=True)
+        return False
+
+    recipients = [e.strip() for e in ADMIN_EMAILS.split(",") if e.strip()]
+    if not recipients:
+        return False
+
+    customer_name = quote.customer_name or "Unknown"
+    grand_total = quote.grand_total or 0.0
+    items = quote.items or []
+
+    # Build items HTML
+    items_rows = ""
+    for item in items:
+        desc = item.get("description", "")
+        amt = float(item.get("amount", 0))
+        items_rows += f"<tr><td style='padding:4px 8px'>{desc}</td><td style='padding:4px 8px;text-align:right'>${amt:,.2f}</td></tr>"
+
+    tax_line = ""
+    if quote.tax_rate:
+        tax_pct = f"{quote.tax_rate * 100:.1f}%"
+        tax_amt = quote.tax_amount or 0
+        tax_line = f"<tr><td style='padding:4px 8px;color:#888'>Tax ({tax_pct})</td><td style='padding:4px 8px;text-align:right;color:#888'>${tax_amt:,.2f}</td></tr>"
+
+    html_body = f"""
+<div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+  <h2 style="color:#1a1a2e">📋 New SnapQuote</h2>
+  <p><strong>Customer:</strong> {customer_name}</p>
+  <p><strong>Address:</strong> {quote.customer_address or 'N/A'}</p>
+  <p><strong>Project:</strong> {quote.project_description or 'N/A'}</p>
+  <table style="width:100%;border-collapse:collapse;margin:16px 0">
+    <thead>
+      <tr style="background:#f0f0f0">
+        <th style="padding:6px 8px;text-align:left">Item</th>
+        <th style="padding:6px 8px;text-align:right">Amount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {items_rows}
+      {tax_line}
+      <tr style="border-top:2px solid #333;font-weight:bold">
+        <td style="padding:6px 8px">Total</td>
+        <td style="padding:6px 8px;text-align:right">${grand_total:,.2f}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><a href="{quote_url}" style="background:#4f46e5;color:white;padding:10px 20px;border-radius:6px;text-decoration:none">View Quote PDF</a></p>
+  <p style="color:#666;font-size:12px">Quote ID: {quote_id}</p>
+</div>
+"""
+
+    payload = {
+        "from": "quotes@dejaview.io",
+        "to": recipients,
+        "subject": f"New SnapQuote: {customer_name} — ${grand_total:,.2f}",
+        "html": html_body,
+    }
+
+    try:
+        async with httpx.AsyncClient() as client:
+            resp = await client.post(
+                "https://api.resend.com/emails",
+                headers={
+                    "Authorization": f"Bearer {RESEND_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json=payload,
+                timeout=10.0,
+            )
+            print(f"[email] Resend response: {resp.status_code} — {resp.text[:200]}", flush=True)
+            return resp.status_code in (200, 201, 202)
+    except Exception as e:
+        print(f"[email] ERROR sending notification: {e}", flush=True)
+        return False
 
 
 async def handle_inbound_sms(sender: str, body: str) -> Optional[str]:
@@ -241,8 +324,17 @@ async def generate_and_send_quote(sender: str, convo) -> str:
         notes=quote.notes,
         logo_path=logo_path
     )
-    
+
+    # Persist to SQLite
+    db.save_quote(quote_id, sender, quote)
+
     quote_url = f"{BASE_URL}/quote/{quote_id}"
+
+    # Send email notification (fire-and-forget style; errors are logged, not fatal)
+    try:
+        await send_quote_email(quote_id, quote, quote_url)
+    except Exception as e:
+        print(f"[email] Non-fatal error: {e}", flush=True)
     
     # Friendly completion message
     if quote.tax_rate:

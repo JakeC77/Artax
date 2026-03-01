@@ -3,29 +3,65 @@ SnapQuote v1 - Text to Professional Quote
 FastAPI application handling SMS webhooks from ClickSend
 """
 
-from fastapi import FastAPI, Request, HTTPException
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, HTMLResponse
-from pydantic import BaseModel
-from typing import Optional
+import base64
 import os
 import json
+import secrets
+
+from fastapi import FastAPI, Request, HTTPException, Depends
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from pydantic import BaseModel
+from typing import Optional
 
 from .sms import handle_inbound_sms, send_sms
 from .state import ConversationState
 from .pdf_gen import generate_quote_pdf
+from . import db
+
 
 app = FastAPI(title="SnapQuote", version="1.0.0")
+security = HTTPBasic()
 
 # Get the base directory
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+ADMIN_USER = "admin"
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "snapquote2026")
+
+
+# ── Startup ─────────────────────────────────────────────────────────────────
+
+@app.on_event("startup")
+async def startup_event():
+    db.init_db()
+
+
+# ── Auth helper ──────────────────────────────────────────────────────────────
+
+def require_admin(credentials: HTTPBasicCredentials = Depends(security)):
+    correct_user = secrets.compare_digest(credentials.username, ADMIN_USER)
+    correct_pass = secrets.compare_digest(credentials.password, ADMIN_PASSWORD)
+    if not (correct_user and correct_pass):
+        raise HTTPException(
+            status_code=401,
+            detail="Unauthorized",
+            headers={"WWW-Authenticate": "Basic"},
+        )
+    return credentials.username
+
+
+# ── Static files ─────────────────────────────────────────────────────────────
+
 # Serve generated quotes
 app.mount("/quotes", StaticFiles(directory=os.path.join(BASE_DIR, "quotes")), name="quotes")
 
-# Serve static files (hero.png, etc)
+# Serve static files (hero.png, admin.html, etc)
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
+
+# ── Public routes ─────────────────────────────────────────────────────────────
 
 @app.get("/", response_class=HTMLResponse)
 async def root():
@@ -107,3 +143,22 @@ async def hero_image():
     if os.path.exists(hero_path):
         return FileResponse(hero_path)
     raise HTTPException(status_code=404, detail="Image not found")
+
+
+# ── Admin routes ─────────────────────────────────────────────────────────────
+
+@app.get("/admin", response_class=HTMLResponse)
+async def admin_dashboard(_: str = Depends(require_admin)):
+    """Serve the admin dashboard HTML (requires basic auth)"""
+    admin_html = os.path.join(BASE_DIR, "static", "admin.html")
+    if os.path.exists(admin_html):
+        with open(admin_html, "r") as f:
+            return f.read()
+    raise HTTPException(status_code=404, detail="admin.html not found")
+
+
+@app.get("/admin/api/quotes")
+async def admin_api_quotes(_: str = Depends(require_admin)):
+    """Return all quotes as JSON (requires basic auth)"""
+    quotes = db.get_all_quotes()
+    return JSONResponse(content={"quotes": quotes})

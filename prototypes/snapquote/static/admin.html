@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SnapQuote Admin</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:       #0d0d1a;
+      --surface:  #1a1a2e;
+      --border:   #2a2a4a;
+      --accent:   #4f46e5;
+      --accent2:  #7c3aed;
+      --text:     #e2e2f0;
+      --muted:    #9090b0;
+      --green:    #22c55e;
+      --card-bg:  #16162a;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    header h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    header .badge {
+      font-size: 0.7rem;
+      background: var(--border);
+      color: var(--muted);
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    .refresh-info {
+      margin-left: auto;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    main { padding: 32px; max-width: 1400px; margin: 0 auto; }
+
+    /* Summary cards */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+    }
+
+    .card-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .card-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card-value.green { color: var(--green); }
+
+    /* Table */
+    .table-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .table-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.875rem;
+    }
+
+    thead th {
+      background: var(--surface);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: rgba(79, 70, 229, 0.06); }
+
+    td {
+      padding: 12px 16px;
+      vertical-align: top;
+    }
+
+    td.phone { color: var(--muted); font-size: 0.8rem; font-family: monospace; }
+    td.total { font-weight: 700; color: var(--green); }
+    td.date  { color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+
+    .pdf-link {
+      display: inline-block;
+      padding: 4px 10px;
+      background: var(--accent);
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 0.75rem;
+      font-weight: 600;
+      transition: opacity 0.15s;
+    }
+    .pdf-link:hover { opacity: 0.8; }
+
+    .empty {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--muted);
+    }
+
+    .error-msg {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: #f87171;
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      font-size: 0.875rem;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 48px;
+      color: var(--muted);
+    }
+
+    .dot {
+      display: inline-block;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      margin-right: 6px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span style="font-size:1.5rem">📋</span>
+  <h1>SnapQuote Admin</h1>
+  <span class="badge">back-of-house</span>
+  <span class="refresh-info"><span class="dot"></span>auto-refreshes every 30s</span>
+</header>
+
+<main>
+  <div id="error" class="error-msg" style="display:none"></div>
+
+  <!-- Summary Cards -->
+  <div class="cards">
+    <div class="card">
+      <div class="card-label">Total Quotes</div>
+      <div class="card-value" id="stat-total">—</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Total Revenue</div>
+      <div class="card-value green" id="stat-revenue">—</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Today's Quotes</div>
+      <div class="card-value" id="stat-today">—</div>
+    </div>
+    <div class="card">
+      <div class="card-label">Avg Quote Value</div>
+      <div class="card-value" id="stat-avg">—</div>
+    </div>
+  </div>
+
+  <!-- Quote Table -->
+  <div class="table-wrap">
+    <div class="table-header">📄 All Quotes</div>
+    <div id="table-container">
+      <div class="loading">Loading quotes…</div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const BASE_URL = window.location.origin;
+
+  function fmt(amount) {
+    if (amount == null) return '—';
+    return '$' + parseFloat(amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    try {
+      const d = new Date(iso + 'Z'); // treat as UTC
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        + ' ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    } catch(e) { return iso; }
+  }
+
+  function todayStr() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  async function loadQuotes() {
+    const errEl = document.getElementById('error');
+    errEl.style.display = 'none';
+
+    try {
+      const resp = await fetch('/admin/api/quotes');
+      if (!resp.ok) {
+        throw new Error(`HTTP ${resp.status}`);
+      }
+      const data = await resp.json();
+      const quotes = data.quotes || [];
+
+      // Update stats
+      const total = quotes.length;
+      const revenue = quotes.reduce((s, q) => s + (q.grand_total || 0), 0);
+      const todayQuotes = quotes.filter(q => (q.created_at || '').startsWith(todayStr())).length;
+      const avg = total > 0 ? revenue / total : 0;
+
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-revenue').textContent = fmt(revenue);
+      document.getElementById('stat-today').textContent = todayQuotes;
+      document.getElementById('stat-avg').textContent = avg > 0 ? fmt(avg) : '—';
+
+      // Render table
+      const container = document.getElementById('table-container');
+      if (quotes.length === 0) {
+        container.innerHTML = '<div class="empty">No quotes yet. Send an SMS to get started!</div>';
+        return;
+      }
+
+      const rows = quotes.map(q => {
+        const itemsSummary = (q.items || []).map(i => i.description).join(', ') || q.project_description || '—';
+        const pdfUrl = `/quote/${q.quote_id}`;
+        return `
+          <tr>
+            <td class="date">${fmtDate(q.created_at)}</td>
+            <td><strong>${escHtml(q.customer_name || '—')}</strong></td>
+            <td>${escHtml(q.customer_address || '—')}</td>
+            <td style="max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${escHtml(itemsSummary)}">${escHtml(itemsSummary)}</td>
+            <td class="total">${fmt(q.grand_total)}</td>
+            <td class="phone">${escHtml(q.phone || '—')}</td>
+            <td><a class="pdf-link" href="${pdfUrl}" target="_blank">PDF ↗</a></td>
+          </tr>`;
+      }).join('');
+
+      container.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Address</th>
+              <th>Project</th>
+              <th>Total</th>
+              <th>Phone</th>
+              <th>PDF</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+
+    } catch(err) {
+      errEl.textContent = 'Error loading quotes: ' + err.message;
+      errEl.style.display = 'block';
+    }
+  }
+
+  function escHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  // Initial load
+  loadQuotes();
+
+  // Auto-refresh every 30s
+  setInterval(loadQuotes, 30000);
+</script>
+
+</body>
+</html>
