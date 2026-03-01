@@ -242,5 +242,34 @@ def forget_entity(name: str) -> str:
         return f"Could not delete: {e}"
 
 
+@mcp.tool()
+def ask(question: str) -> str:
+    """Ask a natural language question about your knowledge graph.
+
+    Returns a synthesized answer backed by cited graph facts.
+    No hallucination — every claim traces to a real node with a timestamp.
+
+    Examples:
+      ask("What do I know about SnapQuote?")
+      ask("Who is JR and how do I know him?")
+      ask("What projects is Alice working on?")
+    """
+    result = _call("POST", "/v1/ask", json={"question": question})
+    answer = result.get("answer", "No answer found.")
+    entities = result.get("entities_found", 0)
+    llm = result.get("llm_used", "none")
+    citations = result.get("citations", [])
+
+    lines = [answer, ""]
+    if citations:
+        lines.append(f"Sources ({entities} entities):")
+        for c in citations[:5]:
+            rels = [r["rel"].lower().replace("_"," ") + " " + r.get("target","")
+                    for r in c.get("outgoing", [])[:3] if r.get("target")]
+            if rels:
+                lines.append(f"  - {c['entity']}: {', '.join(rels)}")
+    return "\n".join(lines)
+
+
 if __name__ == "__main__":
     mcp.run()

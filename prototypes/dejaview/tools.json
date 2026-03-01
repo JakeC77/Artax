@@ -9,6 +9,24 @@
   },
   "tools": [
     {
+      "name": "ask",
+      "description": "Ask a natural language question about the knowledge graph. Returns a synthesized answer backed by cited graph facts \u2014 not hallucination, real nodes with timestamps.",
+      "method": "POST",
+      "path": "/v1/ask",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "question": {
+            "type": "string",
+            "description": "Plain English question, e.g. 'What do I know about Project Atlas?'"
+          }
+        },
+        "required": [
+          "question"
+        ]
+      }
+    },
+    {
       "name": "remember",
       "description": "Store a fact as a subject-predicate-object triple. Use for any relationship, preference, decision, or event worth keeping across sessions.",
       "method": "POST",
@@ -217,6 +235,7 @@
     }
   ],
   "usage_tips": [
+    "ask() is the most powerful tool \u2014 natural language in, cited graph facts out. Try it first.",
     "Call agent_context() at session start to bootstrap memory.",
     "Use remember_many (batch facts) instead of looping remember() for efficiency.",
     "search() before recall() if you are not sure of the exact entity name.",

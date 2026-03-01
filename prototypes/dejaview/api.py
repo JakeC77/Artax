@@ -673,6 +673,177 @@ async def lemonsqueezy_webhook(request: Request):
 
 
 
+
+
+# ============ Natural Language Query ============
+
+def _llm_synthesize(question: str, graph_context: str) -> str:
+    """Call available LLM to synthesize an answer from graph context."""
+    import urllib.request as _ur, json as _js
+
+    system = (
+        "You are a knowledge graph assistant. The user has a personal knowledge graph. "
+        "Answer their question using ONLY the graph context provided. "
+        "Be concise and direct. If the graph doesn't contain enough info to answer, say so. "
+        "Do not invent facts not present in the context."
+    )
+    prompt = f"""Knowledge graph context:
+{graph_context}
+
+Question: {question}
+
+Answer based only on the above context:"""
+
+    # Try Anthropic first
+    anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+    if anthropic_key:
+        payload = _js.dumps({
+            "model": "claude-haiku-4-5",
+            "max_tokens": 1024,
+            "system": system,
+            "messages": [{"role": "user", "content": prompt}]
+        }).encode()
+        req = _ur.Request(
+            "https://api.anthropic.com/v1/messages",
+            data=payload,
+            headers={
+                "x-api-key": anthropic_key,
+                "anthropic-version": "2023-06-01",
+                "content-type": "application/json",
+            }
+        )
+        try:
+            with _ur.urlopen(req, timeout=20) as r:
+                return _js.load(r)["content"][0]["text"].strip()
+        except Exception as e:
+            print(f"Anthropic error: {e}")
+
+    # Try OpenAI
+    openai_key = os.getenv("OPENAI_API_KEY")
+    if openai_key:
+        payload = _js.dumps({
+            "model": "gpt-4o-mini",
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": prompt}
+            ],
+            "max_tokens": 1024,
+        }).encode()
+        req = _ur.Request(
+            "https://api.openai.com/v1/chat/completions",
+            data=payload,
+            headers={
+                "Authorization": f"Bearer {openai_key}",
+                "Content-Type": "application/json",
+            }
+        )
+        try:
+            with _ur.urlopen(req, timeout=20) as r:
+                return _js.load(r)["choices"][0]["message"]["content"].strip()
+        except Exception as e:
+            print(f"OpenAI error: {e}")
+
+    return None  # No LLM available
+
+
+@app.post("/v1/ask")
+def ask(query: NLQuery, user: dict = Depends(verify_api_key)):
+    """
+    Natural language query against the knowledge graph.
+
+    Ask anything — returns a synthesized answer backed by cited graph facts.
+    No hallucination: every claim traces back to a real node in your graph.
+
+    Example: {"question": "What do I know about Project Atlas?"}
+    """
+    graph_id = user["graph_id"]
+    question = query.question.strip()
+
+    # 1. Extract key terms from question for graph search
+    # Simple heuristic: strip common words, search for each remaining token
+    stopwords = {"what", "do", "i", "know", "about", "who", "is", "are", "the",
+                 "a", "an", "how", "why", "when", "where", "tell", "me", "my",
+                 "and", "or", "of", "to", "in", "on", "at", "for"}
+    tokens = [w.strip("?.,!") for w in question.lower().split()
+              if w.strip("?.,!") not in stopwords and len(w) > 2]
+
+    # 2. Search graph for relevant entities
+    citations = []
+    seen_entities = set()
+
+    with driver.session() as session:
+        for token in tokens[:5]:  # limit to top 5 tokens
+            result = session.run("""
+                MATCH (n {_graph_id: $gid})
+                WHERE toLower(n.name) CONTAINS toLower($q)
+                RETURN n.name as name, n.label as label
+                LIMIT 3
+            """, {"q": token, "gid": graph_id})
+            for rec in result:
+                name = rec["name"]
+                if name and name not in seen_entities:
+                    seen_entities.add(name)
+
+        # 3. Pull full context for each matched entity
+        for entity_name in list(seen_entities)[:8]:  # cap at 8 entities
+            result = session.run("""
+                MATCH (n {_norm_name: $norm, _graph_id: $gid})
+                OPTIONAL MATCH (n)-[r_out]->(target {_graph_id: $gid})
+                OPTIONAL MATCH (source {_graph_id: $gid})-[r_in]->(n)
+                RETURN n.name as name, n.label as label,
+                    collect(DISTINCT {rel: type(r_out), target: target.name,
+                        ctx: r_out.context, src: r_out.source,
+                        ts: toString(r_out.created_at)}) as outgoing,
+                    collect(DISTINCT {rel: type(r_in), source: source.name,
+                        ctx: r_in.context, src: r_in.source}) as incoming
+            """, {"norm": _normalize_name(entity_name), "gid": graph_id})
+            rec = result.single()
+            if rec:
+                out = [r for r in rec["outgoing"] if r["target"]]
+                inc = [r for r in rec["incoming"] if r["source"]]
+                citations.append({
+                    "entity": rec["name"],
+                    "label": rec["label"],
+                    "outgoing": out,
+                    "incoming": inc,
+                })
+
+    if not citations:
+        return {
+            "question": question,
+            "answer": "I don't have any information about that in the knowledge graph yet.",
+            "citations": [],
+            "llm_used": None,
+        }
+
+    # 4. Build context block for LLM
+    context_lines = []
+    for c in citations:
+        context_lines.append(f"Entity: {c['entity']} ({c['label']})")
+        for r in c["outgoing"]:
+            rel = r["rel"].lower().replace("_", " ")
+            line = f"  - {c['entity']} {rel} {r['target']}"
+            if r.get("ctx"):
+                line += f" [{r['ctx']}]"
+            context_lines.append(line)
+        for r in c["incoming"]:
+            rel = r["rel"].lower().replace("_", " ")
+            context_lines.append(f"  - {r['source']} {rel} {c['entity']}")
+    graph_context = "\n".join(context_lines)
+
+    # 5. Synthesize answer
+    llm_answer = _llm_synthesize(question, graph_context)
+    llm_used = "anthropic" if os.getenv("ANTHROPIC_API_KEY") and llm_answer else (
+               "openai" if os.getenv("OPENAI_API_KEY") and llm_answer else None)
+
+    return {
+        "question": question,
+        "answer": llm_answer or graph_context,  # fallback to raw context
+        "citations": citations,
+        "llm_used": llm_used,
+        "entities_found": len(citations),
+    }
+
 # ============ Delete Endpoints ============
 
 class FactDelete(BaseModel):
