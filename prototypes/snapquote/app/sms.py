@@ -309,7 +309,7 @@ async def handle_description(sender: str, body: str, convo) -> str:
         item_names = ", ".join(i["description"] for i in items[:3])
         response = (f"No worries! Just a one-liner about the job — like "
                     f'"Kitchen remodel" or "Backyard deck build". '
-                    f'Or text "skip" and I'll use your line items ({item_names}) as the description.')
+                    f'Or text skip and I will use your line items ({item_names}) as the description.')
         await send_sms(sender, response)
         return response
 
