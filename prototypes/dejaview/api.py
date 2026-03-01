@@ -165,6 +165,7 @@ class Fact(BaseModel):
     object: str = Field(..., description="The related entity or value", examples=["Geodesic Works"])
     confidence: float = Field(default=1.0, ge=0.0, le=1.0)
     source: str = Field(default="api", description="Where this fact came from")
+    source_url: Optional[str] = Field(default=None, description="URL where this fact was captured (e.g. browser extension)")
     context: Optional[str] = Field(default=None, description="Additional context about this fact")
 
 class FactsBatch(BaseModel):
@@ -302,6 +303,7 @@ def store_facts(batch: FactsBatch, user: dict = Depends(verify_api_key)):
             MERGE (s)-[r:{rel_type}]->(o)
             SET r.confidence = $confidence,
                 r.source = $source,
+                r.source_url = $source_url,
                 r.context = $context,
                 r.created_at = datetime(),
                 r._graph_id = $graph_id
@@ -319,6 +321,7 @@ def store_facts(batch: FactsBatch, user: dict = Depends(verify_api_key)):
                     "obj_label": obj_label,
                     "confidence": fact.confidence,
                     "source": fact.source,
+                    "source_url": fact.source_url,
                     "context": fact.context,
                     "graph_id": graph_id,
                 })
@@ -1158,6 +1161,40 @@ def delete_entity(name: str, user: dict = Depends(verify_api_key)):
         "nodes_removed": nodes_count,
         "relationships_removed": rels_count,
     }
+
+
+
+@app.delete("/v1/facts/by-source")
+def delete_facts_by_source(source: str = None, source_url: str = None, user: dict = Depends(verify_api_key)):
+    """
+    Bulk-delete facts by source or source_url.
+    Useful for cleaning up browser extension imports from a specific page.
+
+    Examples:
+      DELETE /v1/facts/by-source?source_url=https://nytimes.com/...
+      DELETE /v1/facts/by-source?source=browser-extension
+    """
+    graph_id = user["graph_id"]
+    if not source and not source_url:
+        raise HTTPException(status_code=400, detail="Provide source or source_url")
+
+    with driver.session() as session:
+        if source_url:
+            result = session.run("""
+                MATCH ({_graph_id: $gid})-[r {source_url: $url}]->({_graph_id: $gid})
+                DELETE r
+                RETURN count(r) as deleted
+            """, {"gid": graph_id, "url": source_url})
+        else:
+            result = session.run("""
+                MATCH ({_graph_id: $gid})-[r {source: $src}]->({_graph_id: $gid})
+                DELETE r
+                RETURN count(r) as deleted
+            """, {"gid": graph_id, "src": source})
+
+        deleted = result.single()["deleted"]
+
+    return {"deleted": deleted, "source": source, "source_url": source_url}
 
 # ============ Startup ============
 

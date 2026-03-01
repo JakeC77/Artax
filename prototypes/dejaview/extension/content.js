@@ -111,7 +111,7 @@ function showExtractionPanel(text) {
       if (!selected.length) return;
       chrome.runtime.sendMessage({
         type: 'API_CALL', method: 'POST', path: '/v1/facts',
-        body: { facts: selected },
+        body: { facts: selected.map(function(f){ return Object.assign({}, f, {source_url: location.href}); }) },
       }, (r) => {
         if (r?.ok) {
           statusEl.textContent = `✅ Saved ${r.data.stored} fact${r.data.stored !== 1 ? 's' : ''}!`;
